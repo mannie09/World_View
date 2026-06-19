@@ -96,12 +96,12 @@ export function renderNotificationsSettings(host: NotificationsSettingsHost): No
           upgradeBtn.addEventListener('click', () => {
             if (!host.isSignedIn) {
               import('@/services/clerk').then(m => m.openSignIn()).catch(() => {
-                window.open('https://worldmonitor.app/pro', '_blank');
+                window.open('https://worldview.app/pro', '_blank');
               });
               return;
             }
             import('@/services/checkout').then(m => import('@/config/products').then(p => m.startCheckout(p.DEFAULT_UPGRADE_PRODUCT))).catch(() => {
-              window.open('https://worldmonitor.app/pro', '_blank');
+              window.open('https://worldview.app/pro', '_blank');
             });
           }, { signal });
         }
@@ -782,7 +782,7 @@ export function renderNotificationsSettings(host: NotificationsSettingsHost): No
           setTrustedHtml(rowEl, trustedHtml(`<div class="us-notif-ch-icon">${channelIcon('telegram')}</div><div class="us-notif-ch-body"><div class="us-notif-ch-name">Telegram</div><div class="us-notif-ch-sub">Generating code…</div></div>`, "legacy direct innerHTML migration"));
           createPairingToken().then(({ token, expiresAt }) => {
             if (signal.aborted) return;
-            const botUsername = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_TELEGRAM_BOT_USERNAME as string | undefined) ?? 'WorldMonitorBot';
+            const botUsername = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_TELEGRAM_BOT_USERNAME as string | undefined) ?? 'WorldViewBot';
             const deepLink = `https://t.me/${String(botUsername)}?start=${token}`;
             const startCmd = `/start ${token}`;
             const secsLeft = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
@@ -1013,9 +1013,9 @@ export function renderNotificationsSettings(host: NotificationsSettingsHost): No
 
       const onMessage = (e: MessageEvent): void => {
         const trustedOrigin = e.origin === window.location.origin ||
-          e.origin === 'https://worldmonitor.app' ||
-          e.origin === 'https://www.worldmonitor.app' ||
-          e.origin.endsWith('.worldmonitor.app');
+          e.origin === 'https://worldview.app' ||
+          e.origin === 'https://www.worldview.app' ||
+          e.origin.endsWith('.worldview.app');
         const fromSlack = slackOAuthPopup !== null && e.source === slackOAuthPopup;
         const fromDiscord = discordOAuthPopup !== null && e.source === discordOAuthPopup;
         if (!trustedOrigin || (!fromSlack && !fromDiscord)) return;

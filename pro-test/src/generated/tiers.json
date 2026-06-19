@@ -11,7 +11,7 @@
       "Basic map view"
     ],
     "cta": "Get Started",
-    "href": "https://worldmonitor.app/dashboard",
+    "href": "https://worldview.app/dashboard",
     "highlighted": false
   },
   {
@@ -61,7 +61,7 @@
       "On-premise option"
     ],
     "cta": "Contact Sales",
-    "href": "mailto:enterprise@worldmonitor.app",
+    "href": "mailto:enterprise@worldview.app",
     "highlighted": false
   }
 ]

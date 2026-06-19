@@ -1,6 +1,6 @@
-export const PANEL_SPANS_KEY = 'worldmonitor-panel-spans';
-export const PANEL_COL_SPANS_KEY = 'worldmonitor-panel-col-spans';
-export const PANEL_COLLAPSED_KEY = 'worldmonitor-panel-collapsed';
+export const PANEL_SPANS_KEY = 'worldview-panel-spans';
+export const PANEL_COL_SPANS_KEY = 'worldview-panel-col-spans';
+export const PANEL_COLLAPSED_KEY = 'worldview-panel-collapsed';
 
 let panelSpansCache: Readonly<Record<string, number>> | null = null;
 let panelColSpansCache: Readonly<Record<string, number>> | null = null;

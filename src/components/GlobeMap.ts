@@ -1,7 +1,7 @@
 /**
  * GlobeMap - 3D interactive globe using globe.gl
  *
- * Matches World Monitor's MapContainer API so it can be used as a drop-in
+ * Matches WorldView's MapContainer API so it can be used as a drop-in
  * replacement within MapContainer when the user enables globe mode.
  *
  * Architecture mirrors Sentinel (sentinel.axonia.us):
@@ -52,12 +52,12 @@ import type { DisplacementFlow } from '@/services/displacement';
 import type { ClimateAnomaly } from '@/services/climate';
 import type { GpsJamHex } from '@/services/gps-interference';
 import type { SatellitePosition } from '@/services/satellites';
-import type { ImageryScene } from '@/generated/server/worldmonitor/imagery/v1/service_server';
+import type { ImageryScene } from '@/generated/server/worldview/imagery/v1/service_server';
 import { isAllowedPreviewUrl } from '@/utils/imagery-preview';
 import { getCategoryStyle } from '@/services/webcams';
 import { pinWebcam, isPinned } from '@/services/webcams/pinned-store';
-import type { WebcamEntry, WebcamCluster } from '@/generated/client/worldmonitor/webcam/v1/service_client';
-import type { TrafficAnomaly as ProtoTrafficAnomaly, DdosLocationHit } from '@/generated/client/worldmonitor/infrastructure/v1/service_client';
+import type { WebcamEntry, WebcamCluster } from '@/generated/client/worldview/webcam/v1/service_client';
+import type { TrafficAnomaly as ProtoTrafficAnomaly, DdosLocationHit } from '@/generated/client/worldview/infrastructure/v1/service_client';
 import type { RadiationObservation } from '@/services/radiation';
 import type { ScenarioVisualState } from '@/config/scenario-templates';
 import { setTrustedHtml, trustedHtml } from '@/utils/dom-utils';
@@ -1835,7 +1835,7 @@ export class GlobeMap {
 
   private createLayerToggles(): void {
     const layerDefs = getLayersForVariant((SITE_VARIANT || 'full') as MapVariant, 'globe');
-    const _wmKey = getSecretState('WORLDMONITOR_API_KEY').present;
+    const _wmKey = getSecretState('WORLDVIEW_API_KEY').present;
     const layers = layerDefs.map(def => ({
       key: def.key,
       label: resolveLayerLabel(def, t),
@@ -1872,7 +1872,7 @@ export class GlobeMap {
       </div>`, "legacy direct innerHTML migration"));
     const authorBadge = document.createElement('div');
     authorBadge.className = 'map-author-badge';
-    authorBadge.textContent = '© Elie Habib · Someone™';
+    authorBadge.textContent = '© Mannie · Someone™';
     el.appendChild(authorBadge);
     this.container.appendChild(el);
 

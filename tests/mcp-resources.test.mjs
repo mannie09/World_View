@@ -42,7 +42,7 @@ function envKeyReq(body, headers = {}) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-WorldMonitor-Key': VALID_KEY,
+      'X-WorldView-Key': VALID_KEY,
       ...headers,
     },
     body: JSON.stringify(body),
@@ -149,7 +149,7 @@ let CHOKEPOINT_SLUGS;
 
 describe('api/mcp.ts — resources capability + stability + auth-symmetry', () => {
   beforeEach(async () => {
-    process.env.WORLDMONITOR_VALID_KEYS = VALID_KEY;
+    process.env.WORLDVIEW_VALID_KEYS = VALID_KEY;
     process.env.UPSTASH_REDIS_REST_URL = 'https://fake.upstash.io';
     process.env.UPSTASH_REDIS_REST_TOKEN = 'fake_token';
     process.env.MCP_INTERNAL_HMAC_SECRET = HMAC_SECRET;
@@ -205,10 +205,10 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
     assert.equal(body.result.resources.length, 4, `Expected 4 resources, got ${body.result.resources.length}`);
 
     const expectedUris = [
-      'worldmonitor://countries/{iso2}/risk',
-      'worldmonitor://chokepoints/{slug}/status',
-      'worldmonitor://seed-meta/freshness',
-      'worldmonitor://markets/{symbol}/quote',
+      'worldview://countries/{iso2}/risk',
+      'worldview://chokepoints/{slug}/status',
+      'worldview://seed-meta/freshness',
+      'worldview://markets/{symbol}/quote',
     ];
     const actualUris = body.result.resources.map((r) => r.uri);
     assert.deepEqual(actualUris, expectedUris, 'resource URIs and order must match the documented set');
@@ -229,15 +229,15 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
   // -------------------------------------------------------------------------
   // resources/read — each URI resolves (env-key auth path)
   // -------------------------------------------------------------------------
-  it('resources/read worldmonitor://countries/de/risk returns country-risk content with cached_at + stale', async () => {
-    const res = await handler(envKeyReq(readBody('worldmonitor://countries/de/risk')));
+  it('resources/read worldview://countries/de/risk returns country-risk content with cached_at + stale', async () => {
+    const res = await handler(envKeyReq(readBody('worldview://countries/de/risk')));
     assert.equal(res.status, 200);
     const body = await res.json();
     assert.equal(body.error, undefined, `unexpected error: ${JSON.stringify(body.error)}`);
     assert.ok(Array.isArray(body.result?.contents), 'result.contents must be an array');
     assert.equal(body.result.contents.length, 1, 'must return exactly one content entry');
     const c = body.result.contents[0];
-    assert.equal(c.uri, 'worldmonitor://countries/de/risk', 'echo the requested uri verbatim');
+    assert.equal(c.uri, 'worldview://countries/de/risk', 'echo the requested uri verbatim');
     assert.equal(c.mimeType, 'application/json');
     const payload = JSON.parse(c.text);
     assert.equal(typeof payload.cached_at === 'string' || payload.cached_at === null, true,
@@ -249,8 +249,8 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
     assert.equal(payload.cii, 28);
   });
 
-  it('resources/read worldmonitor://chokepoints/suez/status returns the transit-summary envelope with cached_at + stale', async () => {
-    const res = await handler(envKeyReq(readBody('worldmonitor://chokepoints/suez/status')));
+  it('resources/read worldview://chokepoints/suez/status returns the transit-summary envelope with cached_at + stale', async () => {
+    const res = await handler(envKeyReq(readBody('worldview://chokepoints/suez/status')));
     assert.equal(res.status, 200);
     const body = await res.json();
     assert.equal(body.error, undefined, `unexpected error: ${JSON.stringify(body.error)}`);
@@ -261,8 +261,8 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
     assert.ok(payload.data, 'cache-tool envelope must carry a data field');
   });
 
-  it('resources/read worldmonitor://seed-meta/freshness returns envelope-only (no data field)', async () => {
-    const res = await handler(envKeyReq(readBody('worldmonitor://seed-meta/freshness')));
+  it('resources/read worldview://seed-meta/freshness returns envelope-only (no data field)', async () => {
+    const res = await handler(envKeyReq(readBody('worldview://seed-meta/freshness')));
     assert.equal(res.status, 200);
     const body = await res.json();
     assert.equal(body.error, undefined, `unexpected error: ${JSON.stringify(body.error)}`);
@@ -275,8 +275,8 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
       'envelope-only projection must contain exactly cached_at + stale');
   });
 
-  it('resources/read worldmonitor://markets/AAPL/quote returns the matched single-symbol slice with cached_at + stale', async () => {
-    const res = await handler(envKeyReq(readBody('worldmonitor://markets/AAPL/quote')));
+  it('resources/read worldview://markets/AAPL/quote returns the matched single-symbol slice with cached_at + stale', async () => {
+    const res = await handler(envKeyReq(readBody('worldview://markets/AAPL/quote')));
     assert.equal(res.status, 200);
     const body = await res.json();
     assert.equal(body.error, undefined, `unexpected error: ${JSON.stringify(body.error)}`);
@@ -290,14 +290,14 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
   // resources/read error paths
   // -------------------------------------------------------------------------
   it('resources/read with an unknown URI prefix returns -32602', async () => {
-    const res = await handler(envKeyReq(readBody('worldmonitor://nope/asdf')));
+    const res = await handler(envKeyReq(readBody('worldview://nope/asdf')));
     assert.equal(res.status, 200);
     const body = await res.json();
     assert.equal(body.error?.code, -32602, `unknown uri prefix must be -32602, got ${body.error?.code}`);
   });
 
   it('resources/read with a malformed iso2 (3 letters) returns -32602 with a specific message', async () => {
-    const res = await handler(envKeyReq(readBody('worldmonitor://countries/deu/risk')));
+    const res = await handler(envKeyReq(readBody('worldview://countries/deu/risk')));
     assert.equal(res.status, 200);
     const body = await res.json();
     assert.equal(body.error?.code, -32602);
@@ -308,14 +308,14 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
   it('resources/read with an uppercase iso2 returns -32602 (lowercase canonical)', async () => {
     // Stability contract: the URI is case-sensitive. "DE" is invalid;
     // "de" is canonical. Documented inline in the resource description.
-    const res = await handler(envKeyReq(readBody('worldmonitor://countries/DE/risk')));
+    const res = await handler(envKeyReq(readBody('worldview://countries/DE/risk')));
     assert.equal(res.status, 200);
     const body = await res.json();
     assert.equal(body.error?.code, -32602);
   });
 
   it('resources/read with an unknown chokepoint slug returns -32602 listing the known slugs', async () => {
-    const res = await handler(envKeyReq(readBody('worldmonitor://chokepoints/no-such-slug/status')));
+    const res = await handler(envKeyReq(readBody('worldview://chokepoints/no-such-slug/status')));
     assert.equal(res.status, 200);
     const body = await res.json();
     assert.equal(body.error?.code, -32602);
@@ -326,7 +326,7 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
   });
 
   it('resources/read with a lowercase ticker returns -32602', async () => {
-    const res = await handler(envKeyReq(readBody('worldmonitor://markets/aapl/quote')));
+    const res = await handler(envKeyReq(readBody('worldview://markets/aapl/quote')));
     assert.equal(res.status, 200);
     const body = await res.json();
     assert.equal(body.error?.code, -32602);
@@ -399,7 +399,7 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
   it('LOAD-BEARING: Pro resources/read on countries/de/risk decrements the daily-quota counter by exactly 1 (identical to tools/call(get_country_risk))', async () => {
     const { deps: depsR, pipe: pipeR } = makeProDeps({ pipelineOpts: { initialCount: 0 } });
     const resR = await mcpHandler(
-      proReq('POST', readBody('worldmonitor://countries/de/risk')),
+      proReq('POST', readBody('worldview://countries/de/risk')),
       depsR,
     );
     const bodyR = await resR.json();
@@ -424,9 +424,9 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
 
   it('Pro resources/read on cache-tool-backed URIs (markets, chokepoints, seed-meta) also increments counter by 1 each', async () => {
     const uris = [
-      'worldmonitor://markets/AAPL/quote',
-      'worldmonitor://chokepoints/suez/status',
-      'worldmonitor://seed-meta/freshness',
+      'worldview://markets/AAPL/quote',
+      'worldview://chokepoints/suez/status',
+      'worldview://seed-meta/freshness',
     ];
     for (const uri of uris) {
       const { deps, pipe } = makeProDeps({ pipelineOpts: { initialCount: 0 } });
@@ -440,11 +440,11 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
   });
 
   it('env-key resources/read on countries/de/risk does NOT touch the Pro quota path (env-key tier is its own quota)', async () => {
-    // env-key auth path uses X-WorldMonitor-Key. The dispatcher's INCR
+    // env-key auth path uses X-WorldView-Key. The dispatcher's INCR
     // reservation only fires for context.kind === 'pro'. This test asserts
     // the response succeeds AND no Pro pipeline activity was attempted.
     const { deps, pipe } = makeProDeps({ pipelineOpts: { initialCount: 0 } });
-    const res = await mcpHandler(envKeyReq(readBody('worldmonitor://countries/de/risk')), deps);
+    const res = await mcpHandler(envKeyReq(readBody('worldview://countries/de/risk')), deps);
     const body = await res.json();
     assert.equal(body.error, undefined, `env-key resources/read should succeed, got error: ${JSON.stringify(body.error)}`);
     assert.equal(pipe.count, 0, 'env-key auth must NOT touch the Pro daily-quota counter');
@@ -465,7 +465,7 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
     // Pre-seed the counter at the cap so the next INCR rejects.
     const { deps, pipe } = makeProDeps({ pipelineOpts: { initialCount: 50 } });
     const res = await mcpHandler(
-      proReq('POST', readBody('worldmonitor://countries/de/risk')),
+      proReq('POST', readBody('worldview://countries/de/risk')),
       deps,
     );
     assert.equal(res.status, 429, 'cap-exceeded must surface as HTTP 429');
@@ -504,7 +504,7 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
     try {
       const { deps: depsR } = makeProDeps({ pipelineOpts: { initialCount: 50 } });
       const resR = await mcpHandler(
-        proReq('POST', readBody('worldmonitor://countries/de/risk')),
+        proReq('POST', readBody('worldview://countries/de/risk')),
         depsR,
       );
       assert.equal(resR.status, 429);
@@ -542,7 +542,7 @@ describe('api/mcp.ts — resources capability + stability + auth-symmetry', () =
     const huge = { padding: 'x'.repeat(300_000) }; // > 262_144 budget
     installMockFetch({ riskPayload: huge });
 
-    const res = await handler(envKeyReq(readBody('worldmonitor://countries/de/risk')));
+    const res = await handler(envKeyReq(readBody('worldview://countries/de/risk')));
     assert.equal(res.status, 200);
     const body = await res.json();
     assert.equal(body.error, undefined, 'budget-exceeded surfaces as success-shape, not JSON-RPC error');

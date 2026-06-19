@@ -89,7 +89,7 @@ async function publishWelcome(userId: string, channelType: string): Promise<void
       method: 'POST',
       headers: {
         Authorization: `Bearer ${UPSTASH_TOKEN}`,
-        'User-Agent': 'worldmonitor-edge/1.0',
+        'User-Agent': 'worldview-edge/1.0',
       },
       signal: AbortSignal.timeout(5000),
     });
@@ -111,7 +111,7 @@ async function publishFlushHeld(userId: string, variant: string): Promise<void> 
   try {
     await fetch(`${UPSTASH_URL}/lpush/wm:events:queue/${encodeURIComponent(msg)}`, {
       method: 'POST',
-      headers: { Authorization: `Bearer ${UPSTASH_TOKEN}`, 'User-Agent': 'worldmonitor-edge/1.0' },
+      headers: { Authorization: `Bearer ${UPSTASH_TOKEN}`, 'User-Agent': 'worldview-edge/1.0' },
       signal: AbortSignal.timeout(5000),
     });
   } catch (err) {
@@ -221,7 +221,7 @@ export default async function handler(req: Request, ctx: { waitUntil: (p: Promis
       return json({
         error: 'pro_required',
         message: 'Real-time alerts are available on the Pro plan.',
-        upgradeUrl: 'https://worldmonitor.app/pro',
+        upgradeUrl: 'https://worldview.app/pro',
       }, 403, corsHeaders);
     }
 

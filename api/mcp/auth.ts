@@ -66,7 +66,7 @@ function getMcpProMinRatelimit(): Ratelimit | null {
 /**
  * Build the Authorization header set for a downstream `_execute` fetch.
  *
- *   - env_key → `X-WorldMonitor-Key: <apiKey>` (existing, unchanged).
+ *   - env_key → `X-WorldView-Key: <apiKey>` (existing, unchanged).
  *   - pro     → `X-WM-MCP-Internal: <ts>.<sig>` + `X-WM-MCP-User-Id: <userId>`.
  *               Signature binds method+pathname+queryHash+bodyHash+userId.
  *
@@ -81,7 +81,7 @@ export async function buildAuthHeaders(
   body: BodyInit | null | undefined,
 ): Promise<Record<string, string>> {
   if (context.kind === 'env_key') {
-    return { 'X-WorldMonitor-Key': context.apiKey };
+    return { 'X-WorldView-Key': context.apiKey };
   }
   // context.kind === 'pro'
   const secret = process.env.MCP_INTERNAL_HMAC_SECRET ?? '';
@@ -120,7 +120,7 @@ export const PRODUCTION_DEPS: McpHandlerDeps = {
 
 export function wwwAuthHeader(resourceMetadataUrl: string, errorParam = ''): string {
   const errSegment = errorParam ? `, error="${errorParam}"` : '';
-  return `Bearer realm="worldmonitor"${errSegment}, resource_metadata="${resourceMetadataUrl}"`;
+  return `Bearer realm="worldview"${errSegment}, resource_metadata="${resourceMetadataUrl}"`;
 }
 
 export async function resolveAuthContext(
@@ -156,17 +156,17 @@ export async function resolveAuthContext(
     return { ok: true, context };
   }
 
-  const candidateKey = req.headers.get('X-WorldMonitor-Key') ?? '';
+  const candidateKey = req.headers.get('X-WorldView-Key') ?? '';
   if (!candidateKey) {
     return {
       ok: false,
       response: new Response(
-        JSON.stringify({ jsonrpc: '2.0', id: null, error: { code: -32001, message: 'Authentication required. Use OAuth (/oauth/token) or pass your API key via X-WorldMonitor-Key header.' } }),
+        JSON.stringify({ jsonrpc: '2.0', id: null, error: { code: -32001, message: 'Authentication required. Use OAuth (/oauth/token) or pass your API key via X-WorldView-Key header.' } }),
         { status: 401, headers: { 'Content-Type': 'application/json', 'WWW-Authenticate': wwwAuthHeader(resourceMetadataUrl), ...corsHeaders } },
       ),
     };
   }
-  const validKeys = (process.env.WORLDMONITOR_VALID_KEYS || '').split(',').filter(Boolean);
+  const validKeys = (process.env.WORLDVIEW_VALID_KEYS || '').split(',').filter(Boolean);
   if (!await timingSafeIncludes(candidateKey, validKeys)) {
     return {
       ok: false,
@@ -209,7 +209,7 @@ export async function runProPreChecks(
   const validation = await deps.validateProMcpToken(context.mcpTokenId);
   if (!validation || validation.userId !== context.userId) {
     return new Response(
-      JSON.stringify({ jsonrpc: '2.0', id: null, error: { code: -32001, message: 'MCP authorization revoked. Re-authorize at https://worldmonitor.app/mcp-grant.' } }),
+      JSON.stringify({ jsonrpc: '2.0', id: null, error: { code: -32001, message: 'MCP authorization revoked. Re-authorize at https://worldview.app/mcp-grant.' } }),
       { status: 401, headers: { 'Content-Type': 'application/json', 'WWW-Authenticate': wwwAuthHeader(resourceMetadataUrl, 'invalid_token'), ...corsHeaders } },
     );
   }

@@ -305,7 +305,7 @@ components:
             type: object
             description: |-
                 ListWebhooksRequest has no fields — the owner is derived from the caller's
-                 API-key fingerprint (SHA-256 of X-WorldMonitor-Key).
+                 API-key fingerprint (SHA-256 of X-WorldView-Key).
         ListWebhooksResponse:
             type: object
             properties:

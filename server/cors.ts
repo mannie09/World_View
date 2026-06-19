@@ -6,12 +6,12 @@
  */
 
 const PRODUCTION_PATTERNS: RegExp[] = [
-  /^https:\/\/(.*\.)?worldmonitor\.app$/,
+  /^https:\/\/(.*\.)?worldview\.app$/,
   // Vercel preview deployments under the "eliewm" team scope, e.g.
-  //   worldmonitor-git-<branch>-eliewm.vercel.app  (git-branch alias)
-  //   worldmonitor-<hash>-eliewm.vercel.app        (deployment URL)
+  //   worldview-git-<branch>-eliewm.vercel.app  (git-branch alias)
+  //   worldview-<hash>-eliewm.vercel.app        (deployment URL)
   // Tight on purpose: never a bare *.vercel.app (this is a security allowlist).
-  /^https:\/\/worldmonitor-[a-z0-9-]+-eliewm\.vercel\.app$/,
+  /^https:\/\/worldview-[a-z0-9-]+-eliewm\.vercel\.app$/,
   /^https?:\/\/tauri\.localhost(:\d+)?$/,
   /^https?:\/\/[a-z0-9-]+\.tauri\.localhost(:\d+)?$/i,
   /^tauri:\/\/localhost$/,
@@ -31,12 +31,12 @@ const ALLOWED_ORIGIN_PATTERNS: RegExp[] =
 const ALLOWED_HEADERS = [
   'Content-Type',
   'Authorization',
-  'X-WorldMonitor-Key',
+  'X-WorldView-Key',
   'X-Api-Key',
   'X-Widget-Key',
   'X-Pro-Key',
-  'X-WorldMonitor-Desktop-Timestamp',
-  'X-WorldMonitor-Desktop-Signature',
+  'X-WorldView-Desktop-Timestamp',
+  'X-WorldView-Desktop-Signature',
   'Mcp-Session-Id',
   'MCP-Protocol-Version',
   'Last-Event-ID',
@@ -54,7 +54,7 @@ export function isAllowedOrigin(origin: string): boolean {
 
 export function getCorsHeaders(req: Request): Record<string, string> {
   const origin = req.headers.get('origin') || '';
-  const allowOrigin = isAllowedOrigin(origin) ? origin : 'https://worldmonitor.app';
+  const allowOrigin = isAllowedOrigin(origin) ? origin : 'https://worldview.app';
   return {
     'Access-Control-Allow-Origin': allowOrigin,
     'Access-Control-Allow-Credentials': 'true',

@@ -5331,7 +5331,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "world-monitor"
+name = "world-view"
 version = "2.8.0"
 dependencies = [
  "getrandom 0.2.17",

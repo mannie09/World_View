@@ -1,7 +1,7 @@
 // Cloudflare Worker: api-cors-preflight
 //
-// Bound to: api.worldmonitor.app/*
-// Source of truth for CORS on api.worldmonitor.app. Short-circuits OPTIONS
+// Bound to: api.worldview.app/*
+// Source of truth for CORS on api.worldview.app. Short-circuits OPTIONS
 // preflights at the edge (skip Vercel) and stamps the same CORS headers onto
 // non-OPTIONS responses on the way back to the browser.
 //
@@ -14,7 +14,7 @@
 // the Worker visible to code review, greptile, and CI guardrails.
 //
 // See: docs/architecture/pro-monetization.md (CORS section)
-//      ~/.claude/skills/worldmonitor-architecture-gotchas/reference/
+//      ~/.claude/skills/worldview-architecture-gotchas/reference/
 //        cloudflare-worker-overrides-vercel-cors-for-preflight.md
 
 // Keep in sync with api/_cors.js#ALLOWED_ORIGIN_PATTERNS and
@@ -23,11 +23,11 @@
 // origins that the function would accept get the canonical fallback origin
 // echoed back and fail CORS at the browser.
 const ALLOWED_ORIGIN_PATTERNS = [
-  /^https:\/\/(.*\.)?worldmonitor\.app$/,
+  /^https:\/\/(.*\.)?worldview\.app$/,
   // Vercel previews under the "eliewm" team scope, e.g.
-  //   worldmonitor-git-<branch>-eliewm.vercel.app / worldmonitor-<hash>-eliewm.vercel.app
+  //   worldview-git-<branch>-eliewm.vercel.app / worldview-<hash>-eliewm.vercel.app
   // Mirror of api/_cors.js + server/cors.ts (see superset note above).
-  /^https:\/\/worldmonitor-[a-z0-9-]+-eliewm\.vercel\.app$/,
+  /^https:\/\/worldview-[a-z0-9-]+-eliewm\.vercel\.app$/,
   /^https?:\/\/tauri\.localhost(:\d+)?$/,
   /^https?:\/\/[a-z0-9-]+\.tauri\.localhost(:\d+)?$/i,
   /^tauri:\/\/localhost$/,
@@ -35,7 +35,7 @@ const ALLOWED_ORIGIN_PATTERNS = [
 ];
 
 // Keep in sync with api/_cors.js#getCorsHeaders Access-Control-Allow-Headers.
-const ALLOW_HEADERS = 'Content-Type, Authorization, X-WorldMonitor-Key, X-Api-Key, X-Widget-Key, X-Pro-Key, X-WorldMonitor-Desktop-Timestamp, X-WorldMonitor-Desktop-Signature';
+const ALLOW_HEADERS = 'Content-Type, Authorization, X-WorldView-Key, X-Api-Key, X-Widget-Key, X-Pro-Key, X-WorldView-Desktop-Timestamp, X-WorldView-Desktop-Signature';
 
 // Superset of every method any api/* route advertises. The Worker stamps ONE
 // fixed Allow-Methods on every preflight, so if a route handles DELETE but
@@ -54,7 +54,7 @@ const ALLOW_METHODS = 'GET, POST, DELETE, HEAD, OPTIONS';
 // origin validation). The Worker MUST NOT intercept these:
 //   - OPTIONS preflights must reach Vercel so the function's own policy
 //     applies (otherwise external clients like claude.ai see the canonical
-//     worldmonitor.app fallback echo and get blocked by the browser).
+//     worldview.app fallback echo and get blocked by the browser).
 //   - Non-OPTIONS responses must pass through unmodified — the Worker's
 //     header.set() loop would otherwise overwrite the function's ACAO with
 //     the Worker's origin echo (or canonical fallback) and break CORS.
@@ -91,7 +91,7 @@ export function isAllowedOrigin(origin) {
 export { hasPublicCorsPolicy };
 
 export function buildCorsHeaders(origin) {
-  const allowOrigin = isAllowedOrigin(origin) ? origin : 'https://worldmonitor.app';
+  const allowOrigin = isAllowedOrigin(origin) ? origin : 'https://worldview.app';
   return {
     'Access-Control-Allow-Origin': allowOrigin,
     // Required because the app fetch interceptor sends credentials: 'include'
@@ -117,7 +117,7 @@ export default {
     // discovery, security reports, public utilities) must reach Vercel
     // untouched. If the Worker short-circuited the OPTIONS preflight here,
     // external clients like https://claude.ai would see the canonical
-    // worldmonitor.app fallback origin echo and the browser would block.
+    // worldview.app fallback origin echo and the browser would block.
     if (hasPublicCorsPolicy(url.pathname)) {
       return fetch(request);
     }

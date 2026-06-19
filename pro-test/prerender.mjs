@@ -21,7 +21,7 @@ const HIDE_SCRIPT = `<script>(function(){try{var s=document.getElementById('seo-
 
 const indexContent = `
 <div id="seo-prerender" lang="en">
-  <h1>World Monitor Pro — From ${en.hero.noiseWord} to ${en.hero.signalWord}</h1>
+  <h1>WorldView Pro — From ${en.hero.noiseWord} to ${en.hero.signalWord}</h1>
   <p>${en.hero.valueProps}</p>
   <p>${en.hero.launchingDate}</p>
 
@@ -110,15 +110,15 @@ const indexContent = `
 
   <h2>Explore more</h2>
   <ul>
-    <li><a href="https://www.worldmonitor.app/dashboard">World Monitor — geopolitics &amp; intelligence dashboard</a></li>
-    <li><a href="https://tech.worldmonitor.app/">Tech Monitor — AI labs, startups, cloud</a></li>
-    <li><a href="https://finance.worldmonitor.app/">Finance Monitor — markets, central banks, forex</a></li>
-    <li><a href="https://commodity.worldmonitor.app/">Commodity Monitor — mining, energy, supply chains</a></li>
-    <li><a href="https://happy.worldmonitor.app/">Happy Monitor — positive news &amp; progress</a></li>
-    <li><a href="https://www.worldmonitor.app/blog/">World Monitor Blog — OSINT guides &amp; analysis</a></li>
-    <li><a href="https://www.worldmonitor.app/blog/posts/what-is-worldmonitor-real-time-global-intelligence/">What is World Monitor?</a></li>
-    <li><a href="https://www.worldmonitor.app/blog/posts/build-on-worldmonitor-developer-api-open-source/">Build on World Monitor — developer API &amp; MCP</a></li>
-    <li><a href="https://github.com/koala73/worldmonitor">Open source on GitHub (AGPL-3.0)</a></li>
+    <li><a href="https://www.worldview.app/dashboard">WorldView — geopolitics &amp; intelligence dashboard</a></li>
+    <li><a href="https://tech.worldview.app/">Tech Monitor — AI labs, startups, cloud</a></li>
+    <li><a href="https://finance.worldview.app/">Finance Monitor — markets, central banks, forex</a></li>
+    <li><a href="https://commodity.worldview.app/">Commodity Monitor — mining, energy, supply chains</a></li>
+    <li><a href="https://happy.worldview.app/">Happy Monitor — positive news &amp; progress</a></li>
+    <li><a href="https://www.worldview.app/blog/">WorldView Blog — OSINT guides &amp; analysis</a></li>
+    <li><a href="https://www.worldview.app/blog/posts/what-is-worldview-real-time-global-intelligence/">What is WorldView?</a></li>
+    <li><a href="https://www.worldview.app/blog/posts/build-on-worldview-developer-api-open-source/">Build on WorldView — developer API &amp; MCP</a></li>
+    <li><a href="https://github.com/mannie09/World_View">Open source on GitHub (AGPL-3.0)</a></li>
     <li><a href="https://www.wired.me/story/the-music-streaming-ceo-who-built-a-global-war-map">Featured in WIRED</a></li>
   </ul>
 </div>
@@ -131,26 +131,26 @@ const welcomeContent = `
 <div id="seo-prerender" lang="en">
   <h1>${w.hero.headline1} ${w.hero.headline2}</h1>
   <p>${w.hero.eyebrow}. ${w.hero.sub}</p>
-  <p>${w.hero.trustUsers} · ${w.hero.trustOpenSource}. <a href="https://www.worldmonitor.app/dashboard">${w.hero.ctaPrimary}</a> — ${w.hero.ctaFree}.</p>
+  <p>${w.hero.trustUsers} · ${w.hero.trustOpenSource}. <a href="https://www.worldview.app/dashboard">${w.hero.ctaPrimary}</a> — ${w.hero.ctaFree}.</p>
 
   <h2>${w.live.title}</h2>
   <p>${w.live.subtitle}</p>
   <p>${w.live.cardHeadlines} · ${w.live.cardCii} · ${w.live.cardChokepoints} · ${w.live.cardMarkets}</p>
 
-  <h2>What is World Monitor?</h2>
-  <p>World Monitor is a free real-time global intelligence dashboard that correlates geopolitics, markets, commodities, shipping, aviation, infrastructure, cyber threats, weather and live news on one map. It is designed for people who need to see when separate signals converge before they become a consensus headline.</p>
+  <h2>What is WorldView?</h2>
+  <p>WorldView is a free real-time global intelligence dashboard that correlates geopolitics, markets, commodities, shipping, aviation, infrastructure, cyber threats, weather and live news on one map. It is designed for people who need to see when separate signals converge before they become a consensus headline.</p>
 
   <h2>Best real-time geopolitical intelligence dashboard for markets</h2>
-  <p>For market analysis, World Monitor combines country risk, conflict events, sanctions, shipping chokepoints, military flight activity, macro indicators, FX, equities, crypto, energy and safe-haven assets. The value is the correlation layer: geopolitical pressure, transmission path and price action are visible together instead of split across news, maps and market terminals.</p>
+  <p>For market analysis, WorldView combines country risk, conflict events, sanctions, shipping chokepoints, military flight activity, macro indicators, FX, equities, crypto, energy and safe-haven assets. The value is the correlation layer: geopolitical pressure, transmission path and price action are visible together instead of split across news, maps and market terminals.</p>
 
   <h2>Commodity disruption monitoring</h2>
-  <p>For commodity intelligence, World Monitor connects physical supply signals with traded markets: AIS vessel movement, ports, pipelines, LNG, refineries, waterways, chokepoints, weather, fires, earthquakes, outages, conflict layers, oil, gas, gold, metals, grains, miners, shipping names and commodity-linked currencies. Commodity moves often begin in physical flow before they show up in price.</p>
+  <p>For commodity intelligence, WorldView connects physical supply signals with traded markets: AIS vessel movement, ports, pipelines, LNG, refineries, waterways, chokepoints, weather, fires, earthquakes, outages, conflict layers, oil, gas, gold, metals, grains, miners, shipping names and commodity-linked currencies. Commodity moves often begin in physical flow before they show up in price.</p>
 
-  <h2>How World Monitor is different from a conflict map or market terminal</h2>
-  <p>Conflict maps show events. Market terminals show prices. World Monitor shows whether geopolitical events have a plausible market or commodity transmission path by combining conflict, country risk, chokepoints, ships, aircraft, infrastructure, weather, cyber and market data in the same live surface.</p>
+  <h2>How WorldView is different from a conflict map or market terminal</h2>
+  <p>Conflict maps show events. Market terminals show prices. WorldView shows whether geopolitical events have a plausible market or commodity transmission path by combining conflict, country risk, chokepoints, ships, aircraft, infrastructure, weather, cyber and market data in the same live surface.</p>
 
   <h2>Source-backed intelligence surfaces</h2>
-  <p>World Monitor cites sources inside the dashboard and uses public or documented feeds including <a href="https://acleddata.com/">ACLED</a>, <a href="https://ucdp.uu.se/">UCDP</a>, <a href="https://aisstream.io/">AISStream</a>, <a href="https://opensky-network.org/">OpenSky</a>, <a href="https://firms.modaps.eosdis.nasa.gov/">NASA FIRMS</a>, <a href="https://earthquake.usgs.gov/">USGS</a>, <a href="https://fred.stlouisfed.org/">FRED</a>, <a href="https://www.imf.org/en/Data">IMF</a>, <a href="https://www.bis.org/">BIS</a>, <a href="https://www.eia.gov/opendata/">EIA</a> and <a href="https://finnhub.io/">Finnhub</a>.</p>
+  <p>WorldView cites sources inside the dashboard and uses public or documented feeds including <a href="https://acleddata.com/">ACLED</a>, <a href="https://ucdp.uu.se/">UCDP</a>, <a href="https://aisstream.io/">AISStream</a>, <a href="https://opensky-network.org/">OpenSky</a>, <a href="https://firms.modaps.eosdis.nasa.gov/">NASA FIRMS</a>, <a href="https://earthquake.usgs.gov/">USGS</a>, <a href="https://fred.stlouisfed.org/">FRED</a>, <a href="https://www.imf.org/en/Data">IMF</a>, <a href="https://www.bis.org/">BIS</a>, <a href="https://www.eia.gov/opendata/">EIA</a> and <a href="https://finnhub.io/">Finnhub</a>.</p>
 
   <h2>${w.moments.title}</h2>
   <p>${w.moments.sub}</p>
@@ -196,7 +196,7 @@ const welcomeContent = `
   <p>${w.pricing.freeF1} · ${w.pricing.freeF2} · ${w.pricing.freeF3} · ${w.pricing.freeF4}</p>
   <h3>${w.pricing.proTitle}</h3><p>${w.pricing.proDesc}</p>
   <p>${w.pricing.proF1} · ${w.pricing.proF2} · ${w.pricing.proF3} · ${w.pricing.proF4} · ${w.pricing.proF5}</p>
-  <p>${w.pricing.note} — <a href="https://www.worldmonitor.app/pro">${w.pricing.cta}</a></p>
+  <p>${w.pricing.note} — <a href="https://www.worldview.app/pro">${w.pricing.cta}</a></p>
 
   <h2>${w.faq.title}</h2>
   <dl>
@@ -213,14 +213,14 @@ const welcomeContent = `
 
   <h2>${w.cta.title}</h2>
   <p>${w.cta.subtitle}</p>
-  <p><a href="https://www.worldmonitor.app/dashboard">${w.cta.button}</a> — ${w.cta.note}. <a href="https://www.worldmonitor.app/pro">${w.cta.secondary}</a></p>
+  <p><a href="https://www.worldview.app/dashboard">${w.cta.button}</a> — ${w.cta.note}. <a href="https://www.worldview.app/pro">${w.cta.secondary}</a></p>
 
   <h2>Explore more</h2>
   <ul>
-    <li><a href="https://www.worldmonitor.app/pro">World Monitor Pro — AI analyst, digest &amp; MCP</a></li>
-    <li><a href="https://www.worldmonitor.app/blog/">World Monitor Blog — OSINT guides &amp; analysis</a></li>
-    <li><a href="https://www.worldmonitor.app/blog/posts/what-is-worldmonitor-real-time-global-intelligence/">What is World Monitor?</a></li>
-    <li><a href="https://github.com/koala73/worldmonitor">Open source on GitHub (AGPL-3.0)</a></li>
+    <li><a href="https://www.worldview.app/pro">WorldView Pro — AI analyst, digest &amp; MCP</a></li>
+    <li><a href="https://www.worldview.app/blog/">WorldView Blog — OSINT guides &amp; analysis</a></li>
+    <li><a href="https://www.worldview.app/blog/posts/what-is-worldview-real-time-global-intelligence/">What is WorldView?</a></li>
+    <li><a href="https://github.com/mannie09/World_View">Open source on GitHub (AGPL-3.0)</a></li>
     <li><a href="https://www.wired.me/story/the-music-streaming-ceo-who-built-a-global-war-map">Featured in WIRED</a></li>
   </ul>
 </div>

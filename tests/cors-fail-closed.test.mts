@@ -26,11 +26,11 @@ function stripComments(source: string): string {
 
 describe('cors helper', () => {
   it('returns headers for a well-formed request', () => {
-    const req = new Request('https://worldmonitor.app/x', {
-      headers: { Origin: 'https://worldmonitor.app' },
+    const req = new Request('https://worldview.app/x', {
+      headers: { Origin: 'https://worldview.app' },
     });
     const headers = getCorsHeaders(req);
-    assert.equal(headers['Access-Control-Allow-Origin'], 'https://worldmonitor.app');
+    assert.equal(headers['Access-Control-Allow-Origin'], 'https://worldview.app');
   });
 
   it('propagates exceptions (caller must wrap in fail-closed try/catch)', () => {
@@ -45,7 +45,7 @@ describe('cors helper', () => {
   });
 });
 
-// The Vercel project moved from the personal scope (worldmonitor-*-elie-<hash>)
+// The Vercel project moved from the personal scope (worldview-*-elie-<hash>)
 // to the "eliewm" team scope. Browsers send Origin on the POST to
 // /api/wm-session, so a stale allowlist 403s every preview deployment and the
 // anonymous session can never be minted (dashboard + /welcome teasers stay dark).
@@ -53,21 +53,21 @@ describe('isAllowedOrigin — Vercel preview allowlist (eliewm team scope)', () 
   // Origin for the JS twin (api/_cors.js exports isDisallowedOrigin, not the
   // bare predicate) — same allow/deny outcome proves both files stay in sync.
   const allowedByJsTwin = (origin: string) =>
-    !isDisallowedOriginJs(new Request('https://worldmonitor.app/x', { headers: { Origin: origin } }));
+    !isDisallowedOriginJs(new Request('https://worldview.app/x', { headers: { Origin: origin } }));
 
   const ALLOWED = [
-    ['git-branch alias URL', 'https://worldmonitor-git-feature-eliewm.vercel.app'],
-    ['hash deployment URL', 'https://worldmonitor-abc123def456-eliewm.vercel.app'],
-    ['apex production origin', 'https://worldmonitor.app'],
-    ['production subdomain', 'https://tech.worldmonitor.app'],
+    ['git-branch alias URL', 'https://worldview-git-feature-eliewm.vercel.app'],
+    ['hash deployment URL', 'https://worldview-abc123def456-eliewm.vercel.app'],
+    ['apex production origin', 'https://worldview.app'],
+    ['production subdomain', 'https://tech.worldview.app'],
   ];
 
   const REJECTED = [
-    ['non-worldmonitor vercel.app origin', 'https://some-other-app-eliewm.vercel.app'],
-    ['foreign team scope', 'https://worldmonitor-git-feature-attacker.vercel.app'],
-    ['bare worldmonitor vercel.app (no scope segment)', 'https://worldmonitor.vercel.app'],
-    ['suffix-spoofed eliewm origin', 'https://worldmonitor-git-feature-eliewm.vercel.app.evil.com'],
-    ['dead personal-scope preview (post-migration)', 'https://worldmonitor-feature-elie-abc123.vercel.app'],
+    ['non-worldview vercel.app origin', 'https://some-other-app-eliewm.vercel.app'],
+    ['foreign team scope', 'https://worldview-git-feature-attacker.vercel.app'],
+    ['bare worldview vercel.app (no scope segment)', 'https://worldview.vercel.app'],
+    ['suffix-spoofed eliewm origin', 'https://worldview-git-feature-eliewm.vercel.app.evil.com'],
+    ['dead personal-scope preview (post-migration)', 'https://worldview-feature-elie-abc123.vercel.app'],
   ];
 
   for (const [label, origin] of ALLOWED) {
@@ -104,10 +104,10 @@ describe('CORS triplet parity — eliewm preview pattern stays tight in all thre
       const source = await readFile(new URL(rel, import.meta.url), 'utf8');
       assert.ok(
         source.includes('-eliewm\\.vercel\\.app'),
-        `${rel} must allow worldmonitor-*-eliewm.vercel.app previews`,
+        `${rel} must allow worldview-*-eliewm.vercel.app previews`,
       );
       assert.ok(
-        !source.includes('worldmonitor-[a-z0-9-]+\\.vercel\\.app'),
+        !source.includes('worldview-[a-z0-9-]+\\.vercel\\.app'),
         `${rel} must not widen to a bare *.vercel.app wildcard (security allowlist)`,
       );
     });
@@ -118,7 +118,7 @@ describe('CORS Worker superset invariant — edge allowlist ⊇ function allowli
   // The api-cors-preflight Worker (workers/api-cors-preflight) short-circuits
   // OPTIONS preflights at the edge, so its allowlist MUST be a superset of
   // api/_cors.js. If the Worker rejects an origin the function would accept,
-  // the preflight echoes the canonical worldmonitor.app fallback and the
+  // the preflight echoes the canonical worldview.app fallback and the
   // browser blocks the request before it reaches Vercel.
   //
   // The Worker's own test (workers/api-cors-preflight/index.test.mjs) lives
@@ -130,21 +130,21 @@ describe('CORS Worker superset invariant — edge allowlist ⊇ function allowli
   // Localhost/127 are intentionally omitted: they are DEV-only on the function
   // side (NODE_ENV-gated) and never reach the prod-only Worker.
   const fnAllows = (origin: string) =>
-    !isDisallowedOriginJs(new Request('https://worldmonitor.app/x', { headers: { Origin: origin } }));
+    !isDisallowedOriginJs(new Request('https://worldview.app/x', { headers: { Origin: origin } }));
 
   const PROD_ORIGINS = [
-    'https://worldmonitor.app',
-    'https://www.worldmonitor.app',
-    'https://tech.worldmonitor.app',
-    'https://worldmonitor-git-feature-eliewm.vercel.app',
-    'https://worldmonitor-abc123def456-eliewm.vercel.app',
+    'https://worldview.app',
+    'https://www.worldview.app',
+    'https://tech.worldview.app',
+    'https://worldview-git-feature-eliewm.vercel.app',
+    'https://worldview-abc123def456-eliewm.vercel.app',
     'tauri://localhost',
     'asset://localhost',
     // Negatives — the function rejects these, so the superset assertion is a
     // no-op for them; included to document the boundary.
     'https://some-other-app-eliewm.vercel.app',
-    'https://worldmonitor-git-feature-attacker.vercel.app',
-    'https://worldmonitor-feature-elie-abc123.vercel.app',
+    'https://worldview-git-feature-attacker.vercel.app',
+    'https://worldview-feature-elie-abc123.vercel.app',
     'https://evil.com',
   ];
 
@@ -154,7 +154,7 @@ describe('CORS Worker superset invariant — edge allowlist ⊇ function allowli
         assert.equal(
           isAllowedOriginWorker(origin),
           true,
-          `Worker rejects ${origin} that api/_cors.js accepts — its OPTIONS preflight will echo the worldmonitor.app fallback and the browser will block it`,
+          `Worker rejects ${origin} that api/_cors.js accepts — its OPTIONS preflight will echo the worldview.app fallback and the browser will block it`,
         );
       }
     });

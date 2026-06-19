@@ -6,7 +6,7 @@
 
 > **Design philosophy**: For the "why" behind architectural decisions, intelligence tradecraft, and algorithmic choices, see [Design Philosophy](docs/architecture.mdx).
 
-World Monitor is a real-time global intelligence dashboard built as a TypeScript single-page application. It aggregates data from dozens of external sources covering geopolitics, military activity, financial markets, cyber threats, climate events, maritime tracking, and aviation into a unified operational picture rendered through an interactive map and a grid of specialized panels.
+WorldView is a real-time global intelligence dashboard built as a TypeScript single-page application. It aggregates data from dozens of external sources covering geopolitics, military activity, financial markets, cyber threats, climate events, maritime tracking, and aviation into a unified operational picture rendered through an interactive map and a grid of specialized panels.
 
 ---
 
@@ -109,7 +109,7 @@ No external state library. `AppContext` is a central mutable object holding: map
 
 ### Variant System
 
-Detected by hostname (`tech.worldmonitor.app` → tech, `finance.worldmonitor.app` → finance, etc.) or localStorage on desktop. Controls: default panels, map layers, refresh intervals, theme, UI text. Variant change resets all settings to defaults.
+Detected by hostname (`tech.worldview.app` → tech, `finance.worldview.app` → finance, etc.) or localStorage on desktop. Controls: default panels, map layers, refresh intervals, theme, UI text. Variant change resets all settings to defaults.
 
 **Source files**: `src/main.ts`, `src/App.ts`, `src/app/`, `src/components/Panel.ts`, `src/components/DeckGLMap.ts`, `src/components/GlobeMap.ts`, `src/config/variant.ts`, `src/workers/`
 
@@ -121,7 +121,7 @@ Detected by hostname (`tech.worldmonitor.app` → tech, `finance.worldmonitor.ap
 
 The `api/` directory holds two kinds of endpoints, both deployed as Vercel Edge Functions:
 
-- **Domain intelligence gateways** — generated from proto contracts and backed by handlers under `server/worldmonitor/**`. The per-domain thin entry points (`api/<domain>/v<N>/[rpc].ts`) are produced via `createDomainGateway` (`server/gateway.ts`) and esbuild-bundled, so the *deployed* artifact is self-contained even though the source composes server-side modules.
+- **Domain intelligence gateways** — generated from proto contracts and backed by handlers under `server/worldview/**`. The per-domain thin entry points (`api/<domain>/v<N>/[rpc].ts`) are produced via `createDomainGateway` (`server/gateway.ts`) and esbuild-bundled, so the *deployed* artifact is self-contained even though the source composes server-side modules.
 - **Operational endpoints** — hand-written for concerns that don't fit the contract model: auth/session, checkout and customer portal, MCP, bootstrap/health, notifications, cache invalidation, and user workflows (e.g. `api/create-checkout.ts`, `api/customer-portal.ts`, `api/mcp.ts`, `api/user-prefs.ts`).
 
 Edge functions are bundled per file: each deployed function may not pull in unrelated modules at runtime, a constraint enforced by `tests/edge-functions.test.mjs` and the pre-push esbuild bundle check. Hand-written endpoints that genuinely cannot be proto-defined are listed in `api/api-route-exceptions.json` and enforced by `npm run lint:api-contract`.
@@ -130,7 +130,7 @@ Edge functions are bundled per file: each deployed function may not pull in unre
 
 | File | Purpose |
 |------|---------|
-| `_cors.js` | Origin allowlist (worldmonitor.app, Vercel previews, tauri://localhost, localhost) |
+| `_cors.js` | Origin allowlist (worldview.app, Vercel previews, tauri://localhost, localhost) |
 | `_rate-limit.js` | Upstash sliding window rate limiting, IP extraction |
 | `_api-key.js` | Origin-aware API key validation (desktop requires key, trusted browser exempt) |
 | `_relay.js` | Factory for proxying requests to Railway relay service |
@@ -163,9 +163,9 @@ Edge functions are bundled per file: each deployed function may not pull in unre
 
 ### Domain Handlers
 
-`server/worldmonitor/<domain>/v1/handler.ts` exports handler objects with per-RPC functions. Each RPC function uses `cachedFetchJson()` from `server/_shared/redis.ts` for cache-miss coalescing: concurrent requests for the same key share a single upstream fetch and Redis write.
+`server/worldview/<domain>/v1/handler.ts` exports handler objects with per-RPC functions. Each RPC function uses `cachedFetchJson()` from `server/_shared/redis.ts` for cache-miss coalescing: concurrent requests for the same key share a single upstream fetch and Redis write.
 
-**Source files**: `api/`, `server/gateway.ts`, `server/router.ts`, `server/_shared/redis.ts`, `server/worldmonitor/`
+**Source files**: `api/`, `server/gateway.ts`, `server/router.ts`, `server/_shared/redis.ts`, `server/worldview/`
 
 ---
 
@@ -395,7 +395,7 @@ Runs before every `git push`:
 │   ├── _shared/            Redis, rate-limit, LLM, caching utilities
 │   ├── gateway.ts          Domain gateway factory
 │   ├── router.ts           Route matching
-│   └── worldmonitor/       Domain handlers (mirrors proto structure)
+│   └── worldview/       Domain handlers (mirrors proto structure)
 ├── shared/                 Cross-platform JSON configs (markets, RSS domains)
 ├── src/                    Browser SPA (TypeScript)
 │   ├── app/                App orchestration managers

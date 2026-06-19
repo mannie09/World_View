@@ -320,4 +320,4 @@ components:
             description: |-
                 ScenarioTemplate mirrors the catalog shape served by
                  GET /api/scenario/v1/list-scenario-templates. The authoritative template
-                 registry lives in server/worldmonitor/supply-chain/v1/scenario-templates.ts.
+                 registry lives in server/worldview/supply-chain/v1/scenario-templates.ts.

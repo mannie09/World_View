@@ -3,8 +3,8 @@ import { t } from '@/services/i18n';
 import { joinSafeHtml, safeHtml, safeUrlAttr, type SafeHtml } from '@/utils/sanitize';
 import { getHydratedData } from '@/services/bootstrap';
 import { getRpcBaseUrl } from '@/services/rpc-client';
-import { ClimateServiceClient } from '@/generated/client/worldmonitor/climate/v1/service_client';
-import type { ListClimateNewsResponse, ClimateNewsItem } from '@/generated/client/worldmonitor/climate/v1/service_client';
+import { ClimateServiceClient } from '@/generated/client/worldview/climate/v1/service_client';
+import type { ListClimateNewsResponse, ClimateNewsItem } from '@/generated/client/worldview/climate/v1/service_client';
 
 const client = new ClimateServiceClient(getRpcBaseUrl(), { fetch: (...args: Parameters<typeof fetch>) => globalThis.fetch(...args) });
 

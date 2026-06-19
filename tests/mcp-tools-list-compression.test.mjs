@@ -14,7 +14,7 @@ describe('api/mcp.ts — tools/list description compression (v1.7.0)', () => {
   let mod;
 
   beforeEach(async () => {
-    process.env.WORLDMONITOR_VALID_KEYS = VALID_KEY;
+    process.env.WORLDVIEW_VALID_KEYS = VALID_KEY;
     delete process.env.UPSTASH_REDIS_REST_URL;
     delete process.env.UPSTASH_REDIS_REST_TOKEN;
     mod = await freshMod();
@@ -127,9 +127,9 @@ describe('api/mcp.ts — tools/list description compression (v1.7.0)', () => {
       // export TOOL_REGISTRY-like access by calling buildPublicTool indirectly.
       // We need TOOL_REGISTRY here for tests; export it temporarily via
       // module internals.
-      const res = await mod.default(new Request('https://worldmonitor.app/mcp', {
+      const res = await mod.default(new Request('https://worldview.app/mcp', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-WorldMonitor-Key': VALID_KEY },
+        headers: { 'Content-Type': 'application/json', 'X-WorldView-Key': VALID_KEY },
         body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' }),
       }));
       const body = await res.json();
@@ -271,9 +271,9 @@ describe('api/mcp.ts — tools/list description compression (v1.7.0)', () => {
   // ============================================================
   describe('tools/list compression + describe_tool RPC', () => {
     async function getToolsList() {
-      const res = await mod.default(new Request('https://worldmonitor.app/mcp', {
+      const res = await mod.default(new Request('https://worldview.app/mcp', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-WorldMonitor-Key': VALID_KEY },
+        headers: { 'Content-Type': 'application/json', 'X-WorldView-Key': VALID_KEY },
         body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' }),
       }));
       const body = await res.json();
@@ -281,9 +281,9 @@ describe('api/mcp.ts — tools/list description compression (v1.7.0)', () => {
     }
 
     async function callDescribeTool(tool_name) {
-      const res = await mod.default(new Request('https://worldmonitor.app/mcp', {
+      const res = await mod.default(new Request('https://worldview.app/mcp', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-WorldMonitor-Key': VALID_KEY },
+        headers: { 'Content-Type': 'application/json', 'X-WorldView-Key': VALID_KEY },
         body: JSON.stringify({
           jsonrpc: '2.0', id: 1, method: 'tools/call',
           params: { name: 'describe_tool', arguments: tool_name === undefined ? {} : { tool_name } },
@@ -360,9 +360,9 @@ describe('api/mcp.ts — tools/list description compression (v1.7.0)', () => {
     // U4: Version bump + SERVER_INSTRUCTIONS + server-card sync
     // ============================================================
     it('serverInfo.version === "1.10.0"', async () => {
-      const res = await mod.default(new Request('https://worldmonitor.app/mcp', {
+      const res = await mod.default(new Request('https://worldview.app/mcp', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-WorldMonitor-Key': VALID_KEY },
+        headers: { 'Content-Type': 'application/json', 'X-WorldView-Key': VALID_KEY },
         body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-03-26', capabilities: {}, clientInfo: { name: 't', version: '1' } } }),
       }));
       const body = await res.json();
@@ -370,9 +370,9 @@ describe('api/mcp.ts — tools/list description compression (v1.7.0)', () => {
     });
 
     it('initialize.result.instructions mentions describe_tool AND the TOOL_DESCRIPTION_MAX_BYTES cap value', async () => {
-      const res = await mod.default(new Request('https://worldmonitor.app/mcp', {
+      const res = await mod.default(new Request('https://worldview.app/mcp', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-WorldMonitor-Key': VALID_KEY },
+        headers: { 'Content-Type': 'application/json', 'X-WorldView-Key': VALID_KEY },
         body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-03-26', capabilities: {}, clientInfo: { name: 't', version: '1' } } }),
       }));
       const body = await res.json();

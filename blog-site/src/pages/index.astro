@@ -9,17 +9,17 @@ const posts = (await getCollection('blog')).sort(
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Blog",
-  "name": "World Monitor Blog",
-  "description": "Analysis, guides, and deep dives on real-time intelligence, OSINT, geopolitics, markets, and the open-source tools behind World Monitor.",
-  "url": "https://www.worldmonitor.app/blog/",
+  "name": "WorldView Blog",
+  "description": "Analysis, guides, and deep dives on real-time intelligence, OSINT, geopolitics, markets, and the open-source tools behind WorldView.",
+  "url": "https://www.worldview.app/blog/",
   "inLanguage": "en-US",
   "publisher": {
     "@type": "Organization",
-    "name": "World Monitor",
-    "url": "https://worldmonitor.app",
+    "name": "WorldView",
+    "url": "https://worldview.app",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://www.worldmonitor.app/favico/apple-touch-icon.png"
+      "url": "https://www.worldview.app/favico/apple-touch-icon.png"
     }
   },
   "blogPost": posts.map(post => ({
@@ -28,16 +28,16 @@ const jsonLd = {
     "description": post.data.description,
     "datePublished": post.data.pubDate.toISOString(),
     ...(post.data.modifiedDate ? { "dateModified": post.data.modifiedDate.toISOString() } : {}),
-    "url": `https://www.worldmonitor.app/blog/posts/${post.id}/`,
-    "image": post.data.heroImage ? `https://www.worldmonitor.app${post.data.heroImage}` : "https://www.worldmonitor.app/favico/og-image.png"
+    "url": `https://www.worldview.app/blog/posts/${post.id}/`,
+    "image": post.data.heroImage ? `https://www.worldview.app${post.data.heroImage}` : "https://www.worldview.app/favico/og-image.png"
   }))
 };
 ---
 
 <Base
-  title="World Monitor Blog"
+  title="WorldView Blog"
   description="Insights on real-time global intelligence, OSINT, geopolitics, markets, and the open-source tools that power situational awareness."
-  metaTitle="World Monitor Blog | Real-Time Intelligence, OSINT, Geopolitics & Markets"
+  metaTitle="WorldView Blog | Real-Time Intelligence, OSINT, Geopolitics & Markets"
   jsonLd={jsonLd}
 >
   <div class="blog-hero">
@@ -47,7 +47,7 @@ const jsonLd = {
     </div>
     <h1>Noise<span class="green">.</span>Signal<span class="green">.</span>Blog</h1>
     <p class="subtitle">
-      Analysis, guides, and deep dives on real-time intelligence, OSINT, geopolitics, markets, and the open-source tools behind World Monitor.
+      Analysis, guides, and deep dives on real-time intelligence, OSINT, geopolitics, markets, and the open-source tools behind WorldView.
     </p>
   </div>
   <div class="blog-list">

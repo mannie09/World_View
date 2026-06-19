@@ -38,11 +38,11 @@ export const config = { runtime: 'edge' };
 
 import { authenticateInternalRequest } from '../../server/_shared/internal-auth';
 import { normalizeCountryToIso2 } from '../../server/_shared/country-normalize';
-import { assembleBriefStoryContext } from '../../server/worldmonitor/intelligence/v1/brief-story-context';
+import { assembleBriefStoryContext } from '../../server/worldview/intelligence/v1/brief-story-context';
 import {
   buildAnalystWhyMattersPrompt,
   sanitizeStoryFields,
-} from '../../server/worldmonitor/intelligence/v1/brief-why-matters-prompt';
+} from '../../server/worldview/intelligence/v1/brief-why-matters-prompt';
 import { callLlmReasoning } from '../../server/_shared/llm';
 // @ts-expect-error — JS module, no declaration file
 import { readRawJsonFromUpstash, setCachedData, redisPipeline } from '../_upstash-json.js';

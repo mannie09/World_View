@@ -20,9 +20,9 @@ import { getCorsHeaders } from './_cors.js';
 import { captureSilentError } from './_sentry-edge.js';
 import { isCallerPremium } from '../server/_shared/premium-check';
 import { checkRateLimit } from '../server/_shared/rate-limit';
-import { assembleAnalystContext } from '../server/worldmonitor/intelligence/v1/chat-analyst-context';
-import { buildAnalystSystemPrompt } from '../server/worldmonitor/intelligence/v1/chat-analyst-prompt';
-import { buildActionEvents } from '../server/worldmonitor/intelligence/v1/chat-analyst-actions';
+import { assembleAnalystContext } from '../server/worldview/intelligence/v1/chat-analyst-context';
+import { buildAnalystSystemPrompt } from '../server/worldview/intelligence/v1/chat-analyst-prompt';
+import { buildActionEvents } from '../server/worldview/intelligence/v1/chat-analyst-actions';
 import { callLlmReasoningStream } from '../server/_shared/llm';
 import { sanitizeForPrompt } from '../server/_shared/llm-sanitize.js';
 
@@ -78,7 +78,7 @@ export default async function handler(req: Request): Promise<Response> {
       headers: {
         ...corsHeaders,
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-WorldMonitor-Key, X-Api-Key',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-WorldView-Key, X-Api-Key',
       },
     });
   }
@@ -89,12 +89,12 @@ export default async function handler(req: Request): Promise<Response> {
 
   // Top-level error boundary. An edge function must never let an exception
   // escape: an uncaught throw becomes an opaque Vercel platform 500 that — for
-  // the cross-origin api.worldmonitor.app caller — also drops our CORS headers,
+  // the cross-origin api.worldview.app caller — also drops our CORS headers,
   // so the browser sees an opaque failure rather than a readable status. The
   // pre-stream auth/entitlement lookups (isCallerPremium) are network-backed
   // and, while individually fail-soft today, this route had NO server-side
   // capture, so any 5xx surfaced only as the browser's `API 500` message with
-  // no stack (WORLDMONITOR-SV). Mirror the sibling premium edge route
+  // no stack (WORLDVIEW-SV). Mirror the sibling premium edge route
   // (api/latest-brief.ts): capture server-side for a real trace, and return a
   // CORS-correct transient 503 the panel can render. 503 (not 403) so a
   // transient dependency blip never misclassifies a paying Pro user as

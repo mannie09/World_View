@@ -55,7 +55,7 @@ const DEPENDENCY_FLAG_LABELS: Record<string, { text: string; cls: string }> = {
   DEPENDENCY_FLAG_DIVERSIFIABLE:            { text: 'Diversifiable',   cls: 'cdp-dep-ok' },
 };
 import { toApiUrl } from '@/services/runtime';
-import type { ComputeEnergyShockScenarioResponse, ProductImpact } from '@/generated/client/worldmonitor/intelligence/v1/service_client';
+import type { ComputeEnergyShockScenarioResponse, ProductImpact } from '@/generated/client/worldview/intelligence/v1/service_client';
 import { setTrustedHtml, trustedHtml } from '@/utils/dom-utils';
 
 
@@ -1323,7 +1323,7 @@ export class CountryDeepDivePanel implements CountryBriefPanel {
   private async loadDisruptionsForCountry(iso2: string): Promise<void> {
     try {
       const { SupplyChainServiceClient } = await import(
-        '@/generated/client/worldmonitor/supply_chain/v1/service_client'
+        '@/generated/client/worldview/supply_chain/v1/service_client'
       );
       const { getRpcBaseUrl } = await import('@/services/rpc-client');
       // Thread the panel's `signal` into the fetch shim so a country

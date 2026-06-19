@@ -24,7 +24,7 @@ import { getRpcBaseUrl } from '@/services/rpc-client';
 import { fetchHormuzTracker, type HormuzTrackerData } from '@/services/hormuz-tracker';
 import { getEuGasStorageData } from '@/services/economic';
 import { fetchCommodityQuotes } from '@/services/market';
-import { SupplyChainServiceClient } from '@/generated/client/worldmonitor/supply_chain/v1/service_client';
+import { SupplyChainServiceClient } from '@/generated/client/worldview/supply_chain/v1/service_client';
 import { buildOverviewState, type OverviewState } from './_energy-risk-overview-state';
 
 const supplyChain = new SupplyChainServiceClient(getRpcBaseUrl(), {

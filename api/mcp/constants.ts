@@ -69,7 +69,7 @@ export const MCP_SUPPORTED_CLIENT_MATRIX: Record<string, string> = {
   'Cursor': '0.40.0',
 };
 
-export const SERVER_NAME = 'worldmonitor';
+export const SERVER_NAME = 'worldview';
 // Bumped 1.0 → 1.1.0 (2026-05-11) reflecting:
 //   - PR #3658 Tier-1+2 expansion (6 new tools added: displacement, health,
 //     energy, consumer-prices, tariffs, chokepoint)
@@ -145,10 +145,10 @@ export const SERVER_NAME = 'worldmonitor';
 // Bumped 1.8.0 → 1.9.0 (2026-05-25) reflecting:
 //   - MCP `resources` capability turned on. Four read-only addressable URIs
 //     exposed via resources/list + resources/read:
-//       worldmonitor://countries/{iso2}/risk
-//       worldmonitor://chokepoints/{slug}/status
-//       worldmonitor://seed-meta/freshness
-//       worldmonitor://markets/{symbol}/quote
+//       worldview://countries/{iso2}/risk
+//       worldview://chokepoints/{slug}/status
+//       worldview://seed-meta/freshness
+//       worldview://markets/{symbol}/quote
 //     Chokepoint slugs are pinned in a hand-curated kebab-case table
 //     (api/mcp/resources/slugs.ts) so a cache refresh / upstream rename
 //     never breaks a bookmarked URI.
@@ -249,11 +249,11 @@ export const TOOL_DESCRIPTION_MAX_BYTES = 120;
 // docs/mcp-tools-reference.mdx, fetched on demand instead of amortising
 // ~550 bytes per session.
 export const SERVER_INSTRUCTIONS = [
-  'Every tool accepts an optional `jmespath` string. Server-side projection applied AFTER per-tool filter/summary; typical 80-95% token reduction. Grammar: https://jmespath.org/specification.html. Guide + 12 worked examples: https://www.worldmonitor.app/docs/mcp-jmespath.',
+  'Every tool accepts an optional `jmespath` string. Server-side projection applied AFTER per-tool filter/summary; typical 80-95% token reduction. Grammar: https://jmespath.org/specification.html. Guide + 12 worked examples: https://www.worldview.app/docs/mcp-jmespath.',
   '',
-  `Limits: expr ≤ ${JMESPATH_MAX_EXPR_BYTES}B, output ≤ ${JMESPATH_MAX_OUTPUT_BYTES}B. Bad expressions soft-fail via {_jmespath_error, original_keys} envelope (consumes one Pro/OAuth daily quota unit on retry when that quota path applies — self-correct from original_keys). Full envelope reference: https://www.worldmonitor.app/docs/mcp-error-catalog.`,
+  `Limits: expr ≤ ${JMESPATH_MAX_EXPR_BYTES}B, output ≤ ${JMESPATH_MAX_OUTPUT_BYTES}B. Bad expressions soft-fail via {_jmespath_error, original_keys} envelope (consumes one Pro/OAuth daily quota unit on retry when that quota path applies — self-correct from original_keys). Full envelope reference: https://www.worldview.app/docs/mcp-error-catalog.`,
   '',
-  `tools/list ships compressed tool descriptions (≤${TOOL_DESCRIPTION_MAX_BYTES}B). Call describe_tool({tool_name}) for the full uncompressed definition — quota-exempt (still counts toward the 60/min rate limit), so use freely while exploring. describe_tool({tool_name: 'nonexistent'}) returns {error: 'unknown_tool', available: [...]} so you can self-correct. Full reference: https://www.worldmonitor.app/docs/mcp-tools-reference.`,
+  `tools/list ships compressed tool descriptions (≤${TOOL_DESCRIPTION_MAX_BYTES}B). Call describe_tool({tool_name}) for the full uncompressed definition — quota-exempt (still counts toward the 60/min rate limit), so use freely while exploring. describe_tool({tool_name: 'nonexistent'}) returns {error: 'unknown_tool', available: [...]} so you can self-correct. Full reference: https://www.worldview.app/docs/mcp-tools-reference.`,
   '',
   'Issue prompts/list to discover pre-built workflow templates (country-briefing, energy-shock-watch, market-open-prep, conflict-pulse, route-risk-check, freshness-audit). Each prompt pre-bakes a JMESPath projection per step so the first execution lands on the right shape. prompts/list + prompts/get are quota-exempt (per-minute limit only).',
   '',

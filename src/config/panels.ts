@@ -925,7 +925,7 @@ const COMMODITY_MOBILE_MAP_LAYERS: MapLayers = {
 };
 
 // ============================================
-// ENERGY variant — energy.worldmonitor.app
+// ENERGY variant — energy.worldview.app
 // Pipelines, storage, chokepoints, fuel shortages, disruption timeline.
 // See docs/internal/global-energy-flow-parity-and-surpass.md (not committed).
 // ============================================
@@ -1220,7 +1220,7 @@ export function isPanelEntitled(key: string, config: PanelConfig, isPro = false)
   if (isEntitled()) return true;
   const apiKeyPanels = ['stock-analysis', 'stock-backtest', 'daily-market-brief', 'market-implications', 'regional-intelligence', 'deduction', 'chat-analyst', 'wsb-ticker-scanner', 'trade-policy'];
   if (apiKeyPanels.includes(key)) {
-    return getSecretState('WORLDMONITOR_API_KEY').present || isPro;
+    return getSecretState('WORLDVIEW_API_KEY').present || isPro;
   }
   if (config.premium === 'locked') {
     return isDesktopRuntime();
@@ -1504,8 +1504,8 @@ export const MONITOR_COLORS = [
 ];
 
 export const STORAGE_KEYS = {
-  panels: 'worldmonitor-panels',
-  monitors: 'worldmonitor-monitors',
-  mapLayers: 'worldmonitor-layers',
-  disabledFeeds: 'worldmonitor-disabled-feeds',
+  panels: 'worldview-panels',
+  monitors: 'worldview-monitors',
+  mapLayers: 'worldview-layers',
+  disabledFeeds: 'worldview-disabled-feeds',
 } as const;

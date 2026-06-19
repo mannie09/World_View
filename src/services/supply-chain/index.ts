@@ -27,7 +27,7 @@ import {
   type CountryProduct,
   type ProductExporter,
   type MultiSectorCostShock,
-} from '@/generated/client/worldmonitor/supply_chain/v1/service_client';
+} from '@/generated/client/worldview/supply_chain/v1/service_client';
 import { createCircuitBreaker } from '@/utils';
 import { getHydratedData } from '@/services/bootstrap';
 import { hasPremiumAccess } from '@/services/panel-gating';

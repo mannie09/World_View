@@ -79,7 +79,7 @@ describe('agent readiness: agent-skills index', () => {
       assert.ok(skill.description && skill.description.length > 0, `${skill.name} missing description`);
       assert.match(
         skill.url,
-        /^https:\/\/worldmonitor\.app\/\.well-known\/agent-skills\/[^/]+\/SKILL\.md$/,
+        /^https:\/\/worldview\.app\/\.well-known\/agent-skills\/[^/]+\/SKILL\.md$/,
         `${skill.name} url must be the canonical absolute URL`,
       );
       const local = join(SKILLS_DIR, skill.name, 'SKILL.md');
@@ -119,11 +119,11 @@ describe('agent readiness: agent-skills index', () => {
     const example = parseResponseShapeExample(skill);
 
     const scorer = readFileSync(
-      join(ROOT, 'server/worldmonitor/resilience/v1/_dimension-scorers.ts'),
+      join(ROOT, 'server/worldview/resilience/v1/_dimension-scorers.ts'),
       'utf-8',
     );
     const pillars = readFileSync(
-      join(ROOT, 'server/worldmonitor/resilience/v1/_pillar-membership.ts'),
+      join(ROOT, 'server/worldview/resilience/v1/_pillar-membership.ts'),
       'utf-8',
     );
     const domainIds = readExportedStringArray(scorer, 'RESILIENCE_DOMAIN_ORDER');

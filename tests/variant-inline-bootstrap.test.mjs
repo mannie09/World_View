@@ -10,7 +10,7 @@ const indexHtml = readFileSync(resolve(__dirname, '../index.html'), 'utf-8');
 const csp = indexHtml.match(/<meta http-equiv="Content-Security-Policy" content="([^"]+)"/)?.[1] ?? '';
 const inlineScripts = [...indexHtml.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((match) => match[1]);
 const variantBootstrapScript = inlineScripts.find(
-  (script) => script.includes('worldmonitor-variant') && script.includes('document.documentElement.dataset.variant'),
+  (script) => script.includes('worldview-variant') && script.includes('document.documentElement.dataset.variant'),
 );
 
 describe('variant inline bootstrap', () => {
@@ -18,7 +18,7 @@ describe('variant inline bootstrap', () => {
     for (const variant of ['happy', 'tech', 'finance', 'commodity', 'energy']) {
       assert.ok(
         indexHtml.includes(`h.startsWith('${variant}.'))v='${variant}'`),
-        `index.html inline bootstrap must set data-variant for ${variant}.worldmonitor.app`,
+        `index.html inline bootstrap must set data-variant for ${variant}.worldview.app`,
       );
     }
   });

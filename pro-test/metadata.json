@@ -1,5 +1,5 @@
 {
-  "name": "World Monitor Launch",
-  "description": "Launch waitlist page for World Monitor, the open-source intelligence dashboard.",
+  "name": "WorldView Launch",
+  "description": "Launch waitlist page for WorldView, the open-source intelligence dashboard.",
   "requestFramePermissions": []
 }

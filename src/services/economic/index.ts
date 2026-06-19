@@ -44,7 +44,7 @@ import {
   type OilStocksRegionalSummaryEurope,
   type OilStocksRegionalSummaryAsiaPacific,
   type OilStocksRegionalSummaryNorthAmerica,
-} from '@/generated/client/worldmonitor/economic/v1/service_client';
+} from '@/generated/client/worldview/economic/v1/service_client';
 import { createCircuitBreaker } from '@/utils';
 import { getCSSColor } from '@/utils';
 import { isFeatureAvailable } from '../runtime-config';
@@ -57,7 +57,7 @@ import { hasPremiumAccess } from '@/services/panel-gating';
 
 // premiumFetch for the whole client: 1 of ~16 methods (getNationalDebt) targets a
 // PREMIUM_RPC_PATHS path. globalThis.fetch here would 401 signed-in browser pros
-// on getNationalDebt with no WORLDMONITOR_API_KEY (gateway runs validateApiKey
+// on getNationalDebt with no WORLDVIEW_API_KEY (gateway runs validateApiKey
 // with forceKey=true on premium paths). premiumFetch no-ops safely when no
 // credentials are available, so the public methods (FRED, BLS, energy, BIS,
 // EU, oil) keep working unchanged. See src/services/supply-chain/index.ts for

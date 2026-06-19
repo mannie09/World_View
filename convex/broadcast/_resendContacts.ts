@@ -25,7 +25,7 @@
 
 export const RESEND_API_BASE = "https://api.resend.com";
 export const USER_AGENT =
-  "WorldMonitor-PROLaunchExporter/1.0 (+https://worldmonitor.app)";
+  "WorldView-PROLaunchExporter/1.0 (+https://worldview.app)";
 
 /**
  * Heuristic for distinguishing duplicate-shaped 422 responses from other

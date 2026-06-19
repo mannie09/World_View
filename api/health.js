@@ -495,7 +495,7 @@ const ON_DEMAND_KEYS = new Set([
   // absent — which is the alarm a future operator needs before flipping
   // `RESILIENCE_ENERGY_V2_ENABLED=true`. The scorer fails closed via
   // ResilienceConfigurationError if the flag flips before the seeds
-  // populate (server/worldmonitor/resilience/v1/_dimension-scorers.ts
+  // populate (server/worldview/resilience/v1/_dimension-scorers.ts
   // #scoreEnergy). Do NOT add these labels back to ON_DEMAND_KEYS
   // without revisiting that plan.
   'displacementPrev', // covered by cascade onto current-year displacement; empty most of the year

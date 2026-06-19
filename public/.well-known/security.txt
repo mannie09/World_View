@@ -1,6 +1,6 @@
-Contact: mailto:elie@worldmonitor.app
-Contact: https://github.com/eliehabib/worldmonitor/security/advisories
-Policy: https://github.com/eliehabib/worldmonitor/security/advisories
+Contact: mailto:mannie_fossil@rediffmail.com
+Contact: https://github.com/mannie09/worldview/security/advisories
+Policy: https://github.com/mannie09/worldview/security/advisories
 Preferred-Languages: en
-Canonical: https://worldmonitor.app/.well-known/security.txt
+Canonical: https://worldview.app/.well-known/security.txt
 Expires: 2027-03-02T00:00:00.000Z

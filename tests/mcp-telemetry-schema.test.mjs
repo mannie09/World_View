@@ -10,7 +10,7 @@ import { describe, it, beforeEach, afterEach } from 'node:test';
 import { strict as assert } from 'node:assert';
 
 const VALID_KEY = 'wm_test_key_123';
-const BASE_URL = 'https://worldmonitor.app/mcp';
+const BASE_URL = 'https://worldview.app/mcp';
 
 // Top-level keys that name a request- or response-body shape. If any of
 // these appears in either allowlist, the redaction contract is broken at
@@ -40,7 +40,7 @@ function makeReq(body) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-WorldMonitor-Key': VALID_KEY,
+      'X-WorldView-Key': VALID_KEY,
     },
     body: JSON.stringify(body),
   });
@@ -86,7 +86,7 @@ describe('api/mcp.ts — telemetry redaction (closed-key allowlist)', () => {
   let origLog;
 
   beforeEach(async () => {
-    process.env.WORLDMONITOR_VALID_KEYS = VALID_KEY;
+    process.env.WORLDVIEW_VALID_KEYS = VALID_KEY;
     process.env.MCP_TELEMETRY = 'true';
     process.env.UPSTASH_REDIS_REST_URL = 'https://fake.upstash.io';
     process.env.UPSTASH_REDIS_REST_TOKEN = 'fake_token';

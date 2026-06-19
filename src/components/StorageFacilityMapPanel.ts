@@ -2,14 +2,14 @@ import { Panel } from './Panel';
 import { escapeHtml, sanitizeUrl, unsafeRawHtml } from '@/utils/sanitize';
 import { getRpcBaseUrl } from '@/services/rpc-client';
 import { attributionFooterHtml, ATTRIBUTION_FOOTER_CSS } from '@/utils/attribution-footer';
-import { SupplyChainServiceClient } from '@/generated/client/worldmonitor/supply_chain/v1/service_client';
+import { SupplyChainServiceClient } from '@/generated/client/worldview/supply_chain/v1/service_client';
 import type {
   ListStorageFacilitiesResponse,
   StorageFacilityEntry,
   GetStorageFacilityDetailResponse,
   ListEnergyDisruptionsResponse,
   EnergyDisruptionEntry,
-} from '@/generated/client/worldmonitor/supply_chain/v1/service_client';
+} from '@/generated/client/worldview/supply_chain/v1/service_client';
 import { formatEventWindow, formatCapacityOffline } from '@/shared/disruption-timeline';
 import { deriveStoragePublicBadge } from '@/shared/storage-evidence';
 import {

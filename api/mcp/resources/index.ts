@@ -18,7 +18,7 @@
 //     risk in v1) get the envelope explicitly wrapped here.
 //
 // Spec-shape note: resources/list returns the four template-shaped URIs
-// (e.g. `worldmonitor://countries/{iso2}/risk`) verbatim. Strict 2025-06-18
+// (e.g. `worldview://countries/{iso2}/risk`) verbatim. Strict 2025-06-18
 // reading would route templates through resources/templates/list, but
 // surfacing them via resources/list is the pragmatic posture (Claude
 // Desktop / MCP Inspector both render the literal URI; the user / model
@@ -49,7 +49,7 @@ import { CHOKEPOINT_SLUGS } from './slugs';
 // the URI resolves cleanly to synthetic tools/call arguments.
 export const RESOURCE_REGISTRY: McpResourceDef[] = [
   {
-    uri: 'worldmonitor://countries/{iso2}/risk',
+    uri: 'worldview://countries/{iso2}/risk',
     name: 'Country Risk',
     description: 'Composite Instability Index (CII) score 0–100 with unrest/conflict/security/news components, travel-advisory level, and OFAC sanctions exposure for a single ISO 3166-1 alpha-2 country. URI param {iso2} is lowercase alpha-2 (e.g. "de", "us", "ir").',
     mimeType: 'application/json',
@@ -58,32 +58,32 @@ export const RESOURCE_REGISTRY: McpResourceDef[] = [
     // risk-scores seed-meta key (30min budget matches the upstream cadence).
     freshnessWrap: { seedMetaKey: 'seed-meta:intelligence:risk-scores', maxStaleMin: 30 },
     paramExtractor: (uri: string) => {
-      if (!uri.startsWith('worldmonitor://countries/')) return null;
-      const m = /^worldmonitor:\/\/countries\/([a-z]{2})\/risk$/.exec(uri);
+      if (!uri.startsWith('worldview://countries/')) return null;
+      const m = /^worldview:\/\/countries\/([a-z]{2})\/risk$/.exec(uri);
       const iso2 = m?.[1];
       if (!iso2) {
         return {
           ok: false,
-          reason: 'Expected worldmonitor://countries/{iso2}/risk where {iso2} is lowercase ISO 3166-1 alpha-2.',
+          reason: 'Expected worldview://countries/{iso2}/risk where {iso2} is lowercase ISO 3166-1 alpha-2.',
         };
       }
       return { ok: true, args: { country_code: iso2.toUpperCase() } };
     },
   },
   {
-    uri: 'worldmonitor://chokepoints/{slug}/status',
+    uri: 'worldview://chokepoints/{slug}/status',
     name: 'Chokepoint Status',
     description: 'Maritime chokepoint transit summary: today total / tanker / cargo counts, week-over-week change, risk level, incident count, disruption percentage, and risk narrative. URI param {slug} is one of the hand-curated kebab-case identifiers (suez, strait-of-malacca, strait-of-hormuz, bab-el-mandeb, panama-canal, taiwan-strait, cape-of-good-hope, strait-of-gibraltar, bosphorus, korea-strait, dover-strait, kerch-strait, lombok-strait).',
     mimeType: 'application/json',
     tool: 'get_chokepoint_status',
     paramExtractor: (uri: string) => {
-      if (!uri.startsWith('worldmonitor://chokepoints/')) return null;
-      const m = /^worldmonitor:\/\/chokepoints\/([a-z][a-z0-9-]*)\/status$/.exec(uri);
+      if (!uri.startsWith('worldview://chokepoints/')) return null;
+      const m = /^worldview:\/\/chokepoints\/([a-z][a-z0-9-]*)\/status$/.exec(uri);
       const slug = m?.[1];
       if (!slug) {
         return {
           ok: false,
-          reason: 'Expected worldmonitor://chokepoints/{slug}/status where {slug} is a hand-curated kebab-case identifier.',
+          reason: 'Expected worldview://chokepoints/{slug}/status where {slug} is a hand-curated kebab-case identifier.',
         };
       }
       const matcher = CHOKEPOINT_SLUGS[slug];
@@ -99,15 +99,15 @@ export const RESOURCE_REGISTRY: McpResourceDef[] = [
     },
   },
   {
-    uri: 'worldmonitor://seed-meta/freshness',
+    uri: 'worldview://seed-meta/freshness',
     name: 'Seed-Meta Freshness',
     description: 'Cache-freshness audit for the high-cadence market-data bootstrap pipeline. Returns only the envelope (cached_at + stale) — no quote payload. Use this as a cheap probe to detect a stuck seeder. v1 covers market freshness only; an aggregate freshness resource spanning energy + maritime + risk feeds is a follow-up if customers ask.',
     mimeType: 'application/json',
     tool: 'get_market_data',
     paramExtractor: (uri: string) => {
-      if (uri !== 'worldmonitor://seed-meta/freshness') {
-        if (uri.startsWith('worldmonitor://seed-meta/')) {
-          return { ok: false, reason: 'Expected worldmonitor://seed-meta/freshness (no further path segments).' };
+      if (uri !== 'worldview://seed-meta/freshness') {
+        if (uri.startsWith('worldview://seed-meta/')) {
+          return { ok: false, reason: 'Expected worldview://seed-meta/freshness (no further path segments).' };
         }
         return null;
       }
@@ -119,23 +119,23 @@ export const RESOURCE_REGISTRY: McpResourceDef[] = [
     },
   },
   {
-    uri: 'worldmonitor://markets/{symbol}/quote',
+    uri: 'worldview://markets/{symbol}/quote',
     name: 'Market Quote',
     description: 'Single-symbol quote slice from the market-data bootstrap cache. URI param {symbol} is the uppercase ticker (e.g. "AAPL", "GC=F", "BTC-USD"). Matches equity / commodity / crypto / Gulf / sector / ETF-flow tickers — same case-insensitive matcher as get_market_data({symbols: [...]}).',
     mimeType: 'application/json',
     tool: 'get_market_data',
     paramExtractor: (uri: string) => {
-      if (!uri.startsWith('worldmonitor://markets/')) return null;
+      if (!uri.startsWith('worldview://markets/')) return null;
       // Symbol grammar: leading uppercase letter, then up to 15 more
       // uppercase letters / digits / dash / equals / dot. Covers AAPL,
       // BTC-USD, GC=F, BRK.B. Lowercase tickers are explicitly invalid —
       // canonical wire shape from the bootstrap cache is uppercase.
-      const m = /^worldmonitor:\/\/markets\/([A-Z][A-Z0-9.=-]{0,15})\/quote$/.exec(uri);
+      const m = /^worldview:\/\/markets\/([A-Z][A-Z0-9.=-]{0,15})\/quote$/.exec(uri);
       const symbol = m?.[1];
       if (!symbol) {
         return {
           ok: false,
-          reason: 'Expected worldmonitor://markets/{symbol}/quote where {symbol} is an uppercase ticker (e.g. "AAPL", "GC=F", "BTC-USD").',
+          reason: 'Expected worldview://markets/{symbol}/quote where {symbol} is an uppercase ticker (e.g. "AAPL", "GC=F", "BTC-USD").',
         };
       }
       return { ok: true, args: { symbols: [symbol], asset_class: ['equity', 'commodity', 'crypto', 'gulf', 'etf', 'sectors'] } };

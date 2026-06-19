@@ -589,7 +589,7 @@ const ICAO_NOTAM_URL = 'https://dataservices.icao.int/api/notams-realtime-list';
 const NOTAM_CLOSURE_QCODES = new Set(['FA', 'AH', 'AL', 'AW', 'AC', 'AM']);
 // Restrictions: NOTAM Q-codes RA (restricted area) and RO (overfly prohibited)
 // + restricted code45s and text patterns. Mirrors NOTAM_RESTRICTION_QCODES +
-// the restriction-text regex in server/worldmonitor/aviation/v1/_shared.ts:29,
+// the restriction-text regex in server/worldview/aviation/v1/_shared.ts:29,
 // :440-444 — keep in lockstep so seeded NOTAM data matches the live RPC's
 // classifier.
 const NOTAM_RESTRICTION_QCODES = new Set(['RA', 'RO']);
@@ -794,7 +794,7 @@ async function dispatchNotamNotifications(closedIcaos, reasons) {
 
 // ─── Page-load bootstrap aggregate ───────────────────────────────────────────
 // Mirror of the alerts-array assembly in
-// server/worldmonitor/aviation/v1/list-airport-delays.ts (FAA + intl + NOTAM
+// server/worldview/aviation/v1/list-airport-delays.ts (FAA + intl + NOTAM
 // merge + Normal-operations filler from AIRPORTS). Keep the two builders in
 // lockstep — when the RPC's NOTAM merge / filler shape / enum mapping changes,
 // update both. Enum-string forms here match SEVERITY_MAP/DELAY_TYPE_MAP/REGION_MAP

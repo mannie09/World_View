@@ -2,14 +2,14 @@ import { Panel } from './Panel';
 import { escapeHtml, sanitizeUrl, unsafeRawHtml } from '@/utils/sanitize';
 import { getRpcBaseUrl } from '@/services/rpc-client';
 import { attributionFooterHtml, ATTRIBUTION_FOOTER_CSS } from '@/utils/attribution-footer';
-import { SupplyChainServiceClient } from '@/generated/client/worldmonitor/supply_chain/v1/service_client';
+import { SupplyChainServiceClient } from '@/generated/client/worldview/supply_chain/v1/service_client';
 import type {
   ListPipelinesResponse,
   PipelineEntry,
   GetPipelineDetailResponse,
   ListEnergyDisruptionsResponse,
   EnergyDisruptionEntry,
-} from '@/generated/client/worldmonitor/supply_chain/v1/service_client';
+} from '@/generated/client/worldview/supply_chain/v1/service_client';
 import { formatEventWindow, formatCapacityOffline } from '@/shared/disruption-timeline';
 import {
   derivePipelinePublicBadge,
@@ -68,7 +68,7 @@ function badgeChip(badge: string | undefined): string {
 // Project one raw bootstrap entry into the wire-format PipelineEntry the
 // renderer expects. Defensively coerces every field because Upstash returns
 // `unknown` and the source JSON can drift. Mirrors the server-side
-// projectPipeline() in server/worldmonitor/supply-chain/v1/list-pipelines.ts
+// projectPipeline() in server/worldview/supply-chain/v1/list-pipelines.ts
 // so pre- and post-RPC renders produce the same badges.
 function projectRawPipeline(raw: unknown): PipelineEntry | null {
   if (!raw || typeof raw !== 'object') return null;

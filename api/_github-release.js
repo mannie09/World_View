@@ -1,4 +1,4 @@
-const RELEASES_URL = 'https://api.github.com/repos/koala73/worldmonitor/releases/latest';
+const RELEASES_URL = 'https://api.github.com/repos/mannie09/World_View/releases/latest';
 
 export async function fetchLatestRelease(userAgent) {
   const res = await fetch(RELEASES_URL, {

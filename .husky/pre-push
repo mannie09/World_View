@@ -2,7 +2,7 @@
 echo "Checking for local Vercel env dumps..."
 node scripts/check-local-secret-dumps.mjs || exit 1
 
-export npm_config_cache="${npm_config_cache:-/tmp/worldmonitor-npm-cache}"
+export npm_config_cache="${npm_config_cache:-/tmp/worldview-npm-cache}"
 
 # Ensure dependencies are installed (worktrees start with no node_modules)
 if [ ! -d node_modules ]; then

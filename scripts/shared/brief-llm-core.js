@@ -19,7 +19,7 @@
  * and the cron fallback emit the identical editorial voice.
  */
 export const WHY_MATTERS_SYSTEM =
-  'You are the editor of WorldMonitor Brief, a geopolitical intelligence magazine. ' +
+  'You are the editor of WorldView Brief, a geopolitical intelligence magazine. ' +
   'For each story below, write ONE concise sentence (18–30 words) explaining the ' +
   'regional or global stakes. Editorial, impersonal, serious. No preamble ' +
   '("This matters because…"), no questions, no calls to action, no markdown, ' +
@@ -170,8 +170,8 @@ export async function hashBriefStory(story) {
  * no section labels in the output.
  */
 export const WHY_MATTERS_ANALYST_SYSTEM_V2 =
-  'You are the lead analyst at WorldMonitor Brief, a geopolitical intelligence magazine. ' +
-  'Using the Live WorldMonitor Context AND the story, write 2–3 sentences (40–70 words total) ' +
+  'You are the lead analyst at WorldView Brief, a geopolitical intelligence magazine. ' +
+  'Using the Live WorldView Context AND the story, write 2–3 sentences (40–70 words total) ' +
   'on why the story matters.\n\n' +
   'STRUCTURE:\n' +
   '1. SITUATION — what is happening right now, grounded in a SPECIFIC named actor, ' +

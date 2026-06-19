@@ -20,7 +20,7 @@ import { SoonBadge } from './components/SoonBadge';
 import { Logo } from './components/Logo';
 import { WiredBadge } from './components/WiredBadge';
 import { Footer } from './components/Footer';
-import dashboardFallback from './assets/worldmonitor-7-mar-2026.jpg';
+import dashboardFallback from './assets/worldview-7-mar-2026.jpg';
 import wiredLogo from './assets/wired-logo.svg';
 import {
   DASHBOARD_CHECKOUT_SUCCESS_URL,
@@ -29,7 +29,7 @@ import {
   DASHBOARD_URL,
 } from './routes';
 
-const API_BASE = 'https://api.worldmonitor.app/api';
+const API_BASE = 'https://api.worldview.app/api';
 const TURNSTILE_SITE_KEY = '0x4AAAAAACnaYgHIyxclu8Tj';
 
 declare global {
@@ -229,7 +229,7 @@ function ClerkUserButton(): ReactElement {
       .then((clerk) => {
         if (unmounted || !el) return;
         clerk.mountUserButton(el, {
-          afterSignOutUrl: 'https://www.worldmonitor.app/pro',
+          afterSignOutUrl: 'https://www.worldview.app/pro',
         });
       })
       .catch((err) => {
@@ -594,7 +594,7 @@ const LivePreview = () => (
         <div className="relative aspect-[16/9] bg-black">
           <img
             src={dashboardFallback}
-            alt="World Monitor Dashboard"
+            alt="WorldView Dashboard"
             className="absolute inset-0 w-full h-full object-cover"
           />
           <iframe
@@ -745,7 +745,7 @@ const ProShowcase = () => (
           <div className="w-3 h-3 rounded-full bg-red-500" />
           <div className="w-3 h-3 rounded-full bg-yellow-500" />
           <div className="w-3 h-3 rounded-full bg-green-500" />
-          <span className="ml-2 font-mono text-xs text-gray-400">#world-monitor-alerts</span>
+          <span className="ml-2 font-mono text-xs text-gray-400">#world-view-alerts</span>
         </div>
         <div className="p-6 space-y-6 font-sans text-sm">
           <div className="flex gap-4">
@@ -754,7 +754,7 @@ const ProShowcase = () => (
             </div>
             <div>
               <div className="flex items-baseline gap-2 mb-1">
-                <span className="font-bold text-gray-200">World Monitor</span>
+                <span className="font-bold text-gray-200">WorldView</span>
                 <span className="text-xs text-gray-500 bg-gray-800 px-1 rounded">APP</span>
                 <span className="text-xs text-gray-500">8:00 AM</span>
               </div>
@@ -821,12 +821,12 @@ const ApiSection = () => (
         <div className="bg-black border border-wm-border rounded-lg overflow-hidden font-mono text-sm">
           <div className="bg-wm-card px-4 py-2 border-b border-wm-border flex items-center gap-2">
             <Terminal className="w-4 h-4 text-wm-muted" aria-hidden="true" />
-            <span className="text-wm-muted text-xs">api.worldmonitor.app</span>
+            <span className="text-wm-muted text-xs">api.worldview.app</span>
           </div>
           <div className="p-6 text-gray-300 overflow-x-auto">
             <pre><code>
 <span className="text-wm-blue">curl</span> \<br/>
-  <span className="text-wm-green">"https://api.worldmonitor.app/v1/intelligence/convergence?region=MENA&time_window=6h"</span> \<br/>
+  <span className="text-wm-green">"https://api.worldview.app/v1/intelligence/convergence?region=MENA&time_window=6h"</span> \<br/>
   -H <span className="text-wm-green">"Authorization: Bearer wm_live_xxx"</span><br/><br/>
 <span className="text-wm-muted">{"{"}</span><br/>
   <span className="text-wm-blue">"status"</span>: <span className="text-wm-green">"success"</span>,<br/>
@@ -1254,14 +1254,14 @@ const EnterprisePage = () => (
         </div>
         <div className="flex items-center gap-6">
           <a href={DASHBOARD_PATH} className="hover:text-wm-text transition-colors">Dashboard</a>
-          <a href="https://www.worldmonitor.app/blog/" className="hover:text-wm-text transition-colors">Blog</a>
-          <a href="https://www.worldmonitor.app/docs" className="hover:text-wm-text transition-colors">Docs</a>
-          <a href="https://status.worldmonitor.app/" target="_blank" rel="noreferrer" className="hover:text-wm-text transition-colors">Status</a>
-          <a href="https://github.com/koala73/worldmonitor" target="_blank" rel="noreferrer" className="hover:text-wm-text transition-colors">GitHub</a>
+          <a href="https://www.worldview.app/blog/" className="hover:text-wm-text transition-colors">Blog</a>
+          <a href="https://www.worldview.app/docs" className="hover:text-wm-text transition-colors">Docs</a>
+          <a href="https://status.worldview.app/" target="_blank" rel="noreferrer" className="hover:text-wm-text transition-colors">Status</a>
+          <a href="https://github.com/mannie09/World_View" target="_blank" rel="noreferrer" className="hover:text-wm-text transition-colors">GitHub</a>
           <a href="https://discord.gg/re63kWKxaz" target="_blank" rel="noreferrer" className="hover:text-wm-text transition-colors">Discord</a>
-          <a href="https://x.com/worldmonitorai" target="_blank" rel="noreferrer" className="hover:text-wm-text transition-colors">X</a>
+          <a href="https://x.com/worldviewai" target="_blank" rel="noreferrer" className="hover:text-wm-text transition-colors">X</a>
         </div>
-        <span className="text-[10px] opacity-40 mt-4 md:mt-0">&copy; {new Date().getFullYear()} WorldMonitor</span>
+        <span className="text-[10px] opacity-40 mt-4 md:mt-0">&copy; {new Date().getFullYear()} WorldView</span>
       </div>
     </footer>
   </div>

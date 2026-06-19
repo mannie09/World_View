@@ -95,7 +95,7 @@ async function _createCheckoutSession(
   user: UserInfo,
 ) {
   // Validate returnUrl to prevent open-redirect attacks.
-  const siteUrl = process.env.SITE_URL ?? "https://worldmonitor.app";
+  const siteUrl = process.env.SITE_URL ?? "https://worldview.app";
   let returnUrl = siteUrl;
   if (args.returnUrl) {
     let parsedReturnUrl: URL;
@@ -106,19 +106,19 @@ async function _createCheckoutSession(
     }
 
     const allowedOrigins = new Set([
-      "https://worldmonitor.app",
-      "https://www.worldmonitor.app",
-      "https://app.worldmonitor.app",
-      "https://tech.worldmonitor.app",
-      "https://finance.worldmonitor.app",
-      "https://commodity.worldmonitor.app",
-      "https://happy.worldmonitor.app",
-      "https://energy.worldmonitor.app",
+      "https://worldview.app",
+      "https://www.worldview.app",
+      "https://app.worldview.app",
+      "https://tech.worldview.app",
+      "https://finance.worldview.app",
+      "https://commodity.worldview.app",
+      "https://happy.worldview.app",
+      "https://energy.worldview.app",
       new URL(siteUrl).origin,
     ]);
     if (!allowedOrigins.has(parsedReturnUrl.origin)) {
       throw new ConvexError(
-        "Invalid returnUrl: must use a trusted worldmonitor.app origin",
+        "Invalid returnUrl: must use a trusted worldview.app origin",
       );
     }
     returnUrl = parsedReturnUrl.toString();

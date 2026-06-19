@@ -1,8 +1,8 @@
-# Pricing - World Monitor
+# Pricing - WorldView
 
 Last updated: June 13, 2026
 
-World Monitor has a free public dashboard and paid tiers for analyst workflows, API access and organization deployments.
+WorldView has a free public dashboard and paid tiers for analyst workflows, API access and organization deployments.
 
 ## Free
 
@@ -25,7 +25,7 @@ World Monitor has a free public dashboard and paid tiers for analyst workflows, 
 ## API
 
 - Price: $99.99/month
-- Best for: Developers and teams that want programmatic access to World Monitor intelligence data
+- Best for: Developers and teams that want programmatic access to WorldView intelligence data
 - Includes: REST API access, structured JSON, cache headers, OpenAPI docs, real-time data streams, webhook notifications and custom data exports
 - Starter limit: 1,000 requests/day
 - Starter webhooks: 5 webhook rules
@@ -33,7 +33,7 @@ World Monitor has a free public dashboard and paid tiers for analyst workflows, 
 ## Enterprise
 
 - Price: Custom
-- Contact: enterprise@worldmonitor.app
+- Contact: enterprise@worldview.app
 - Best for: Governments, institutions, trading desks, SOCs, risk consultancies and organizations that need shared monitoring or deployment control
 - Includes: Everything in Pro and API, team workspaces, SSO/MFA/RBAC, dedicated support, white-label and embeddable panels, Android TV app, SIEM/connectors, bulk export and managed deployment options
 - Deployment options: Cloud, dedicated cloud tenant, on-premises or air-gapped
@@ -43,9 +43,9 @@ World Monitor has a free public dashboard and paid tiers for analyst workflows, 
 
 ```json
 {
-  "product": "World Monitor",
-  "url": "https://www.worldmonitor.app/",
-  "pricing_url": "https://www.worldmonitor.app/pro#pricing",
+  "product": "WorldView",
+  "url": "https://www.worldview.app/",
+  "pricing_url": "https://www.worldview.app/pro#pricing",
   "plans": [
     {
       "name": "Free",
@@ -67,7 +67,7 @@ World Monitor has a free public dashboard and paid tiers for analyst workflows, 
     {
       "name": "Enterprise",
       "price": "Custom",
-      "contact": "enterprise@worldmonitor.app",
+      "contact": "enterprise@worldview.app",
       "features": ["SSO/MFA/RBAC", "team workspaces", "white-label", "on-premises", "air-gapped", "dedicated support"]
     }
   ]

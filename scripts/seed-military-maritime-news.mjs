@@ -24,21 +24,21 @@ import { loadEnvFile, CHROME_UA } from './_seed-utils.mjs';
 
 loadEnvFile(import.meta.url);
 
-const API_BASE = 'https://api.worldmonitor.app';
+const API_BASE = 'https://api.worldview.app';
 const TIMEOUT = 30_000;
 
 // Defense-in-depth auth — see seed-infra.mjs for the same pattern + rationale.
-// Set WORLDMONITOR_RELAY_KEY on the Railway service to a value already
-// present in Vercel's WORLDMONITOR_VALID_KEYS.
-const RELAY_API_KEY = process.env.WORLDMONITOR_RELAY_KEY || '';
+// Set WORLDVIEW_RELAY_KEY on the Railway service to a value already
+// present in Vercel's WORLDVIEW_VALID_KEYS.
+const RELAY_API_KEY = process.env.WORLDVIEW_RELAY_KEY || '';
 
 function warmPingHeaders() {
   const h = {
     'Content-Type': 'application/json',
     'User-Agent': CHROME_UA,
-    Origin: 'https://worldmonitor.app',
+    Origin: 'https://worldview.app',
   };
-  if (RELAY_API_KEY) h['X-WorldMonitor-Key'] = RELAY_API_KEY;
+  if (RELAY_API_KEY) h['X-WorldView-Key'] = RELAY_API_KEY;
   return h;
 }
 
@@ -51,7 +51,7 @@ async function warmPing(name, path, body = {}) {
       signal: AbortSignal.timeout(TIMEOUT),
     });
     if (!resp.ok) {
-      const keyNote = RELAY_API_KEY ? '' : ' (WORLDMONITOR_RELAY_KEY not set — Origin-only auth)';
+      const keyNote = RELAY_API_KEY ? '' : ' (WORLDVIEW_RELAY_KEY not set — Origin-only auth)';
       console.warn(`  ${name}: HTTP ${resp.status}${keyNote}`);
       return false;
     }

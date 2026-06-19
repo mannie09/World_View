@@ -89,7 +89,7 @@ function installAxiomFetchSpy(
 const ORIGINAL_FETCH = globalThis.fetch;
 const ORIGINAL_USAGE_FLAG = process.env.USAGE_TELEMETRY;
 const ORIGINAL_AXIOM_TOKEN = process.env.AXIOM_API_TOKEN;
-const ORIGINAL_VALID_KEYS = process.env.WORLDMONITOR_VALID_KEYS;
+const ORIGINAL_VALID_KEYS = process.env.WORLDVIEW_VALID_KEYS;
 
 afterEach(() => {
   globalThis.fetch = ORIGINAL_FETCH;
@@ -97,8 +97,8 @@ afterEach(() => {
   else process.env.USAGE_TELEMETRY = ORIGINAL_USAGE_FLAG;
   if (ORIGINAL_AXIOM_TOKEN == null) delete process.env.AXIOM_API_TOKEN;
   else process.env.AXIOM_API_TOKEN = ORIGINAL_AXIOM_TOKEN;
-  if (ORIGINAL_VALID_KEYS == null) delete process.env.WORLDMONITOR_VALID_KEYS;
-  else process.env.WORLDMONITOR_VALID_KEYS = ORIGINAL_VALID_KEYS;
+  if (ORIGINAL_VALID_KEYS == null) delete process.env.WORLDVIEW_VALID_KEYS;
+  else process.env.WORLDVIEW_VALID_KEYS = ORIGINAL_VALID_KEYS;
 });
 
 describe('gateway telemetry payload — domain extraction', () => {
@@ -117,8 +117,8 @@ describe('gateway telemetry payload — domain extraction', () => {
 
     const recorder = makeRecordingCtx();
     const res = await handler(
-      new Request('https://worldmonitor.app/api/v2/shipping/route-intelligence', {
-        headers: { Origin: 'https://worldmonitor.app' },
+      new Request('https://worldview.app/api/v2/shipping/route-intelligence', {
+        headers: { Origin: 'https://worldview.app' },
       }),
       recorder.ctx,
     );
@@ -152,8 +152,8 @@ describe('gateway telemetry payload — domain extraction', () => {
 
     const recorder = makeRecordingCtx();
     const res = await handler(
-      new Request('https://worldmonitor.app/api/market/v1/list-market-quotes?symbols=AAPL', {
-        headers: { Origin: 'https://worldmonitor.app', 'X-WorldMonitor-Key': SESSION_TOKEN },
+      new Request('https://worldview.app/api/market/v1/list-market-quotes?symbols=AAPL', {
+        headers: { Origin: 'https://worldview.app', 'X-WorldView-Key': SESSION_TOKEN },
       }),
       recorder.ctx,
     );
@@ -186,8 +186,8 @@ describe('gateway telemetry payload — domain extraction', () => {
 
     const recorder = makeRecordingCtx();
     const res = await handler(
-      new Request('https://worldmonitor.app/api/market/v1/list-market-quotes?symbols=AAPL', {
-        headers: { Origin: 'https://worldmonitor.app', 'X-WorldMonitor-Key': SESSION_TOKEN },
+      new Request('https://worldview.app/api/market/v1/list-market-quotes?symbols=AAPL', {
+        headers: { Origin: 'https://worldview.app', 'X-WorldView-Key': SESSION_TOKEN },
       }),
       recorder.ctx,
     );
@@ -265,9 +265,9 @@ describe('gateway telemetry payload — bearer identity propagation', () => {
     const token = await signToken({ sub: 'user_pro', plan: 'pro' });
     const recorder = makeRecordingCtx();
     const res = await handler(
-      new Request('https://worldmonitor.app/api/resilience/v1/get-resilience-score?countryCode=US', {
+      new Request('https://worldview.app/api/resilience/v1/get-resilience-score?countryCode=US', {
         headers: {
-          Origin: 'https://worldmonitor.app',
+          Origin: 'https://worldview.app',
           Authorization: `Bearer ${token}`,
         },
       }),
@@ -326,9 +326,9 @@ describe('gateway telemetry payload — bearer identity propagation', () => {
     const token = await signToken({ sub: 'user_api', plan: 'api' });
     const recorder = makeRecordingCtx();
     const res = await handler(
-      new Request('https://worldmonitor.app/api/market/v1/analyze-stock?symbol=AAPL', {
+      new Request('https://worldview.app/api/market/v1/analyze-stock?symbol=AAPL', {
         headers: {
-          Origin: 'https://worldmonitor.app',
+          Origin: 'https://worldview.app',
           Authorization: `Bearer ${token}`,
         },
       }),
@@ -365,9 +365,9 @@ describe('gateway telemetry payload — bearer identity propagation', () => {
 
     const recorder = makeRecordingCtx();
     const res = await handler(
-      new Request('https://worldmonitor.app/api/resilience/v1/get-resilience-score?countryCode=US', {
+      new Request('https://worldview.app/api/resilience/v1/get-resilience-score?countryCode=US', {
         headers: {
-          Origin: 'https://worldmonitor.app',
+          Origin: 'https://worldview.app',
           Authorization: 'Bearer not-a-real-token',
         },
       }),
@@ -400,8 +400,8 @@ describe('gateway telemetry payload — ctx-optional safety', () => {
     ]);
 
     const res = await handler(
-      new Request('https://worldmonitor.app/api/market/v1/list-market-quotes?symbols=AAPL', {
-        headers: { Origin: 'https://worldmonitor.app', 'X-WorldMonitor-Key': SESSION_TOKEN },
+      new Request('https://worldview.app/api/market/v1/list-market-quotes?symbols=AAPL', {
+        headers: { Origin: 'https://worldview.app', 'X-WorldView-Key': SESSION_TOKEN },
       }),
     );
     assert.equal(res.status, 200);
@@ -440,8 +440,8 @@ describe('gateway telemetry payload — unmatched route reason labels', () => {
 
     const recorder = makeRecordingCtx();
     const res = await handler(
-      new Request('https://worldmonitor.app/api/trade/v1/list-tariffs', {
-        headers: { Origin: 'https://worldmonitor.app', 'X-WorldMonitor-Key': SESSION_TOKEN },
+      new Request('https://worldview.app/api/trade/v1/list-tariffs', {
+        headers: { Origin: 'https://worldview.app', 'X-WorldView-Key': SESSION_TOKEN },
       }),
       recorder.ctx,
     );
@@ -480,9 +480,9 @@ describe('gateway telemetry payload — unmatched route reason labels', () => {
 
     const recorder = makeRecordingCtx();
     const res = await handler(
-      new Request('https://worldmonitor.app/api/market/v1/list-market-quotes', {
+      new Request('https://worldview.app/api/market/v1/list-market-quotes', {
         method: 'DELETE',
-        headers: { Origin: 'https://worldmonitor.app', 'X-WorldMonitor-Key': SESSION_TOKEN },
+        headers: { Origin: 'https://worldview.app', 'X-WorldView-Key': SESSION_TOKEN },
       }),
       recorder.ctx,
     );

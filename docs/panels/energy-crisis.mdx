@@ -26,7 +26,7 @@ Panel id is `energy-crisis`; canonical component is `src/components/EnergyCrisis
 ## Data sources
 
 - `EconomicServiceClient.getEnergyCrisisPolicies()` via the generated Economic service client.
-- Panel prefers the hydrated bootstrap payload first (`getHydratedData()`) and falls back to a fresh RPC call — the standard WorldMonitor "one bootstrap, no duplicate fetch" pattern.
+- Panel prefers the hydrated bootstrap payload first (`getHydratedData()`) and falls back to a fresh RPC call — the standard WorldView "one bootstrap, no duplicate fetch" pattern.
 
 Upstream source per the in-panel info tooltip: **IEA 2026 Energy Crisis Policy Response Tracker**. Tracks measures across ~60 countries with nearly 200 policy entries.
 

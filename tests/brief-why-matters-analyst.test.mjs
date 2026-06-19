@@ -487,7 +487,7 @@ describe('endpoint validation contract', () => {
 describe('buildAnalystWhyMattersPrompt — shape and budget', () => {
   let builder;
   it('loads', async () => {
-    const mod = await import('../server/worldmonitor/intelligence/v1/brief-why-matters-prompt.ts');
+    const mod = await import('../server/worldview/intelligence/v1/brief-why-matters-prompt.ts');
     builder = mod.buildAnalystWhyMattersPrompt;
     assert.ok(typeof builder === 'function');
   });
@@ -574,7 +574,7 @@ describe('buildAnalystWhyMattersPrompt — shape and budget', () => {
       macroSignals: '',
       degraded: false,
     });
-    assert.doesNotMatch(user, /# Live WorldMonitor Context/);
+    assert.doesNotMatch(user, /# Live WorldView Context/);
   });
 
   it('truncates context to stay under budget', () => {
@@ -610,7 +610,7 @@ describe('sectionsForCategory — structural relevance gating', () => {
   let sectionsForCategory;
   let builder;
   it('loads', async () => {
-    const mod = await import('../server/worldmonitor/intelligence/v1/brief-why-matters-prompt.ts');
+    const mod = await import('../server/worldview/intelligence/v1/brief-why-matters-prompt.ts');
     sectionsForCategory = mod.sectionsForCategory;
     builder = mod.buildAnalystWhyMattersPrompt;
     assert.ok(typeof sectionsForCategory === 'function');

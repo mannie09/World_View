@@ -27,10 +27,10 @@ function overrideGlobal(name, value) {
 
 function installBrowserEnv() {
   const location = {
-    hostname: 'worldmonitor.app',
+    hostname: 'worldview.app',
     protocol: 'https:',
-    host: 'worldmonitor.app',
-    origin: 'https://worldmonitor.app',
+    host: 'worldview.app',
+    origin: 'https://worldview.app',
   };
   const navigator = { userAgent: 'node-test', onLine: true };
   const window = { location, navigator };

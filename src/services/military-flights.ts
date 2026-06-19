@@ -14,7 +14,7 @@ import {
   type MilitaryFlight as ProtoMilitaryFlight,
   type MilitaryAircraftType as ProtoMilitaryAircraftType,
   type MilitaryOperator as ProtoMilitaryOperator,
-} from '@/generated/client/worldmonitor/military/v1/service_client';
+} from '@/generated/client/worldview/military/v1/service_client';
 import { getRpcBaseUrl } from '@/services/rpc-client';
 import {
   getAircraftDetailsBatch,

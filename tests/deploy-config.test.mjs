@@ -12,7 +12,7 @@ const middlewareSource = readFileSync(resolve(__dirname, '../middleware.ts'), 'u
 const dockerfileSource = readFileSync(resolve(__dirname, '../Dockerfile'), 'utf-8');
 const SPA_HTML_CACHE_SOURCE = '/((?!api|mcp|oauth|assets|blog|docs|embed|embed\\.html|favico|map-styles|data|textures|pro|sw\\.js|workbox-[a-f0-9]+\\.js|manifest\\.webmanifest|offline\\.html|robots\\.txt|sitemap\\.xml|llms\\.txt|llms-full\\.txt|openapi\\.yaml|\\.well-known|wm-widget-sandbox\\.html|mcp-grant\\.html|mcp-grant).*)';
 const GLOBAL_SECURITY_HEADER_SOURCE = '/((?!docs|embed|embed\\.html).*)';
-const APP_ROOT_HOST_PATTERN = '^(?:(?:www|tech|finance|commodity|happy|energy)\\.)?worldmonitor\\.app$';
+const APP_ROOT_HOST_PATTERN = '^(?:(?:www|tech|finance|commodity|happy|energy)\\.)?worldview\\.app$';
 const GLOBAL_CSP_INLINE_SCRIPT_HTML_FILES = [
   'index.html',
   'settings.html',
@@ -165,9 +165,9 @@ const DASHBOARD_HTML_DESTINATION = '/dashboard.html';
 // Root marketing landing page — a second HTML entry in the pro-test bundle
 // (vite rollupOptions.input), served from public/pro/welcome.html on the full
 // site and app variant roots. Variant dashboards live at /dashboard so the root
-// welcome route is consistent across worldmonitor.app, finance.worldmonitor.app,
-// tech.worldmonitor.app, commodity.worldmonitor.app, happy.worldmonitor.app, and
-// energy.worldmonitor.app.
+// welcome route is consistent across worldview.app, finance.worldview.app,
+// tech.worldview.app, commodity.worldview.app, happy.worldview.app, and
+// energy.worldview.app.
 // The dashboard source template remains index.html, but the web build renames
 // its output to dashboard.html so Vercel's filesystem cannot shadow the /
 // rewrite. /welcome and /index.html redirect to root so crawlers and humans do
@@ -195,11 +195,11 @@ describe('welcome landing page routing', () => {
   });
 
   it('routes app roots to welcome and leaves non-app roots on the dashboard catch-all', () => {
-    assert.equal(rootDestinationForHost('worldmonitor.app'), '/pro/welcome.html');
-    assert.equal(rootDestinationForHost('www.worldmonitor.app'), '/pro/welcome.html');
-    assert.equal(rootDestinationForHost('worldmonitor.app.evil.example'), DASHBOARD_HTML_DESTINATION);
+    assert.equal(rootDestinationForHost('worldview.app'), '/pro/welcome.html');
+    assert.equal(rootDestinationForHost('www.worldview.app'), '/pro/welcome.html');
+    assert.equal(rootDestinationForHost('worldview.app.evil.example'), DASHBOARD_HTML_DESTINATION);
 
-    const variantHosts = getVariantHosts().filter((host) => host !== 'www.worldmonitor.app');
+    const variantHosts = getVariantHosts().filter((host) => host !== 'www.worldview.app');
     for (const host of variantHosts) {
       assert.equal(
         rootDestinationForHost(host),
@@ -211,7 +211,7 @@ describe('welcome landing page routing', () => {
 
   it('keeps variant canonicals aligned with the /dashboard routing strategy', () => {
     const variantUrls = getVariantUrls();
-    assert.equal(variantUrls.full, 'https://www.worldmonitor.app/dashboard');
+    assert.equal(variantUrls.full, 'https://www.worldview.app/dashboard');
 
     const nonFullUrls = Object.entries(variantUrls).filter(([variant]) => variant !== 'full');
     assert.ok(nonFullUrls.length >= 5, 'expected non-full variant metadata entries');
@@ -342,18 +342,18 @@ describe('welcome landing page routing', () => {
   it('sitemap lists dashboard routes and does not list legacy /welcome', () => {
     const sitemap = readFileSync(resolve(__dirname, '../public/sitemap.xml'), 'utf-8');
     assert.ok(
-      sitemap.includes('<loc>https://www.worldmonitor.app/dashboard</loc>'),
-      'public/sitemap.xml must list https://www.worldmonitor.app/dashboard'
+      sitemap.includes('<loc>https://www.worldview.app/dashboard</loc>'),
+      'public/sitemap.xml must list https://www.worldview.app/dashboard'
     );
     for (const host of ['tech', 'finance', 'commodity', 'happy', 'energy']) {
       assert.ok(
-        sitemap.includes(`<loc>https://${host}.worldmonitor.app/dashboard</loc>`),
-        `public/sitemap.xml must list https://${host}.worldmonitor.app/dashboard`
+        sitemap.includes(`<loc>https://${host}.worldview.app/dashboard</loc>`),
+        `public/sitemap.xml must list https://${host}.worldview.app/dashboard`
       );
     }
     assert.ok(
-      !sitemap.includes('<loc>https://www.worldmonitor.app/welcome</loc>'),
-      'public/sitemap.xml must not list legacy https://www.worldmonitor.app/welcome'
+      !sitemap.includes('<loc>https://www.worldview.app/welcome</loc>'),
+      'public/sitemap.xml must not list legacy https://www.worldview.app/welcome'
     );
   });
 
@@ -362,27 +362,27 @@ describe('welcome landing page routing', () => {
     const generatedWelcomeHtml = readFileSync(resolve(__dirname, '../public/pro/welcome.html'), 'utf-8');
     const dashboardHtml = readFileSync(resolve(__dirname, '../index.html'), 'utf-8');
     assert.ok(
-      welcomeHtml.includes('<link rel="canonical" href="https://www.worldmonitor.app/" />'),
+      welcomeHtml.includes('<link rel="canonical" href="https://www.worldview.app/" />'),
       'welcome source must canonicalize to root'
     );
     assert.ok(
-      !welcomeHtml.includes('https://www.worldmonitor.app/welcome'),
+      !welcomeHtml.includes('https://www.worldview.app/welcome'),
       'welcome source must not emit legacy /welcome SEO URLs'
     );
     assert.ok(
-      generatedWelcomeHtml.includes('<link rel="canonical" href="https://www.worldmonitor.app/" />'),
+      generatedWelcomeHtml.includes('<link rel="canonical" href="https://www.worldview.app/" />'),
       'generated welcome HTML must canonicalize to root'
     );
     assert.ok(
-      !generatedWelcomeHtml.includes('https://www.worldmonitor.app/welcome'),
+      !generatedWelcomeHtml.includes('https://www.worldview.app/welcome'),
       'generated welcome HTML must not emit legacy /welcome SEO URLs'
     );
     assert.ok(
-      generatedWelcomeHtml.includes('https://www.worldmonitor.app/dashboard'),
+      generatedWelcomeHtml.includes('https://www.worldview.app/dashboard'),
       'generated welcome HTML must launch the dashboard at /dashboard'
     );
     assert.ok(
-      dashboardHtml.includes('<link rel="canonical" href="https://www.worldmonitor.app/dashboard" />'),
+      dashboardHtml.includes('<link rel="canonical" href="https://www.worldview.app/dashboard" />'),
       'dashboard shell must canonicalize to /dashboard'
     );
   });
@@ -395,7 +395,7 @@ describe('welcome landing page routing', () => {
 
     const generatedWelcomeAsset = readFileSync(resolve(__dirname, '../public/pro', welcomeAssetPath), 'utf-8');
     const rootWelcomeLaunchLink = /href\s*[:=]\s*["'`]\/\?ref=welcome-/;
-    const variantRootWelcomeLaunchLink = /https:\/\/(?:tech|finance|commodity|happy|energy)\.worldmonitor\.app\/\?ref=welcome-/;
+    const variantRootWelcomeLaunchLink = /https:\/\/(?:tech|finance|commodity|happy|energy)\.worldview\.app\/\?ref=welcome-/;
     assert.doesNotMatch(
       welcomeMomentsSource,
       rootWelcomeLaunchLink,
@@ -687,7 +687,7 @@ describe('security header guardrails', () => {
     const csp = getHeaderValue('Content-Security-Policy');
     const scriptSrc = csp.match(/script-src\s+([^;]+)/)?.[1] ?? '';
     assert.ok(
-      scriptSrc.includes('clerk.accounts.dev') || scriptSrc.includes('clerk.worldmonitor.app'),
+      scriptSrc.includes('clerk.accounts.dev') || scriptSrc.includes('clerk.worldview.app'),
       'CSP script-src must include Clerk origin for auth UI to load'
     );
   });
@@ -696,7 +696,7 @@ describe('security header guardrails', () => {
     const csp = getHeaderValue('Content-Security-Policy');
     const frameSrc = csp.match(/frame-src\s+([^;]+)/)?.[1] ?? '';
     assert.ok(
-      frameSrc.includes('clerk.accounts.dev') || frameSrc.includes('clerk.worldmonitor.app'),
+      frameSrc.includes('clerk.accounts.dev') || frameSrc.includes('clerk.worldview.app'),
       'CSP frame-src must include Clerk origin for sign-in modal'
     );
   });
@@ -710,7 +710,7 @@ describe('security header guardrails', () => {
     assert.ok(nginxCsp, 'nginx-security-headers.conf must have a Content-Security-Policy header');
     const frameSrc = nginxCsp.match(/frame-src\s+([^;]+)/)?.[1] ?? '';
     assert.ok(
-      frameSrc.includes('clerk.accounts.dev') || frameSrc.includes('clerk.worldmonitor.app'),
+      frameSrc.includes('clerk.accounts.dev') || frameSrc.includes('clerk.worldview.app'),
       'docker/nginx CSP frame-src must include Clerk origin for the self-hosted sign-in modal'
     );
   });
@@ -910,14 +910,14 @@ describe('agent readiness: api-catalog + openapi build', () => {
   const pkg = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf-8'));
 
   it('api anchor is first and points at the api host root', () => {
-    assert.equal(apiCatalog.linkset[0].anchor, 'https://api.worldmonitor.app/');
+    assert.equal(apiCatalog.linkset[0].anchor, 'https://api.worldview.app/');
   });
 
   it('status href points at /api/health (SPA lives at /health — would 200 HTML and look healthy)', () => {
     const statusHref = apiCatalog.linkset[0].status[0].href;
     assert.ok(
-      statusHref.startsWith('https://api.worldmonitor.app'),
-      `status href must be on api.worldmonitor.app, got: ${statusHref}`
+      statusHref.startsWith('https://api.worldview.app'),
+      `status href must be on api.worldview.app, got: ${statusHref}`
     );
     assert.ok(
       statusHref.endsWith('/api/health'),
@@ -935,8 +935,8 @@ describe('agent readiness: api-catalog + openapi build', () => {
   });
 
   it('has a second anchor for the MCP server-card', () => {
-    const mcpEntry = apiCatalog.linkset.find((entry) => entry.anchor === 'https://worldmonitor.app/mcp');
-    assert.ok(mcpEntry, 'linkset must contain an anchor for https://worldmonitor.app/mcp');
+    const mcpEntry = apiCatalog.linkset.find((entry) => entry.anchor === 'https://worldview.app/mcp');
+    assert.ok(mcpEntry, 'linkset must contain an anchor for https://worldview.app/mcp');
     const mcpServiceDesc = mcpEntry['service-desc']?.[0];
     assert.ok(mcpServiceDesc, 'mcp anchor must have a service-desc entry');
     assert.ok(
@@ -949,8 +949,8 @@ describe('agent readiness: api-catalog + openapi build', () => {
     const buildOpenapi = pkg.scripts['build:openapi'];
     assert.ok(buildOpenapi, 'package.json must define scripts["build:openapi"]');
     assert.ok(
-      buildOpenapi.includes('docs/api/worldmonitor.openapi.yaml'),
-      `build:openapi must reference docs/api/worldmonitor.openapi.yaml, got: ${buildOpenapi}`
+      buildOpenapi.includes('docs/api/worldview.openapi.yaml'),
+      `build:openapi must reference docs/api/worldview.openapi.yaml, got: ${buildOpenapi}`
     );
     assert.ok(
       buildOpenapi.includes('public/openapi.yaml'),
@@ -977,14 +977,14 @@ describe('agent readiness: api-catalog + openapi build', () => {
     assert.ok(pkg.scripts.prebuild, 'package.json must define scripts["prebuild"] (default build path uses it)');
   });
 
-  it('openapi source exists at docs/api/worldmonitor.openapi.yaml', () => {
+  it('openapi source exists at docs/api/worldview.openapi.yaml', () => {
     // Catches the class of regression where someone cleans generated
     // artifacts and forgets to regenerate before committing — the
     // prebuild step would then fail silently at deploy time.
-    const openapiPath = resolve(__dirname, '../docs/api/worldmonitor.openapi.yaml');
+    const openapiPath = resolve(__dirname, '../docs/api/worldview.openapi.yaml');
     assert.ok(
       existsSync(openapiPath),
-      `docs/api/worldmonitor.openapi.yaml must exist — without it, build:openapi fails at deploy time`
+      `docs/api/worldview.openapi.yaml must exist — without it, build:openapi fails at deploy time`
     );
   });
 });
@@ -1008,7 +1008,7 @@ describe('agent readiness: MCP/OAuth origin alignment', () => {
     const handler = mod.default;
     assert.equal(typeof handler, 'function', 'handler must be the default export');
 
-    const hosts = ['worldmonitor.app', 'www.worldmonitor.app', 'api.worldmonitor.app'];
+    const hosts = ['worldview.app', 'www.worldview.app', 'api.worldview.app'];
     for (const host of hosts) {
       const req = new Request(`https://${host}/.well-known/oauth-protected-resource`, {
         headers: { host },
@@ -1032,7 +1032,7 @@ describe('agent readiness: MCP/OAuth origin alignment', () => {
     const u = new URL(mcpCard.authentication.resource);
     assert.equal(u.protocol, 'https:');
     assert.ok(
-      ['worldmonitor.app', 'www.worldmonitor.app', 'api.worldmonitor.app'].includes(u.host),
+      ['worldview.app', 'www.worldview.app', 'api.worldview.app'].includes(u.host),
       `unexpected host: ${u.host}`
     );
   });
@@ -1049,9 +1049,9 @@ describe('agent readiness: MCP/OAuth origin alignment', () => {
       + readFileSync(resolve(__dirname, '../api/mcp/auth.ts'), 'utf-8');
     // Must NOT contain a hardcoded apex or api URL for resource_metadata —
     // that regressed once (PR #3351 review: apex pointer emitted from
-    // api.worldmonitor.app/mcp 401s) and the grep-only test didn't catch it.
+    // api.worldview.app/mcp 401s) and the grep-only test didn't catch it.
     assert.ok(
-      !/resource_metadata="https:\/\/(?:api\.)?worldmonitor\.app\/\.well-known\//.test(source),
+      !/resource_metadata="https:\/\/(?:api\.)?worldview\.app\/\.well-known\//.test(source),
       'api/mcp.ts must not hardcode resource_metadata URL — derive from request host'
     );
     // Must contain a template-literal construction that uses a host variable.

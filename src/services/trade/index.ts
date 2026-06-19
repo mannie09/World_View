@@ -24,7 +24,7 @@ import {
   type TradeFlowRecord,
   type TradeBarrier,
   type CustomsRevenueMonth,
-} from '@/generated/client/worldmonitor/trade/v1/service_client';
+} from '@/generated/client/worldview/trade/v1/service_client';
 import { createCircuitBreaker } from '@/utils';
 import { isFeatureAvailable } from '../runtime-config';
 import { getHydratedData } from '@/services/bootstrap';
@@ -55,7 +55,7 @@ export type {
 //
 //   - premiumClient (premiumFetch)      — ONLY used for get-tariff-trends
 //     and list-comtrade-flows. Injects the caller's Clerk bearer /
-//     tester-key / WORLDMONITOR_API_KEY, so pro users get real data
+//     tester-key / WORLDVIEW_API_KEY, so pro users get real data
 //     instead of 401.
 const publicClient = new TradeServiceClient(getRpcBaseUrl(), { fetch: (...args) => globalThis.fetch(...args) });
 const premiumClient = new TradeServiceClient(getRpcBaseUrl(), { fetch: premiumFetch });

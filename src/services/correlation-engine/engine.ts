@@ -8,7 +8,7 @@ import type {
   TrendDirection,
 } from './types';
 import { haversineKm } from '@/utils/distance';
-import { IntelligenceServiceClient } from '@/generated/client/worldmonitor/intelligence/v1/service_client';
+import { IntelligenceServiceClient } from '@/generated/client/worldview/intelligence/v1/service_client';
 import { premiumFetch } from '@/services/premium-fetch';
 import { hasPremiumAccess } from '@/services/panel-gating';
 

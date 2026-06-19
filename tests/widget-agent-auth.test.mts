@@ -3,7 +3,7 @@ import { after, before, beforeEach, describe, it, mock } from 'node:test';
 
 const originalWidgetKey = process.env.WIDGET_AGENT_KEY;
 const originalProKey = process.env.PRO_WIDGET_KEY;
-const originalValidKeys = process.env.WORLDMONITOR_VALID_KEYS;
+const originalValidKeys = process.env.WORLDVIEW_VALID_KEYS;
 
 function fakeRelayResponse(
   body = 'data: {"type":"done"}\n\n',
@@ -23,7 +23,7 @@ describe('widget-agent unified tester key auth', () => {
   before(async () => {
     process.env.WIDGET_AGENT_KEY = 'server-widget-key';
     process.env.PRO_WIDGET_KEY = 'server-pro-key';
-    process.env.WORLDMONITOR_VALID_KEYS = 'browser-test-key';
+    process.env.WORLDVIEW_VALID_KEYS = 'browser-test-key';
 
     fetchMock = mock.method(globalThis, 'fetch', () => Promise.resolve(fakeRelayResponse()));
     ({ default: handler } = await import('../api/widget-agent.ts'));
@@ -43,17 +43,17 @@ describe('widget-agent unified tester key auth', () => {
     if (originalProKey == null) delete process.env.PRO_WIDGET_KEY;
     else process.env.PRO_WIDGET_KEY = originalProKey;
 
-    if (originalValidKeys == null) delete process.env.WORLDMONITOR_VALID_KEYS;
-    else process.env.WORLDMONITOR_VALID_KEYS = originalValidKeys;
+    if (originalValidKeys == null) delete process.env.WORLDVIEW_VALID_KEYS;
+    else process.env.WORLDVIEW_VALID_KEYS = originalValidKeys;
   });
 
-  it('accepts X-WorldMonitor-Key and upgrades relay request to pro', async () => {
-    const res = await handler(new Request('https://www.worldmonitor.app/api/widget-agent', {
+  it('accepts X-WorldView-Key and upgrades relay request to pro', async () => {
+    const res = await handler(new Request('https://www.worldview.app/api/widget-agent', {
       method: 'POST',
       headers: {
-        Origin: 'https://www.worldmonitor.app',
+        Origin: 'https://www.worldview.app',
         'Content-Type': 'application/json',
-        'X-WorldMonitor-Key': 'browser-test-key',
+        'X-WorldView-Key': 'browser-test-key',
       },
       body: JSON.stringify({ prompt: 'Build a widget', mode: 'create', tier: 'basic' }),
     }));
@@ -62,13 +62,13 @@ describe('widget-agent unified tester key auth', () => {
     assert.equal(fetchMock.mock.calls.length, 1);
 
     const call = fetchMock.mock.calls[0];
-    assert.equal(call.arguments[0], 'https://proxy.worldmonitor.app/widget-agent');
+    assert.equal(call.arguments[0], 'https://proxy.worldview.app/widget-agent');
 
     const init = call.arguments[1] as RequestInit;
     const headers = new Headers(init.headers);
     assert.equal(headers.get('X-Widget-Key'), 'server-widget-key');
     assert.equal(headers.get('X-Pro-Key'), 'server-pro-key');
-    assert.equal(headers.get('X-WorldMonitor-Key'), null);
+    assert.equal(headers.get('X-WorldView-Key'), null);
 
     assert.deepEqual(JSON.parse(String(init.body)), {
       prompt: 'Build a widget',
@@ -77,13 +77,13 @@ describe('widget-agent unified tester key auth', () => {
     });
   });
 
-  it('falls back to legacy tester keys when X-WorldMonitor-Key is invalid', async () => {
-    const res = await handler(new Request('https://www.worldmonitor.app/api/widget-agent', {
+  it('falls back to legacy tester keys when X-WorldView-Key is invalid', async () => {
+    const res = await handler(new Request('https://www.worldview.app/api/widget-agent', {
       method: 'POST',
       headers: {
-        Origin: 'https://www.worldmonitor.app',
+        Origin: 'https://www.worldview.app',
         'Content-Type': 'application/json',
-        'X-WorldMonitor-Key': 'wrong-key',
+        'X-WorldView-Key': 'wrong-key',
         'X-Pro-Key': 'server-pro-key',
       },
       body: JSON.stringify({ prompt: 'Build a widget', mode: 'create', tier: 'basic' }),
@@ -106,10 +106,10 @@ describe('widget-agent unified tester key auth', () => {
   });
 
   it('accepts HttpOnly legacy tester key cookies without JS-readable auth headers', async () => {
-    const res = await handler(new Request('https://www.worldmonitor.app/api/widget-agent', {
+    const res = await handler(new Request('https://www.worldview.app/api/widget-agent', {
       method: 'POST',
       headers: {
-        Origin: 'https://www.worldmonitor.app',
+        Origin: 'https://www.worldview.app',
         'Content-Type': 'application/json',
         Cookie: `wm-widget-key=${encodeURIComponent('server-widget-key')}; wm-pro-key=${encodeURIComponent('server-pro-key')}`,
       },
@@ -132,7 +132,7 @@ describe('widget-agent unified tester key auth', () => {
   });
 
   it('rejects disallowed origins before cookie-backed auth reaches the relay', async () => {
-    const res = await handler(new Request('https://www.worldmonitor.app/api/widget-agent', {
+    const res = await handler(new Request('https://www.worldview.app/api/widget-agent', {
       method: 'POST',
       headers: {
         Origin: 'https://evil.example.com',
@@ -149,13 +149,13 @@ describe('widget-agent unified tester key auth', () => {
     assert.equal(body.error, 'Origin not allowed');
   });
 
-  it('rejects invalid X-WorldMonitor-Key before relay fetch', async () => {
-    const res = await handler(new Request('https://www.worldmonitor.app/api/widget-agent', {
+  it('rejects invalid X-WorldView-Key before relay fetch', async () => {
+    const res = await handler(new Request('https://www.worldview.app/api/widget-agent', {
       method: 'POST',
       headers: {
-        Origin: 'https://www.worldmonitor.app',
+        Origin: 'https://www.worldview.app',
         'Content-Type': 'application/json',
-        'X-WorldMonitor-Key': 'wrong-key',
+        'X-WorldView-Key': 'wrong-key',
       },
       body: JSON.stringify({ prompt: 'Build a widget', mode: 'create', tier: 'pro' }),
     }));

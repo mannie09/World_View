@@ -1,15 +1,15 @@
 {
   "serverInfo": {
-    "name": "worldmonitor",
+    "name": "worldview",
     "version": "1.10.0",
-    "description": "WorldMonitor's live global-intelligence stack as an MCP server: real-time markets, conflict events, aviation, maritime, energy, climate, health, displacement, supply chain, and AI-generated regional briefs.",
-    "vendor": "WorldMonitor",
-    "homepage": "https://www.worldmonitor.app"
+    "description": "WorldView's live global-intelligence stack as an MCP server: real-time markets, conflict events, aviation, maritime, energy, climate, health, displacement, supply chain, and AI-generated regional briefs.",
+    "vendor": "WorldView",
+    "homepage": "https://www.worldview.app"
   },
   "protocolVersion": "2025-06-18",
   "transport": {
     "type": "streamableHttp",
-    "endpoint": "https://worldmonitor.app/mcp"
+    "endpoint": "https://worldview.app/mcp"
   },
   "capabilities": {
     "tools": true,
@@ -32,22 +32,22 @@
   },
   "authentication": {
     "type": "oauth2",
-    "authorization_servers": ["https://api.worldmonitor.app"],
-    "resource": "https://worldmonitor.app",
+    "authorization_servers": ["https://api.worldview.app"],
+    "resource": "https://worldview.app",
     "scopes": ["mcp"],
     "alternative_methods": [
       {
         "type": "api_key",
-        "header": "X-WorldMonitor-Key",
+        "header": "X-WorldView-Key",
         "description": "API-tier subscribers may pass a wm_<40 lowercase hex> key directly instead of completing the OAuth flow."
       }
     ]
   },
   "documentation": {
-    "overview": "https://www.worldmonitor.app/docs/mcp-server",
-    "toolReference": "https://www.worldmonitor.app/docs/mcp-tools-reference",
-    "apiReference": "https://www.worldmonitor.app/docs/api-reference",
-    "support": "https://www.worldmonitor.app/docs/getting-started"
+    "overview": "https://www.worldview.app/docs/mcp-server",
+    "toolReference": "https://www.worldview.app/docs/mcp-tools-reference",
+    "apiReference": "https://www.worldview.app/docs/api-reference",
+    "support": "https://www.worldview.app/docs/getting-started"
   },
   "rateLimits": {
     "perMinute": 60,

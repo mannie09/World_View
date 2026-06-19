@@ -39,10 +39,10 @@ const CANONICAL_KEY = 'news:insights:v1';
 const DIGEST_KEY = 'news:digest:v1:full:en';
 
 // Defense-in-depth auth — see seed-infra.mjs for the same pattern + rationale.
-// Set WORLDMONITOR_RELAY_KEY on the Railway service (must match a value in
-// Vercel's WORLDMONITOR_VALID_KEYS). Origin alone is no longer reliable
+// Set WORLDVIEW_RELAY_KEY on the Railway service (must match a value in
+// Vercel's WORLDVIEW_VALID_KEYS). Origin alone is no longer reliable
 // because CF/Vercel intermediaries may strip it and CF can cache the 401.
-const RELAY_API_KEY = process.env.WORLDMONITOR_RELAY_KEY || '';
+const RELAY_API_KEY = process.env.WORLDVIEW_RELAY_KEY || '';
 
 // Digest items store proto enum strings (THREAT_LEVEL_HIGH etc.) from toProtoItem().
 // Normalize to client-side lowercase values before propagating into insights output.
@@ -171,7 +171,7 @@ const LLM_PROVIDERS = [
     envKey: 'OPENROUTER_API_KEY',
     apiUrl: 'https://openrouter.ai/api/v1/chat/completions',
     model: 'google/gemini-2.5-flash',
-    headers: (key) => ({ 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json', 'HTTP-Referer': 'https://worldmonitor.app', 'X-Title': 'World Monitor', 'User-Agent': CHROME_UA }),
+    headers: (key) => ({ 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json', 'HTTP-Referer': 'https://worldview.app', 'X-Title': 'WorldView', 'User-Agent': CHROME_UA }),
     timeout: 20_000,
   },
 ];
@@ -321,12 +321,12 @@ function buildImportanceObservability(clusters, topStories) {
 }
 
 async function warmDigestCache() {
-  const apiBase = process.env.API_BASE_URL || 'https://api.worldmonitor.app';
+  const apiBase = process.env.API_BASE_URL || 'https://api.worldview.app';
   const headers = {
     'User-Agent': CHROME_UA,
-    Origin: 'https://worldmonitor.app',
+    Origin: 'https://worldview.app',
   };
-  if (RELAY_API_KEY) headers['X-WorldMonitor-Key'] = RELAY_API_KEY;
+  if (RELAY_API_KEY) headers['X-WorldView-Key'] = RELAY_API_KEY;
   try {
     const resp = await fetch(`${apiBase}/api/news/v1/list-feed-digest?variant=full&lang=en`, {
       headers,
@@ -334,7 +334,7 @@ async function warmDigestCache() {
     });
     if (resp.ok) console.log('  Digest cache warmed via RPC');
     else {
-      const keyNote = RELAY_API_KEY ? '' : ' (WORLDMONITOR_RELAY_KEY not set — Origin-only auth)';
+      const keyNote = RELAY_API_KEY ? '' : ' (WORLDVIEW_RELAY_KEY not set — Origin-only auth)';
       console.warn(`  Digest warm failed: HTTP ${resp.status}${keyNote}`);
     }
   } catch (err) {

@@ -159,14 +159,14 @@ describe('empty-stack network/timeout errors are NOT suppressed', () => {
   // Note: dynamic-module-import failures are intentionally suppressed even with empty
   // stacks — that exact phrase is emitted only by the runtime on stale-chunk-after-
   // deploy, which the chunk-reload guard already auto-recovers. See the dedicated
-  // suite below for that case (WORLDMONITOR-Q / WORLDMONITOR-15).
+  // suite below for that case (WORLDVIEW-Q / WORLDVIEW-15).
   // Note: Firefox's `NetworkError when attempting to fetch resource.` USED to
   // live here (preserved with empty stacks on a "could be our code" caution),
   // but that predated the `Failed to fetch` provenance refinement. It now lives
   // in the zero-frame suppression suite below — it is the engine-equivalent of
   // Chrome's bare `Failed to fetch` and is suppressed the same way (zero frames
   // → background/SW/extension; a real first-party failure keeps a .ts frame).
-  // WORLDMONITOR-RK / WORLDMONITOR-KM.
+  // WORLDVIEW-RK / WORLDVIEW-KM.
   const networkErrors = [
     'Could not connect to the server',
     'Operation timed out',
@@ -233,12 +233,12 @@ describe('empty-stack network/timeout errors are NOT suppressed', () => {
 // call site. The chunk-reload guard auto-reloads the page, so the user is unaffected
 // — but the Sentry event is still captured. We suppress these even with empty stacks
 // because the exact phrase is only emitted by the runtime, never by our shipped code
-// (WORLDMONITOR-Q / WORLDMONITOR-15).
+// (WORLDVIEW-Q / WORLDVIEW-15).
 
 describe('dynamic-module-import failures (stale chunk after deploy)', () => {
   const dynamicImportErrors = [
-    'Failed to fetch dynamically imported module: https://worldmonitor.app/assets/panels-abc.js',
-    'Failed to fetch dynamically imported module: https://www.worldmonitor.app/assets/index-DSkSc57y.js',
+    'Failed to fetch dynamically imported module: https://worldview.app/assets/panels-abc.js',
+    'Failed to fetch dynamically imported module: https://www.worldview.app/assets/index-DSkSc57y.js',
     'Importing a module script failed.',
     'TypeError: Importing a module script failed.',
     'error loading dynamically imported module',
@@ -268,15 +268,15 @@ describe('dynamic-module-import failures (stale chunk after deploy)', () => {
 // up via onunhandledrejection without first-party frames captured (browser
 // fires them from internal infra at the timer boundary). Both phrases are
 // runtime-emitted only — our shipped code cannot synthesize them
-// (WORLDMONITOR-66 / WORLDMONITOR-62).
+// (WORLDVIEW-66 / WORLDVIEW-62).
 
 describe('zero-frame async-rejection patterns (timeout / DOMException / OOM / DOM-walker / wrapper-injected timeout)', () => {
   const zeroFrameErrors = [
     ['signal timed out', 'TimeoutError'],
     ['NotSupportedError: The operation is not supported.', 'Error'],
-    // Firefox setInterval mechanism, no captured frames (WORLDMONITOR-KE)
+    // Firefox setInterval mechanism, no captured frames (WORLDVIEW-KE)
     ['out of memory', 'Error'],
-    // Apple Mail privacy proxy DOM walker (WORLDMONITOR-P2). Frames in
+    // Apple Mail privacy proxy DOM walker (WORLDVIEW-P2). Frames in
     // production are [sentry-chunk, [native code]] which fully filter out
     // of `nonInfraFrames` so empty-stack semantics apply.
     [".toLowerCase is not a function. (In 'el.className.toLowerCase()', 'el.className.toLowerCase' is undefined)", 'TypeError'],
@@ -284,20 +284,20 @@ describe('zero-frame async-rejection patterns (timeout / DOMException / OOM / DO
     ['.indexOf is not a function', 'TypeError'],
     ['.findIndex is not a function', 'TypeError'],
     // Third-party Electron wrapper polling endpoints we don't serve
-    // (WORLDMONITOR-PW: /api/setIsSelect from Electron 39.2.7).
+    // (WORLDVIEW-PW: /api/setIsSelect from Electron 39.2.7).
     ['Request timeout: /api/setIsSelect', 'Error'],
     ['Error: Request timeout: /api/whatever', 'Error'],
     // Bare `Failed to fetch` with zero frames = service worker /
     // extension / in-app webview / stale pre-deploy bundle. First-party
     // fetch failures surface with a source-mapped frame on the awaiting
-    // site (WORLDMONITOR-KM 10ev/8u). The host-suffixed variant
+    // site (WORLDVIEW-KM 10ev/8u). The host-suffixed variant
     // `Failed to fetch (<host>)` has its own first-party allowlist
     // earlier in beforeSend (isHostScopedFetchFailure), so doesn't go
     // through this gate.
     ['Failed to fetch', 'TypeError'],
     ['TypeError: Failed to fetch', 'TypeError'],
     // Safari module-loader abort / streaming-fetch interruption
-    // (WORLDMONITOR-RF). iOS Safari fires `SyntaxError: Unexpected EOF`
+    // (WORLDVIEW-RF). iOS Safari fires `SyntaxError: Unexpected EOF`
     // via `onunhandledrejection` with no captured frames when a dynamic
     // `import()` or service-worker-mediated fetch is truncated mid-stream
     // during PWA lifecycle transitions. Our own `JSON.parse` produces
@@ -306,7 +306,7 @@ describe('zero-frame async-rejection patterns (timeout / DOMException / OOM / DO
     // is engine-emitted only.
     ['Unexpected EOF', 'SyntaxError'],
     ['SyntaxError: Unexpected EOF', 'SyntaxError'],
-    // Firefox's wording for a failed `fetch()` (WORLDMONITOR-RK) — the
+    // Firefox's wording for a failed `fetch()` (WORLDVIEW-RK) — the
     // engine-equivalent of Chrome's bare `Failed to fetch` above. Zero frames
     // via `onunhandledrejection` = background / service-worker / extension /
     // stale-pre-deploy-bundle fetch. A genuine first-party fetch failure keeps
@@ -400,7 +400,7 @@ describe('existing beforeSend filters', () => {
   });
 
   it('suppresses OrbitControls setPointerCapture NotFoundError when frame context matches three.js signature', () => {
-    // Verbatim frame context slice from WORLDMONITOR-NC: minified three.js OrbitControls
+    // Verbatim frame context slice from WORLDVIEW-NC: minified three.js OrbitControls
     // onPointerDown body. The `_pointers` + `setPointerCapture` adjacency is a three.js-only
     // pattern (our own code doesn't use `_pointers` naming).
     const event = makeEvent(
@@ -460,15 +460,15 @@ describe('existing beforeSend filters', () => {
     assert.equal(beforeSend(event), null, 'Allowlisted AJAX host should be suppressed regardless of stack shape');
   });
 
-  it('suppresses Clerk SDK "Failed to fetch (clerk.worldmonitor.app)" even with a clerk first-party frame', () => {
-    // WORLDMONITOR-SA/SB: the bundled Clerk SDK fetches its Frontend API
-    // (clerk.worldmonitor.app, a CNAME to Clerk's auth infra) for token
+  it('suppresses Clerk SDK "Failed to fetch (clerk.worldview.app)" even with a clerk first-party frame', () => {
+    // WORLDVIEW-SA/SB: the bundled Clerk SDK fetches its Frontend API
+    // (clerk.worldview.app, a CNAME to Clerk's auth infra) for token
     // refresh and retries transient failures itself. A leaked
-    // `Failed to fetch (clerk.worldmonitor.app)` is a Clerk-SDK-internal
+    // `Failed to fetch (clerk.worldview.app)` is a Clerk-SDK-internal
     // network blip, not our code — same disposition as `/ClerkJS: Network
     // error/`. The clerk-*.js chunk reads as first-party (not in the vendor
     // list), so the host allowlist — not hasFirstParty — must decide.
-    const event = makeEvent('Failed to fetch (clerk.worldmonitor.app)', 'TypeError', [
+    const event = makeEvent('Failed to fetch (clerk.worldview.app)', 'TypeError', [
       { filename: '/assets/clerk-DC7Q2aDh.js', lineno: 848, function: 'i' },
       { filename: 'chrome-extension://ebeglcfoffnnadgncmppkkohfcigngkj/js/injected/hook.js', lineno: 1, function: 'Object.apply' },
       { filename: '/assets/panels-CYSIkWVK.js', lineno: 45, function: 'window.fetch' },
@@ -483,8 +483,8 @@ describe('existing beforeSend filters', () => {
     assert.ok(beforeSend(event) !== null, 'Plain first-party fetch failure should surface');
   });
 
-  it('suppresses bare "Failed to fetch" when an extension monkeypatched window.fetch (WORLDMONITOR-SG)', () => {
-    // Real WORLDMONITOR-SG stack: our runtime fetch interceptor + country-geometry
+  it('suppresses bare "Failed to fetch" when an extension monkeypatched window.fetch (WORLDVIEW-SG)', () => {
+    // Real WORLDVIEW-SG stack: our runtime fetch interceptor + country-geometry
     // loader are first-party frames, but the leaked rejection comes from an
     // extension (Adjust SDK injectScriptAdjust.js / page-inspector) that wrapped
     // window.fetch and chained an uncaught `.then()`. hasFirstParty is true, so
@@ -501,7 +501,7 @@ describe('existing beforeSend filters', () => {
   });
 
   it('does NOT suppress bare "Failed to fetch" with a first-party frame and a NON-fetch extension frame', () => {
-    // Precision guard for WORLDMONITOR-SG: an extension frame whose function is
+    // Precision guard for WORLDVIEW-SG: an extension frame whose function is
     // not a fetch wrapper is NOT evidence the extension owns the orphan fetch
     // promise, so a genuine first-party fetch failure must still surface.
     const event = makeEvent('Failed to fetch', 'TypeError', [
@@ -528,15 +528,15 @@ describe('existing beforeSend filters', () => {
   it('does NOT suppress "Failed to fetch (<hostname>)" when no maplibre frame is present', () => {
     // Guards against broad message-only suppression hiding a real first-party fetch
     // regression that happens to wrap host into the message.
-    const event = makeEvent('Failed to fetch (api.worldmonitor.app)', 'TypeError', [
+    const event = makeEvent('Failed to fetch (api.worldview.app)', 'TypeError', [
       { filename: '/assets/panels-wF5GXf0N.js', lineno: 100, function: 'MyApiCall' },
     ]);
     assert.ok(beforeSend(event) !== null, 'Non-maplibre Failed-to-fetch must reach Sentry');
   });
 
   it('does NOT suppress MapLibre AJAXError for a non-allowlisted host (mixed stack)', () => {
-    // Mirrors WORLDMONITOR-NE/NF real-world stack: maplibre + first-party fetch wrapper.
-    const event = makeEvent('Failed to fetch (pmtiles.worldmonitor.app)', 'TypeError', [
+    // Mirrors WORLDVIEW-NE/NF real-world stack: maplibre + first-party fetch wrapper.
+    const event = makeEvent('Failed to fetch (pmtiles.worldview.app)', 'TypeError', [
       { filename: '/assets/maplibre-A8Ca0ysS.js', lineno: 4, function: 'ajaxFetch' },
       { filename: '/assets/panels-wF5GXf0N.js', lineno: 24, function: 'window.fetch' },
     ]);
@@ -549,18 +549,18 @@ describe('existing beforeSend filters', () => {
     // AJAX errors must bypass that generic filter so the host allowlist is what decides,
     // otherwise a self-hosted R2 basemap regression whose stack happens to be vendor-only
     // would be silently dropped.
-    const event = makeEvent('Failed to fetch (pmtiles.worldmonitor.app)', 'TypeError', [
+    const event = makeEvent('Failed to fetch (pmtiles.worldview.app)', 'TypeError', [
       { filename: '/assets/maplibre-A8Ca0ysS.js', lineno: 4, function: 'ajaxFetch' },
     ]);
     assert.ok(beforeSend(event) !== null, 'All-maplibre first-party tile fetch failure must still reach Sentry');
   });
 
   it('suppresses "Failed to fetch (<host>)" when stack is extension-only (covered by generic extension rule)', () => {
-    // WORLDMONITOR-P5: AdBlock-class extensions wrap window.fetch and their
+    // WORLDVIEW-P5: AdBlock-class extensions wrap window.fetch and their
     // replacement can fail unrelated to our backend. The generic extension rule
     // (`!hasFirstParty && extension frame`) already drops this; the test locks
     // that property in for the `Failed to fetch (<host>)` message shape.
-    const event = makeEvent('Failed to fetch (abacus.worldmonitor.app)', 'TypeError', [
+    const event = makeEvent('Failed to fetch (abacus.worldview.app)', 'TypeError', [
       { filename: 'chrome-extension://hoklmmgfnpapgjgcpechhaamimifchmp/frame_ant/frame_ant.js', lineno: 2, function: 'window.fetch' },
     ]);
     assert.equal(beforeSend(event), null, 'Extension-only fetch failure should be suppressed');
@@ -569,9 +569,9 @@ describe('existing beforeSend filters', () => {
   it('does NOT suppress "Failed to fetch (<host>)" when stack has both first-party and extension frames', () => {
     // Safety property: a first-party panels-*.js frame means our code initiated
     // the fetch — must surface even if an extension also wrapped it, so a real
-    // api.worldmonitor.app outage isn't silenced for users who happen to run
+    // api.worldview.app outage isn't silenced for users who happen to run
     // fetch-wrapping extensions.
-    const event = makeEvent('Failed to fetch (api.worldmonitor.app)', 'TypeError', [
+    const event = makeEvent('Failed to fetch (api.worldview.app)', 'TypeError', [
       { filename: '/assets/panels-wF5GXf0N.js', lineno: 24, function: 'window.fetch' },
       { filename: 'chrome-extension://hoklmmgfnpapgjgcpechhaamimifchmp/frame_ant/frame_ant.js', lineno: 2, function: 'window.fetch' },
     ]);
@@ -581,7 +581,7 @@ describe('existing beforeSend filters', () => {
   it('suppresses iOS Safari WKWebView "Cannot inject key into script value" regardless of first-party frame', () => {
     // The native throw always lands in a first-party caller; the existing
     // !hasFirstParty gate missed it. `UnknownError` type name is WebKit-only
-    // so scoping on excType is safe (WORLDMONITOR-NM).
+    // so scoping on excType is safe (WORLDVIEW-NM).
     const event = makeEvent('Cannot inject key into script value', 'UnknownError', [
       { filename: '/assets/panels-Dt68xLlT.js', lineno: 20, function: 'bootstrap' },
     ]);
@@ -600,7 +600,7 @@ describe('existing beforeSend filters', () => {
   it('suppresses Convex re-auth race on fetchToken (stack has tryToReauthenticate)', () => {
     // Convex SDK BaseConvexClient.tryToReauthenticate reads authState.config.fetchToken
     // during WebSocket reconnect when authState.config is still undefined. Known SDK
-    // internal, not actionable in our code (WORLDMONITOR-NJ).
+    // internal, not actionable in our code (WORLDVIEW-NJ).
     const event = makeEvent(
       "Cannot read properties of undefined (reading 'fetchToken')",
       'TypeError',
@@ -662,7 +662,7 @@ describe('existing beforeSend filters', () => {
     assert.ok(beforeSend(event) !== null);
   });
 
-  // WORLDMONITOR-MK: Fireglass (Symantec/Broadcom CloudSOC) console-hook recursion.
+  // WORLDVIEW-MK: Fireglass (Symantec/Broadcom CloudSOC) console-hook recursion.
   it('suppresses Fireglass RangeError with FireglassUtils frame', () => {
     const event = makeEvent('Maximum call stack size exceeded', 'RangeError', [
       { filename: '<anonymous>', lineno: 1, function: 'FireglassUtils.logInternal' },
@@ -679,7 +679,7 @@ describe('existing beforeSend filters', () => {
     assert.ok(beforeSend(event) !== null, 'RangeError gate must limit blast radius');
   });
 
-  // WORLDMONITOR-MH: Chrome Mobile WebView 105+ duplex requirement, Dodo SDK path.
+  // WORLDVIEW-MH: Chrome Mobile WebView 105+ duplex requirement, Dodo SDK path.
   it('suppresses duplex error ONLY when checkout-*.js chunk is in the stack', () => {
     const event = makeEvent(
       "Failed to construct 'Request': The `duplex` member must be specified for a request with a streaming body",
@@ -701,7 +701,7 @@ describe('existing beforeSend filters', () => {
     assert.ok(beforeSend(event) !== null, 'first-party runtime regression must still surface');
   });
 
-  // WORLDMONITOR-MP: Chrome extension intercepting maplibre fetch — suppress only when no first-party frames.
+  // WORLDVIEW-MP: Chrome extension intercepting maplibre fetch — suppress only when no first-party frames.
   it('suppresses chrome-extension-frame errors when no first-party frames are present', () => {
     const event = makeEvent('Failed to fetch (pub-x.r2.dev)', 'TypeError', [
       { filename: '/assets/maplibre-WH5fAPRo.js', lineno: 1, function: 'FetchSource.load' }, // vendor chunk → not first-party
@@ -727,7 +727,7 @@ describe('existing beforeSend filters', () => {
     assert.ok(beforeSend(event) !== null, 'first-party bug must surface even if an extension frame is on the stack');
   });
 
-  // WORLDMONITOR-MQ: Sentry SDK DOM breadcrumb null.contains crash — suppress only when no first-party frames.
+  // WORLDVIEW-MQ: Sentry SDK DOM breadcrumb null.contains crash — suppress only when no first-party frames.
   it("suppresses null 'contains' read on a sentry-*.js frame with no first-party frames", () => {
     const event = makeEvent("Cannot read properties of null (reading 'contains')", 'TypeError', [
       { filename: '/assets/sentry-C2sjIlLb.js', lineno: 1, function: 'HTMLDocument.r' },
@@ -750,7 +750,7 @@ describe('existing beforeSend filters', () => {
     assert.ok(beforeSend(event) !== null, 'first-party null.contains must still surface');
   });
 
-  // WORLDMONITOR-MV: Convex WS onmessage JSON.parse truncation — suppress only when stack has no first-party frames.
+  // WORLDVIEW-MV: Convex WS onmessage JSON.parse truncation — suppress only when stack has no first-party frames.
   it('suppresses SyntaxError "is not valid JSON" with onmessage frame and no first-party frames', () => {
     const event = makeEvent(
       'Unexpected token \'p\', "pdated","Ping"}" is not valid JSON',
@@ -770,7 +770,7 @@ describe('existing beforeSend filters', () => {
     assert.ok(beforeSend(event) !== null, 'first-party onmessage regression must surface');
   });
 
-  // WORLDMONITOR-NR: deck.gl/maplibre internal null-access on Layer.isHidden
+  // WORLDVIEW-NR: deck.gl/maplibre internal null-access on Layer.isHidden
   // during render (Safari 26.4 beta, empty stacks preceded by DeckGLMap map-error
   // breadcrumbs). `\w{1,3}\.isHidden` is gated on !hasFirstParty so a genuine
   // SmartPollContext.isHidden regression in runtime.ts still surfaces.
@@ -804,7 +804,7 @@ describe('existing beforeSend filters', () => {
     assert.ok(beforeSend(event) !== null, '4+ char symbol accessing .isHidden must still surface');
   });
 
-  // WORLDMONITOR-NQ: Safari short-var ReferenceError ("Can't find variable: ss")
+  // WORLDVIEW-NQ: Safari short-var ReferenceError ("Can't find variable: ss")
   // from userscript/extension injection. Gated on empty stack + !hasFirstParty +
   // 1–2 char var name so a real "foo is not defined" from our code still surfaces.
   it("suppresses \"Can't find variable: ss\" with empty stack", () => {
@@ -835,7 +835,7 @@ describe('existing beforeSend filters', () => {
 
 });
 
-// ─── WORLDMONITOR-SQ: ProgressEvent rejection ignoreErrors entry ──────────
+// ─── WORLDVIEW-SQ: ProgressEvent rejection ignoreErrors entry ──────────
 //
 // A raw DOM `ProgressEvent` (type=error) from a failed resource/XHR load that
 // leaks via onunhandledrejection. Sentry synthesizes the message
@@ -844,7 +844,7 @@ describe('existing beforeSend filters', () => {
 // FileReader onerror handlers all reject wrapped Errors; the lone XHR caller is
 // fire-and-forget + Tauri-only where Sentry is disabled), so it goes in
 // ignoreErrors alongside the CustomEvent sibling.
-describe('ignoreErrors — ProgressEvent promise rejection (WORLDMONITOR-SQ)', () => {
+describe('ignoreErrors — ProgressEvent promise rejection (WORLDVIEW-SQ)', () => {
   const PROD_MSG = 'Event `ProgressEvent` (type=error) captured as promise rejection';
   const progressEventPattern = ignoreErrors.find(
     p => p instanceof RegExp && /ProgressEvent/.test(p.source));
@@ -865,7 +865,7 @@ describe('ignoreErrors — ProgressEvent promise rejection (WORLDMONITOR-SQ)', (
   });
 });
 
-// ─── WORLDMONITOR-SP: SyntaxError through the deck.gl/maplibre init path ───
+// ─── WORLDVIEW-SP: SyntaxError through the deck.gl/maplibre init path ───
 //
 // `SyntaxError: Invalid or unexpected token` (and the Unexpected token/EOF
 // family) surfacing through deck.gl/maplibre WebGL init. Our compiled bundle
@@ -874,8 +874,8 @@ describe('ignoreErrors — ProgressEvent promise rejection (WORLDMONITOR-SQ)', (
 // `new Function` shader builder, or a stale/corrupt lazy chunk). The pre-
 // existing `!hasFirstParty` token-parse gate misses it because `initDeck` rides
 // the stack as the caller, so this gate keys off a deck-stack/maplibre frame.
-describe('SyntaxError via deck.gl/maplibre init path (WORLDMONITOR-SP)', () => {
-  // Mirrors the real WORLDMONITOR-SP stack: deck-stack + maplibre vendor frames
+describe('SyntaxError via deck.gl/maplibre init path (WORLDVIEW-SP)', () => {
+  // Mirrors the real WORLDVIEW-SP stack: deck-stack + maplibre vendor frames
   // plus the first-party MapContainer.initDeck caller.
   const mapInitStack = [
     { filename: '/assets/deck-stack-Dq2qX5Bt.js', lineno: 1606, function: 'Go._getViews' },
@@ -919,14 +919,14 @@ describe('SyntaxError via deck.gl/maplibre init path (WORLDMONITOR-SP)', () => {
   });
 });
 
-// ─── WORLDMONITOR-TG: mainWorldSdk extension-global ReferenceError ─────────
+// ─── WORLDVIEW-TG: mainWorldSdk extension-global ReferenceError ─────────
 //
 // A browser-extension SDK injected into the page's main world references its
 // `mainWorldSdk` global before defining it (Edge 148 / Windows, anonymous-
 // frames-only stack). `mainWorldSdk` is nowhere in our bundle, so the message
 // can never originate from our own code — it goes in ignoreErrors alongside the
 // other named extension/webview globals (crusoe, vc_request_action, nmhCrx).
-describe('ignoreErrors — mainWorldSdk extension global (WORLDMONITOR-TG)', () => {
+describe('ignoreErrors — mainWorldSdk extension global (WORLDVIEW-TG)', () => {
   const PROD_MSG = 'mainWorldSdk is not defined';
   const pattern = ignoreErrors.find(p => p instanceof RegExp && /mainWorldSdk/.test(p.source));
 

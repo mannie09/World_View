@@ -48,7 +48,7 @@ function shouldSuppressCspViolation(
   // mutation as the connect-src case above. The HLS *manifest* fetch is
   // connect-src (already suppressed via the foxnews-style rule); this covers the
   // media element load of that same stream. Built-in and user-added custom HLS
-  // channels (LiveNewsPanel) both hit this — WORLDMONITOR-HV (bloomberg.com
+  // channels (LiveNewsPanel) both hit this — WORLDVIEW-HV (bloomberg.com
   // us.m3u8, 4 users). Gated on policy detection so it stays scoped to the
   // current policy state, not a blanket protocol assumption. http: media-src
   // blocks (real mixed-content) still surface.
@@ -67,22 +67,22 @@ function shouldSuppressCspViolation(
   // ships no http:// subresource loads, and every fetch directive we DO use
   // (connect-src, img-src, script-src, media-src) is set explicitly, so a genuine
   // first-party mixed-content fetch surfaces under its specific directive — never
-  // this default-src fallback. Preserve first-party worldmonitor.app http blocks
+  // this default-src fallback. Preserve first-party worldview.app http blocks
   // so a real mixed-content regression on our own assets still surfaces
-  // (WORLDMONITOR-S0 — http://www.euronews.com article prefetch, 1 user/775 ev).
+  // (WORLDVIEW-S0 — http://www.euronews.com article prefetch, 1 user/775 ev).
   if (directive === 'default-src') {
     try {
       const u = new URL(blockedURI);
       if (u.protocol === 'http:'
-          && u.hostname !== 'worldmonitor.app'
-          && !u.hostname.endsWith('.worldmonitor.app')) return true;
+          && u.hostname !== 'worldview.app'
+          && !u.hostname.endsWith('.worldview.app')) return true;
     } catch { /* scheme-only values fall through */ }
   }
   // First-party Convex backend: corporate proxies / privacy extensions that mutate the
   // page CSP (stripping bare `https:` from connect-src) cause our Convex sync calls to
   // be CSP-blocked even though our policy allows them. Suppress unconditionally for OUR
   // configured Convex deployment hostname (`VITE_CONVEX_URL`) so we don't drown Sentry
-  // in 1M+ events/month from those users (WORLDMONITOR-HN). Convex is multi-tenant —
+  // in 1M+ events/month from those users (WORLDVIEW-HN). Convex is multi-tenant —
   // do NOT suppress all `*.convex.cloud`, that would silently swallow blocks to foreign/
   // attacker-controlled Convex projects. Match by exact hostname only. Real first-party
   // CSP regressions on this host are caught by the staging deploy + uptime check.
@@ -96,13 +96,13 @@ function shouldSuppressCspViolation(
   // CloudSOC, school content-filters) can strip both `'self'` and `https:` from img-src
   // in the user's effective policy, causing our own favicon and panel icons to be
   // CSP-blocked even though our policy (`img-src 'self' data: blob: https:`) allows
-  // them. Scope to `worldmonitor.app` and its subdomains — img-src blocks to foreign
+  // them. Scope to `worldview.app` and its subdomains — img-src blocks to foreign
   // hosts (a third-party CDN we never load, attacker-controlled host) still surface
-  // (WORLDMONITOR-JP). Suffix check uses a leading `.` so lookalikes like
-  // `worldmonitor.app.evil.com` do NOT match.
+  // (WORLDVIEW-JP). Suffix check uses a leading `.` so lookalikes like
+  // `worldview.app.evil.com` do NOT match.
   //
   // REQUIRE https: protocol — our CSP only allows https: for img-src, so a real
-  // mixed-content regression (`<img src="http://worldmonitor.app/...">`) would be
+  // mixed-content regression (`<img src="http://worldview.app/...">`) would be
   // blocked by the browser. Suppressing http: blocks on first-party hosts would mask
   // that regression in Sentry. The `cspConnectSrcAllowsHttps` block above uses the
   // same protocol gate for connect-src.
@@ -110,21 +110,21 @@ function shouldSuppressCspViolation(
     try {
       const url = new URL(blockedURI);
       if (url.protocol === 'https:'
-          && (url.hostname === 'worldmonitor.app' || url.hostname.endsWith('.worldmonitor.app'))) return true;
+          && (url.hostname === 'worldview.app' || url.hostname.endsWith('.worldview.app'))) return true;
     } catch { /* scheme-only values fall through */ }
   }
   // YouTube IFrame API loader: explicitly allowed by our script-src
   // (`https://www.youtube.com`), so a block here means a third party (extension,
   // corporate proxy, in-app webview) mutated the policy. Not actionable — embedded
   // video remains broken in that user's environment regardless of our code
-  // (WORLDMONITOR-HP).
+  // (WORLDVIEW-HP).
   if (
     (directive === 'script-src-elem' || directive === 'script-src')
     && /^https:\/\/www\.youtube\.com\/iframe_api(?:\?|$)/.test(blockedURI)
   ) return true;
   // Zscaler enterprise content-filter proxy: `gateway.zscloud.net` is injected into
   // corporate users' frames by Zscaler's web filter agent. We never load it ourselves;
-  // it's inserted into the host page outside our control (WORLDMONITOR-HT). Match by
+  // it's inserted into the host page outside our control (WORLDVIEW-HT). Match by
   // parsed hostname so a `gateway.zscloud.net.evil.com` lookalike doesn't bypass the
   // surrounding signal filters.
   if (directive === 'frame-src') {
@@ -133,7 +133,7 @@ function shouldSuppressCspViolation(
     } catch { /* scheme-only values fall through */ }
   }
   // Browser extensions or injected scripts. `ms-browser-extension://` is Edge's
-  // scheme for legacy/internal extensions (WORLDMONITOR-JM).
+  // scheme for legacy/internal extensions (WORLDVIEW-JM).
   if (/^(?:chrome|moz|safari(?:-web)?|ms-browser)-extension/.test(sourceFile) || /^(?:chrome|moz|safari(?:-web)?|ms-browser)-extension/.test(blockedURI)) return true;
   // blob: — browsers report "blob" (scheme-only) or "blob:https://...".
   if (blockedURI === 'blob' || /^blob:/.test(sourceFile) || /^blob:/.test(blockedURI)) return true;
@@ -141,7 +141,7 @@ function shouldSuppressCspViolation(
   if (blockedURI === 'eval' || blockedURI === 'inline' || blockedURI === 'data' || /^data:/.test(blockedURI)) return true;
   // about: — browsers report "about" (scheme-only) or "about:blank" / "about:srcdoc"
   // for iframes created by extensions, ad-injectors, or Smart TV browsers (Samsung
-  // Internet on Tizen). We never set frame src to about:* ourselves (WORLDMONITOR-JQ).
+  // Internet on Tizen). We never set frame src to about:* ourselves (WORLDVIEW-JQ).
   if (blockedURI === 'about' || /^about:/.test(blockedURI)) return true;
   // Android WebView video poster injection.
   if (blockedURI === 'android-webview-video-poster') return true;
@@ -160,8 +160,8 @@ function shouldSuppressCspViolation(
   // We legitimately load JSON + JS from `cdn.jsdelivr.net` (world-atlas /
   // us-atlas TopoJSON, chart.js in widget-sanitizer iframe), but never
   // CSS — so a `style-src*` block on jsDelivr is by definition third-party
-  // injection (WORLDMONITOR-J0 — antd@4 CSS injection, 270 events / 26
-  // users on finance.worldmonitor.app).
+  // injection (WORLDVIEW-J0 — antd@4 CSS injection, 270 events / 26
+  // users on finance.worldview.app).
   if (/^style-src(-elem)?$/.test(directive) && /^https:\/\/cdn\.jsdelivr\.net\//.test(blockedURI)) return true;
   // Inline script blocks from extensions/in-app browsers.
   if (blockedURI === 'inline' && directive === 'script-src-elem') return true;
@@ -270,7 +270,7 @@ initMetaTags();
 
 // In desktop mode, route /api/* calls to the local Tauri sidecar backend.
 installRuntimeFetchPatch();
-// In web production, route RPC calls through api.worldmonitor.app (Cloudflare edge).
+// In web production, route RPC calls through api.worldview.app (Cloudflare edge).
 installWebApiRedirect();
 // Force-reload tabs running a stale bundle (catches the class of bug where
 // users keep a tab open across a wire-shape change). Skips when build-hash
@@ -339,13 +339,13 @@ if (urlParams.get('settings') === '1') {
 // Beta mode toggle: type `beta=true` / `beta=false` in console
 Object.defineProperty(window, 'beta', {
   get() {
-    const on = localStorage.getItem('worldmonitor-beta-mode') === 'true';
+    const on = localStorage.getItem('worldview-beta-mode') === 'true';
     console.log(`[Beta] ${on ? 'ON' : 'OFF'}`);
     return on;
   },
   set(v: boolean) {
-    if (v) localStorage.setItem('worldmonitor-beta-mode', 'true');
-    else localStorage.removeItem('worldmonitor-beta-mode');
+    if (v) localStorage.setItem('worldview-beta-mode', 'true');
+    else localStorage.removeItem('worldview-beta-mode');
     location.reload();
   },
 });

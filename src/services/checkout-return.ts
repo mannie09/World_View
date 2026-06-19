@@ -11,7 +11,7 @@
  *      the /pro marketing page when its embedded Dodo overlay
  *      resolves; used when the buyer is redirected from /pro to the
  *      main dashboard and the overlay's manualRedirect means Dodo
- *      itself doesn't write any URL params. The marker is a WorldMonitor-
+ *      itself doesn't write any URL params. The marker is a WorldView-
  *      namespaced param (not `?success=`) to avoid collision with
  *      unrelated query strings and to make the origin intent-explicit.
  *
@@ -31,7 +31,7 @@ export type CheckoutReturnResult =
 const SUCCESS_STATUSES = new Set(['active', 'succeeded']);
 const FAILED_STATUSES = new Set(['failed', 'declined', 'cancelled', 'canceled']);
 
-/** WorldMonitor-namespaced marker written by /pro overlay-success. */
+/** WorldView-namespaced marker written by /pro overlay-success. */
 const WM_MARKER_PARAM = 'wm_checkout';
 const WM_MARKER_SUCCESS = 'success';
 

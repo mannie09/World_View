@@ -10,7 +10,7 @@ import {
   type ScenarioImpactCountry,
   type ScenarioResultTemplate,
   type ScenarioTemplate,
-} from '@/generated/client/worldmonitor/scenario/v1/service_client';
+} from '@/generated/client/worldview/scenario/v1/service_client';
 
 export type {
   RunScenarioRequest,

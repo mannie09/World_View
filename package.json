@@ -1,8 +1,14 @@
 {
-  "name": "world-monitor",
+  "name": "world-view",
   "private": true,
-  "version": "2.8.0",
+  "version": "1.0.0",
   "license": "AGPL-3.0-only",
+  "author": "Mannie <mannie_fossil@rediffmail.com>",
+  "homepage": "https://worldview.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mannie09/World_View"
+  },
   "type": "module",
   "scripts": {
     "lint": "biome lint ./src ./server ./api ./tests ./e2e ./scripts ./middleware.ts && npm run lint:safe-html",
@@ -35,7 +41,7 @@
     "postinstall": "cd blog-site && npm ci --prefer-offline",
     "build:blog": "cd blog-site && npm run build && rm -rf ../public/blog && mkdir -p ../public/blog && cp -r dist/* ../public/blog/",
     "build:pro": "cd pro-test && npm ci && npm run build",
-    "build:openapi": "node -e \"require('fs').cpSync('docs/api/worldmonitor.openapi.yaml', 'public/openapi.yaml')\"",
+    "build:openapi": "node -e \"require('fs').cpSync('docs/api/worldview.openapi.yaml', 'public/openapi.yaml')\"",
     "build:agent-skills": "node scripts/build-agent-skills-index.mjs",
     "prebuild": "npm run build:openapi && npm run build:agent-skills",
     "build": "npm run build:blog && tsc && vite build",

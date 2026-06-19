@@ -3,7 +3,7 @@ title: "AI Brief Endpoints"
 description: "Read, share, and render the AI-composed intelligence brief."
 ---
 
-WorldMonitor composes a per-user intelligence brief on Railway, stores each
+WorldView composes a per-user intelligence brief on Railway, stores each
 edition in Redis at `brief:{userId}:{issueSlot}`, writes a latest pointer at
 `brief:latest:{userId}`, and exposes these routes for dashboard readback,
 public sharing, and Telegram/Slack carousel rendering. Default cadence is
@@ -96,4 +96,4 @@ Streaming chat endpoint for the "Ask the analyst" in-dashboard assistant. Takes 
 
 ### `POST /api/widget-agent`
 
-Single-shot completion endpoint used by embedded widget iframes. Auth via `X-WorldMonitor-Key` (partner keys). Rate-limited per key.
+Single-shot completion endpoint used by embedded widget iframes. Auth via `X-WorldView-Key` (partner keys). Rate-limited per key.

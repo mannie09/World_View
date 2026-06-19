@@ -19,7 +19,7 @@
     {
       "path": "api/mcp/auth.ts",
       "category": "external-protocol",
-      "reason": "MCP auth resolution (Bearer + X-WorldMonitor-Key), Pro pre-checks, rate-limiter init, and PRODUCTION_DEPS bundle for the MCP handler. Extracted from api/mcp.ts during the structural split; same external-protocol constraint as the parent shim.",
+      "reason": "MCP auth resolution (Bearer + X-WorldView-Key), Pro pre-checks, rate-limiter init, and PRODUCTION_DEPS bundle for the MCP handler. Extracted from api/mcp.ts during the structural split; same external-protocol constraint as the parent shim.",
       "owner": "@SebastienMelki",
       "removal_issue": null
     },
@@ -138,7 +138,7 @@
     {
       "path": "api/mcp/resources/slugs.ts",
       "category": "external-protocol",
-      "reason": "Hand-curated kebab-case slug → matcher table for the worldmonitor://chokepoints/{slug}/status MCP resource URI. The stability contract: bookmarked URIs survive cache refreshes / upstream renames. Same external-protocol constraint as the resources index it backs.",
+      "reason": "Hand-curated kebab-case slug → matcher table for the worldview://chokepoints/{slug}/status MCP resource URI. The stability contract: bookmarked URIs survive cache refreshes / upstream renames. Same external-protocol constraint as the resources index it backs.",
       "owner": "@SebastienMelki",
       "removal_issue": null
     },
@@ -408,7 +408,7 @@
     {
       "path": "api/internal/mcp-grant-mint.ts",
       "category": "internal-helper",
-      "reason": "Apex-domain bridge endpoint for the cross-subdomain Pro MCP authorization flow (plan 2026-05-10-001 U3). POST {nonce} from the Clerk-protected /mcp-grant SPA on worldmonitor.app; returns a fixed-host redirect URL with a HMAC-signed grant token to api.worldmonitor.app/oauth/authorize-pro. Shape is an implementation detail of the bounce-via-apex consent flow — exposing it as a versioned product API would publish internal OAuth plumbing.",
+      "reason": "Apex-domain bridge endpoint for the cross-subdomain Pro MCP authorization flow (plan 2026-05-10-001 U3). POST {nonce} from the Clerk-protected /mcp-grant SPA on worldview.app; returns a fixed-host redirect URL with a HMAC-signed grant token to api.worldview.app/oauth/authorize-pro. Shape is an implementation detail of the bounce-via-apex consent flow — exposing it as a versioned product API would publish internal OAuth plumbing.",
       "owner": "@SebastienMelki",
       "removal_issue": null
     },

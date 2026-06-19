@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Submit all worldmonitor.app URLs to IndexNow after deploy.
+ * Submit all worldview.app URLs to IndexNow after deploy.
  * Run once after deploying the IndexNow key file:
  *   node scripts/seo-indexnow-submit.mjs
  *
@@ -17,25 +17,25 @@ const BLOG_DIR = new URL('../blog-site/src/content/blog/', import.meta.url);
 function getBlogPostUrls() {
   return readdirSync(BLOG_DIR)
     .filter((file) => file.endsWith('.md'))
-    .map((file) => `https://www.worldmonitor.app/blog/posts/${basename(file, '.md')}/`)
+    .map((file) => `https://www.worldview.app/blog/posts/${basename(file, '.md')}/`)
     .sort();
 }
 
 const WWW_URLS = [
-  'https://www.worldmonitor.app/',
-  'https://www.worldmonitor.app/pro',
-  'https://www.worldmonitor.app/blog/',
+  'https://www.worldview.app/',
+  'https://www.worldview.app/pro',
+  'https://www.worldview.app/blog/',
   ...getBlogPostUrls(),
 ];
 
 const BATCHES = [
   {
-    host: 'www.worldmonitor.app',
+    host: 'www.worldview.app',
     urls: WWW_URLS,
   },
-  { host: 'tech.worldmonitor.app', urls: ['https://tech.worldmonitor.app/'] },
-  { host: 'finance.worldmonitor.app', urls: ['https://finance.worldmonitor.app/'] },
-  { host: 'happy.worldmonitor.app', urls: ['https://happy.worldmonitor.app/'] },
+  { host: 'tech.worldview.app', urls: ['https://tech.worldview.app/'] },
+  { host: 'finance.worldview.app', urls: ['https://finance.worldview.app/'] },
+  { host: 'happy.worldview.app', urls: ['https://happy.worldview.app/'] },
 ];
 
 const ENDPOINTS = [
@@ -52,7 +52,7 @@ async function submit(endpoint, host, urlList) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
-      'User-Agent': 'WorldMonitor-IndexNow/1.0 (+https://www.worldmonitor.app)',
+      'User-Agent': 'WorldView-IndexNow/1.0 (+https://www.worldview.app)',
     },
     body: JSON.stringify({ host, key: KEY, keyLocation, urlList }),
   });

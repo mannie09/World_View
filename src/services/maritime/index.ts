@@ -5,7 +5,7 @@ import {
   type AisDisruption as ProtoDisruption,
   type GetVesselSnapshotResponse,
   type SnapshotCandidateReport as ProtoCandidateReport,
-} from '@/generated/client/worldmonitor/maritime/v1/service_client';
+} from '@/generated/client/worldview/maritime/v1/service_client';
 import { createCircuitBreaker } from '@/utils';
 import type { AisDisruptionEvent, AisDensityZone, AisDisruptionType } from '@/types';
 import { dataFreshness } from '../data-freshness';

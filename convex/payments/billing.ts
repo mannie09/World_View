@@ -85,7 +85,7 @@ function getDodoClient(): DodoPayments {
  * right portal regardless of how many other Clerk accounts share the
  * same Dodo customer. No Clerk REST lookup needed.
  *
- * WORLDMONITOR-R5: the original opaque `[Request ID: X] Server Error`
+ * WORLDVIEW-R5: the original opaque `[Request ID: X] Server Error`
  * came from this path throwing on a missing customers row when both
  * the rawPayload and a same-user customers row still held the answer.
  */
@@ -120,14 +120,14 @@ async function createCustomerPortalUrlForUser(
     // response, or a transport failure) when the portal-session create
     // fails. Convex's action runtime then masks any NON-ConvexError throw
     // as an opaque `[Request ID: X] Server Error`, dropping the real cause
-    // from the wire — the exact opacity WORLDMONITOR-R5 fought for the
+    // from the wire — the exact opacity WORLDVIEW-R5 fought for the
     // missing-customer path above (this was the last unwrapped throw site).
     // Re-throw as a structured ConvexError so the client receives
     // `err.data.kind === 'DODO_PORTAL_ERROR'` for proper Sentry
     // classification (browser → `extractBillingErrorKind` → tag
     // `billing_error_kind`; the user still falls back to the generic Dodo
     // portal), and log the underlying cause here so it survives in the
-    // Convex function logs for server-side triage. WORLDMONITOR-ST.
+    // Convex function logs for server-side triage. WORLDVIEW-ST.
     const cause = err instanceof Error ? err.message : String(err);
     console.error(
       `[billing] Dodo customer-portal create failed for customer ${dodoCustomerId}:`,
@@ -208,7 +208,7 @@ export const getSubscriptionForUser = query({
 /**
  * Internal query to retrieve a customer record by userId.
  *
- * NOTE: As of WORLDMONITOR-R5 follow-up, this is no longer used by the
+ * NOTE: As of WORLDVIEW-R5 follow-up, this is no longer used by the
  * Manage Billing flow — see `getDodoCustomerIdForUserPortal` below for
  * the rationale. Still consumed by callers that legitimately want the
  * customers row (broadcast paid-set membership, comp-grant lookups,
@@ -607,7 +607,7 @@ export const repairCustomerFromSubscriptionPayload = internalMutation({
  * Idempotent — re-running after a successful pass is a no-op because every
  * affected user now has a customers row.
  *
- * WORLDMONITOR-R5 surfaced this gap for one user; the backfill is the
+ * WORLDVIEW-R5 surfaced this gap for one user; the backfill is the
  * "find everyone else" sweep.
  */
 export const backfillMissingCustomers = internalMutation({
@@ -857,7 +857,7 @@ export const internalGetCustomerPortalUrl = internalAction({
  * calls claimSubscription(anonId) to reassign all payment records from the
  * anonymous ID to the real user ID.
  *
- * @see https://github.com/koala73/worldmonitor/issues/2078
+ * @see https://github.com/mannie09/World_View/issues/2078
  */
 export const claimSubscription = mutation({
   args: { anonId: v.string() },

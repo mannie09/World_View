@@ -48,11 +48,11 @@ const BRIEF_CAROUSEL_PATH_RE =
   /^\/api\/brief\/carousel\/[^/]+\/\d{4}-\d{2}-\d{2}-\d{4}\/[0-2]\/?$/;
 
 const VARIANT_HOST_MAP: Record<string, string> = {
-  'tech.worldmonitor.app': 'tech',
-  'finance.worldmonitor.app': 'finance',
-  'commodity.worldmonitor.app': 'commodity',
-  'happy.worldmonitor.app': 'happy',
-  'energy.worldmonitor.app': 'energy',
+  'tech.worldview.app': 'tech',
+  'finance.worldview.app': 'finance',
+  'commodity.worldview.app': 'commodity',
+  'happy.worldview.app': 'happy',
+  'energy.worldview.app': 'energy',
 };
 
 // Source of truth: src/config/variant-meta.ts — keep in sync when variant metadata changes.
@@ -64,41 +64,41 @@ const VARIANT_OG: Record<string, { name: string; title: string; description: str
     name: 'Tech Monitor',
     title: 'Tech Monitor - Real-Time AI & Tech Industry Dashboard',
     description: 'Real-time AI and tech industry dashboard tracking tech giants, AI labs, startup ecosystems, funding rounds, and tech events worldwide.',
-    image: 'https://tech.worldmonitor.app/favico/tech/og-image.png',
-    url: 'https://tech.worldmonitor.app/dashboard',
+    image: 'https://tech.worldview.app/favico/tech/og-image.png',
+    url: 'https://tech.worldview.app/dashboard',
   },
   finance: {
     name: 'Finance Monitor',
     title: 'Finance Monitor - Real-Time Markets & Trading Dashboard',
     description: 'Real-time finance and trading dashboard tracking global markets, stock exchanges, central banks, commodities, forex, crypto, and economic indicators worldwide.',
-    image: 'https://finance.worldmonitor.app/favico/finance/og-image.png',
-    url: 'https://finance.worldmonitor.app/dashboard',
+    image: 'https://finance.worldview.app/favico/finance/og-image.png',
+    url: 'https://finance.worldview.app/dashboard',
   },
   commodity: {
     name: 'Commodity Monitor',
     title: 'Commodity Monitor - Real-Time Commodity Markets & Supply Chain Dashboard',
     description: 'Real-time commodity markets dashboard tracking mining sites, processing plants, commodity ports, supply chains, and global commodity trade flows.',
-    image: 'https://commodity.worldmonitor.app/favico/commodity/og-image.png',
-    url: 'https://commodity.worldmonitor.app/dashboard',
+    image: 'https://commodity.worldview.app/favico/commodity/og-image.png',
+    url: 'https://commodity.worldview.app/dashboard',
   },
   happy: {
     name: 'Happy Monitor',
     title: 'Happy Monitor - Good News & Global Progress',
     description: 'Curated positive news, progress data, and uplifting stories from around the world.',
-    image: 'https://happy.worldmonitor.app/favico/happy/og-image.png',
-    url: 'https://happy.worldmonitor.app/dashboard',
+    image: 'https://happy.worldview.app/favico/happy/og-image.png',
+    url: 'https://happy.worldview.app/dashboard',
   },
   energy: {
     name: 'Energy Atlas',
     title: 'Energy Atlas - Real-Time Global Energy Intelligence Dashboard',
     description: 'Real-time global energy atlas tracking oil and gas pipelines, storage facilities, chokepoints, fuel shortages, tanker flows, and disruption events worldwide.',
-    image: 'https://energy.worldmonitor.app/favico/energy/og-image.png',
-    url: 'https://energy.worldmonitor.app/dashboard',
+    image: 'https://energy.worldview.app/favico/energy/og-image.png',
+    url: 'https://energy.worldview.app/dashboard',
   },
 };
 
 const ALLOWED_HOSTS = new Set([
-  'worldmonitor.app',
+  'worldview.app',
   ...Object.keys(VARIANT_HOST_MAP),
 ]);
 const VERCEL_PREVIEW_RE = /^[a-z0-9-]+-[a-z0-9]{8,}\.vercel\.app$/;
@@ -172,12 +172,12 @@ export default function middleware(request: Request) {
             screenshot: og.image,
             isPartOf: {
               '@type': 'WebSite',
-              name: 'World Monitor',
-              url: 'https://www.worldmonitor.app/',
+              name: 'WorldView',
+              url: 'https://www.worldview.app/',
             },
             sameAs: [
-              'https://github.com/koala73/worldmonitor',
-              'https://x.com/worldmonitorai',
+              'https://github.com/mannie09/World_View',
+              'https://x.com/worldviewai',
             ],
           })}</script>` : '';
           const aiBody = isAI ? `
@@ -185,14 +185,14 @@ export default function middleware(request: Request) {
 <p>${eDesc}</p>
 <h2>Explore the platform</h2>
 <ul>
-<li><a href="https://www.worldmonitor.app/dashboard">World Monitor — geopolitics &amp; intelligence</a></li>
-<li><a href="https://tech.worldmonitor.app/dashboard">Tech Monitor</a></li>
-<li><a href="https://finance.worldmonitor.app/dashboard">Finance Monitor</a></li>
-<li><a href="https://commodity.worldmonitor.app/dashboard">Commodity Monitor</a></li>
-<li><a href="https://happy.worldmonitor.app/dashboard">Happy Monitor</a></li>
-<li><a href="https://www.worldmonitor.app/pro">World Monitor Pro</a></li>
-<li><a href="https://www.worldmonitor.app/blog/">Blog</a></li>
-<li><a href="https://github.com/koala73/worldmonitor">Open source on GitHub</a></li>
+<li><a href="https://www.worldview.app/dashboard">WorldView — geopolitics &amp; intelligence</a></li>
+<li><a href="https://tech.worldview.app/dashboard">Tech Monitor</a></li>
+<li><a href="https://finance.worldview.app/dashboard">Finance Monitor</a></li>
+<li><a href="https://commodity.worldview.app/dashboard">Commodity Monitor</a></li>
+<li><a href="https://happy.worldview.app/dashboard">Happy Monitor</a></li>
+<li><a href="https://www.worldview.app/pro">WorldView Pro</a></li>
+<li><a href="https://www.worldview.app/blog/">Blog</a></li>
+<li><a href="https://github.com/mannie09/World_View">Open source on GitHub</a></li>
 </ul>
 <h2>Sources</h2>
 <p>Data ingested live from <a href="https://acleddata.com/">ACLED</a>, <a href="https://ucdp.uu.se/">UCDP</a>, <a href="https://firms.modaps.eosdis.nasa.gov/">NASA FIRMS</a>, <a href="https://earthquake.usgs.gov/">USGS</a>, <a href="https://opensky-network.org/">OpenSky</a>, <a href="https://aisstream.io/">AISStream</a>, <a href="https://fred.stlouisfed.org/">FRED</a>, <a href="https://www.imf.org/en/Data">IMF</a>, and <a href="https://www.bis.org/">BIS</a>.</p>` : '';
@@ -271,7 +271,7 @@ export default function middleware(request: Request) {
   // spoofed-but-well-shaped keys still 401 at the gateway.
   const WM_KEY_SHAPE = /^wm_[a-f0-9]{40}$/;
   const apiKey =
-    request.headers.get('x-worldmonitor-key') ??
+    request.headers.get('x-worldview-key') ??
     request.headers.get('x-api-key') ??
     '';
   if (WM_KEY_SHAPE.test(apiKey)) {

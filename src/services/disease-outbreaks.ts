@@ -3,7 +3,7 @@ import {
   HealthServiceClient,
   type ListDiseaseOutbreaksResponse,
   type DiseaseOutbreakItem,
-} from '@/generated/client/worldmonitor/health/v1/service_client';
+} from '@/generated/client/worldview/health/v1/service_client';
 import { getHydratedData } from '@/services/bootstrap';
 
 export type { ListDiseaseOutbreaksResponse, DiseaseOutbreakItem };
@@ -11,7 +11,7 @@ export type { ListDiseaseOutbreaksResponse, DiseaseOutbreakItem };
 const client = new HealthServiceClient(getRpcBaseUrl(), { fetch: (...args) => globalThis.fetch(...args) });
 
 // Fallback methodology version matches the server-side transitional fallback
-// in server/worldmonitor/health/v1/list-disease-outbreaks.ts so empty/offline
+// in server/worldview/health/v1/list-disease-outbreaks.ts so empty/offline
 // states present a consistent contract to UI consumers.
 const emptyOutbreaks: ListDiseaseOutbreaksResponse = {
   outbreaks: [],

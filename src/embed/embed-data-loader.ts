@@ -4,7 +4,7 @@ import { fetchEarthquakes } from '@/services/earthquakes';
 import { fetchNaturalEvents } from '@/services/eonet';
 import { fetchProtestEvents } from '@/services/unrest';
 import { fetchWeatherAlerts } from '@/services/weather';
-import { ConflictServiceClient } from '@/generated/client/worldmonitor/conflict/v1/service_client';
+import { ConflictServiceClient } from '@/generated/client/worldview/conflict/v1/service_client';
 import { startSmartPollLoop, type SmartPollLoopHandle } from '@/services/smart-poll-loop';
 import type { EmbedLayerId } from './embed-url';
 

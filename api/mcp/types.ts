@@ -5,7 +5,7 @@
 // ---------------------------------------------------------------------------
 // Auth-context shape passed into tool _execute. U7 widened the previous
 // `apiKey: string` to a discriminated union so per-tool fetches can branch
-// header construction (`X-WorldMonitor-Key` for env_key, internal-HMAC for
+// header construction (`X-WorldView-Key` for env_key, internal-HMAC for
 // Pro) from a single point.
 // ---------------------------------------------------------------------------
 

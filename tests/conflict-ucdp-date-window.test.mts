@@ -24,7 +24,7 @@ async function loadUcdpDeriver() {
   );
   patched = replaceRequired(
     patched,
-    /import \{\n[\s\S]*?\} from '@\/generated\/client\/worldmonitor\/conflict\/v1\/service_client';/,
+    /import \{\n[\s\S]*?\} from '@\/generated\/client\/worldview\/conflict\/v1\/service_client';/,
     `class ConflictServiceClient {
   constructor(..._args: unknown[]) {}
   listAcledEvents() { return { events: [], pagination: undefined }; }

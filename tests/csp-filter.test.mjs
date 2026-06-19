@@ -38,7 +38,7 @@ describe('CSP violation filter (shouldSuppressCspViolation)', () => {
 
   describe('connect-src HTTPS suppression (policy-aware)', () => {
     it('suppresses HTTPS connect-src when CSP allows https:', () => {
-      assert.ok(suppress('enforce', 'connect-src', 'https://api.worldmonitor.app/api/oref-alerts', '', true));
+      assert.ok(suppress('enforce', 'connect-src', 'https://api.worldview.app/api/oref-alerts', '', true));
     });
 
     it('suppresses HTTPS connect-src for tilecache.rainviewer.com', () => {
@@ -58,7 +58,7 @@ describe('CSP violation filter (shouldSuppressCspViolation)', () => {
     });
 
     it('does NOT suppress HTTPS connect-src when CSP does not allow https:', () => {
-      assert.ok(!suppress('enforce', 'connect-src', 'https://api.worldmonitor.app/api/oref-alerts', '', false));
+      assert.ok(!suppress('enforce', 'connect-src', 'https://api.worldview.app/api/oref-alerts', '', false));
     });
 
     it('does NOT suppress HTTP connect-src even when CSP allows https:', () => {
@@ -70,7 +70,7 @@ describe('CSP violation filter (shouldSuppressCspViolation)', () => {
     });
   });
 
-  describe('media-src HTTPS suppression (policy-aware) — WORLDMONITOR-HV', () => {
+  describe('media-src HTTPS suppression (policy-aware) — WORLDVIEW-HV', () => {
     // 7th positional arg = cspMediaSrcAllowsHttps. Our media-src policy carries
     // `https:` in both the meta tag and the vercel.json header, so an enforced
     // https: media-src block is an environmental policy mutation (proxy/extension
@@ -96,7 +96,7 @@ describe('CSP violation filter (shouldSuppressCspViolation)', () => {
     });
   });
 
-  describe('default-src HTTP mixed-content suppression — WORLDMONITOR-S0', () => {
+  describe('default-src HTTP mixed-content suppression — WORLDVIEW-S0', () => {
     // Browser link-prefetch / extension fetching a feed-supplied http article
     // URL; falls to the default-src fallback (no prefetch-src set). HTTPS-only
     // app never ships http subresource loads, so third-party http default-src
@@ -106,17 +106,17 @@ describe('CSP violation filter (shouldSuppressCspViolation)', () => {
     });
 
     it('does NOT suppress http default-src block to our own host (real mixed-content regression)', () => {
-      assert.ok(!suppress('enforce', 'default-src', 'http://www.worldmonitor.app/asset.json', '', false));
-      assert.ok(!suppress('enforce', 'default-src', 'http://worldmonitor.app/asset.json', '', false));
+      assert.ok(!suppress('enforce', 'default-src', 'http://www.worldview.app/asset.json', '', false));
+      assert.ok(!suppress('enforce', 'default-src', 'http://worldview.app/asset.json', '', false));
     });
 
     it('does NOT suppress an https default-src block (still potential signal)', () => {
       assert.ok(!suppress('enforce', 'default-src', 'https://prefetch.example.com/page', '', false));
     });
 
-    it('does NOT let a worldmonitor.app suffix-spoof lookalike bypass the first-party gate', () => {
-      // worldmonitor.app.evil.com is third-party → http block IS suppressed (it is not us).
-      assert.ok(suppress('enforce', 'default-src', 'http://worldmonitor.app.evil.com/x', '', false));
+    it('does NOT let a worldview.app suffix-spoof lookalike bypass the first-party gate', () => {
+      // worldview.app.evil.com is third-party → http block IS suppressed (it is not us).
+      assert.ok(suppress('enforce', 'default-src', 'http://worldview.app.evil.com/x', '', false));
     });
   });
 
@@ -148,7 +148,7 @@ describe('CSP violation filter (shouldSuppressCspViolation)', () => {
     });
 
     it('suppresses blob: URI', () => {
-      assert.ok(suppress('enforce', 'worker-src', 'blob:https://www.worldmonitor.app/abc', '', false));
+      assert.ok(suppress('enforce', 'worker-src', 'blob:https://www.worldview.app/abc', '', false));
     });
 
     it('suppresses eval', () => {
@@ -206,12 +206,12 @@ describe('CSP violation filter (shouldSuppressCspViolation)', () => {
     });
 
     it('suppresses manifest.webmanifest', () => {
-      assert.ok(suppress('enforce', 'default-src', 'https://www.worldmonitor.app/manifest.webmanifest', '', false));
+      assert.ok(suppress('enforce', 'default-src', 'https://www.worldview.app/manifest.webmanifest', '', false));
     });
 
     it('suppresses third-party stylesheet injection from cdn.jsdelivr.net (style-src-elem)', () => {
-      // WORLDMONITOR-J0: extension/bookmarklet injecting antd@4 CSS on
-      // finance.worldmonitor.app — 270 events / 26 users. We never load
+      // WORLDVIEW-J0: extension/bookmarklet injecting antd@4 CSS on
+      // finance.worldview.app — 270 events / 26 users. We never load
       // CSS from jsDelivr (only JSON atlases + chart.js JS).
       assert.ok(suppress('enforce', 'style-src-elem', 'https://cdn.jsdelivr.net/npm/antd@4/dist/antd.min.css', '', false));
     });
@@ -249,7 +249,7 @@ describe('CSP violation filter (shouldSuppressCspViolation)', () => {
     // Corporate proxies / privacy extensions strip bare `https:` from connect-src in
     // the user's effective policy, blocking our first-party Convex backend even though
     // our policy allows it. Suppress unconditionally for our exact configured Convex
-    // host so we don't drown Sentry in events from those users (WORLDMONITOR-HN).
+    // host so we don't drown Sentry in events from those users (WORLDVIEW-HN).
     // Convex is multi-tenant — must NOT broaden to all *.convex.cloud (would silently
     // suppress blocks to foreign / attacker-controlled tenants).
     const FIRST_PARTY_CONVEX = 'tacit-curlew-777.convex.cloud';
@@ -309,21 +309,21 @@ describe('CSP violation filter (shouldSuppressCspViolation)', () => {
     // Corporate proxies / privacy extensions / school content-filters can strip
     // both `'self'` and `https:` from img-src in the user's effective policy,
     // causing browsers to block our own favicon and panel icons even though our
-    // policy (`img-src 'self' data: blob: https:`) allows them (WORLDMONITOR-JP).
-    it('suppresses img-src to apex worldmonitor.app (favicon)', () => {
-      assert.ok(suppress('enforce', 'img-src', 'https://worldmonitor.app/favico/favicon-32x32.png', '', false, FIRST_PARTY_CONVEX));
+    // policy (`img-src 'self' data: blob: https:`) allows them (WORLDVIEW-JP).
+    it('suppresses img-src to apex worldview.app (favicon)', () => {
+      assert.ok(suppress('enforce', 'img-src', 'https://worldview.app/favico/favicon-32x32.png', '', false, FIRST_PARTY_CONVEX));
     });
 
-    it('suppresses img-src to www.worldmonitor.app (production favicon, WORLDMONITOR-JP)', () => {
-      assert.ok(suppress('enforce', 'img-src', 'https://www.worldmonitor.app/favico/favicon-32x32.png', '', false, FIRST_PARTY_CONVEX));
+    it('suppresses img-src to www.worldview.app (production favicon, WORLDVIEW-JP)', () => {
+      assert.ok(suppress('enforce', 'img-src', 'https://www.worldview.app/favico/favicon-32x32.png', '', false, FIRST_PARTY_CONVEX));
     });
 
-    it('suppresses img-src to finance.worldmonitor.app subdomain', () => {
-      assert.ok(suppress('enforce', 'img-src', 'https://finance.worldmonitor.app/favico/finance/apple-touch-icon.png', '', false, FIRST_PARTY_CONVEX));
+    it('suppresses img-src to finance.worldview.app subdomain', () => {
+      assert.ok(suppress('enforce', 'img-src', 'https://finance.worldview.app/favico/finance/apple-touch-icon.png', '', false, FIRST_PARTY_CONVEX));
     });
 
-    it('suppresses img-src to tech.worldmonitor.app subdomain', () => {
-      assert.ok(suppress('enforce', 'img-src', 'https://tech.worldmonitor.app/favico/tech/favicon-32x32.png', '', false, FIRST_PARTY_CONVEX));
+    it('suppresses img-src to tech.worldview.app subdomain', () => {
+      assert.ok(suppress('enforce', 'img-src', 'https://tech.worldview.app/favico/tech/favicon-32x32.png', '', false, FIRST_PARTY_CONVEX));
     });
 
     it('does NOT suppress img-src to a foreign host', () => {
@@ -331,26 +331,26 @@ describe('CSP violation filter (shouldSuppressCspViolation)', () => {
       assert.ok(!suppress('enforce', 'img-src', 'https://malicious.example.com/tracker.gif', '', false, FIRST_PARTY_CONVEX));
     });
 
-    it('does NOT suppress img-src to suffix-spoof lookalike `worldmonitor.app.evil.com`', () => {
+    it('does NOT suppress img-src to suffix-spoof lookalike `worldview.app.evil.com`', () => {
       // Endswith check uses a leading `.` so attacker-controlled lookalikes
-      // (`worldmonitor.app.evil.com`, `not-worldmonitor.app`) are not whitelisted.
-      assert.ok(!suppress('enforce', 'img-src', 'https://worldmonitor.app.evil.com/pixel.gif', '', false, FIRST_PARTY_CONVEX));
+      // (`worldview.app.evil.com`, `not-worldview.app`) are not whitelisted.
+      assert.ok(!suppress('enforce', 'img-src', 'https://worldview.app.evil.com/pixel.gif', '', false, FIRST_PARTY_CONVEX));
     });
 
-    it('does NOT suppress img-src to prefix-spoof `not-worldmonitor.app`', () => {
-      assert.ok(!suppress('enforce', 'img-src', 'https://not-worldmonitor.app/pixel.gif', '', false, FIRST_PARTY_CONVEX));
+    it('does NOT suppress img-src to prefix-spoof `not-worldview.app`', () => {
+      assert.ok(!suppress('enforce', 'img-src', 'https://not-worldview.app/pixel.gif', '', false, FIRST_PARTY_CONVEX));
     });
 
-    it('does NOT suppress connect-src to worldmonitor.app (rule is scoped to img-src)', () => {
+    it('does NOT suppress connect-src to worldview.app (rule is scoped to img-src)', () => {
       // First-party img-src rule must not bleed into other directives.
       // A real connect-src regression to our own host must still surface.
-      assert.ok(!suppress('enforce', 'connect-src', 'https://api.worldmonitor.app/api/health', '', false, FIRST_PARTY_CONVEX));
+      assert.ok(!suppress('enforce', 'connect-src', 'https://api.worldview.app/api/health', '', false, FIRST_PARTY_CONVEX));
     });
 
-    it('does NOT suppress script-src to worldmonitor.app (rule is scoped to img-src)', () => {
+    it('does NOT suppress script-src to worldview.app (rule is scoped to img-src)', () => {
       // A script-src block on our own host indicates a real CSP regression
       // we want to see — must not be swallowed by the img-src rule.
-      assert.ok(!suppress('enforce', 'script-src', 'https://www.worldmonitor.app/assets/main-abc.js', '', false, FIRST_PARTY_CONVEX));
+      assert.ok(!suppress('enforce', 'script-src', 'https://www.worldview.app/assets/main-abc.js', '', false, FIRST_PARTY_CONVEX));
     });
 
     // Mixed-content / wrong-scheme regression guard. Our CSP only allows `https:`
@@ -358,17 +358,17 @@ describe('CSP violation filter (shouldSuppressCspViolation)', () => {
     // first-party host would be blocked by the browser. The first-party host
     // suppression MUST NOT hide that signal — it requires `https:` explicitly.
     it('does NOT suppress http:// img-src to our own apex (mixed-content regression must surface)', () => {
-      assert.ok(!suppress('enforce', 'img-src', 'http://worldmonitor.app/favico/favicon-32x32.png', '', false, FIRST_PARTY_CONVEX));
+      assert.ok(!suppress('enforce', 'img-src', 'http://worldview.app/favico/favicon-32x32.png', '', false, FIRST_PARTY_CONVEX));
     });
 
-    it('does NOT suppress http:// img-src to a worldmonitor.app subdomain', () => {
-      assert.ok(!suppress('enforce', 'img-src', 'http://www.worldmonitor.app/favico/favicon-32x32.png', '', false, FIRST_PARTY_CONVEX));
+    it('does NOT suppress http:// img-src to a worldview.app subdomain', () => {
+      assert.ok(!suppress('enforce', 'img-src', 'http://www.worldview.app/favico/favicon-32x32.png', '', false, FIRST_PARTY_CONVEX));
     });
 
-    it('does NOT suppress ws:// img-src to a worldmonitor.app subdomain (only https: is whitelisted)', () => {
+    it('does NOT suppress ws:// img-src to a worldview.app subdomain (only https: is whitelisted)', () => {
       // ws:// is not a valid img source but a malformed reference could trigger
       // a violation; protocol gate must reject anything other than https:.
-      assert.ok(!suppress('enforce', 'img-src', 'ws://www.worldmonitor.app/socket', '', false, FIRST_PARTY_CONVEX));
+      assert.ok(!suppress('enforce', 'img-src', 'ws://www.worldview.app/socket', '', false, FIRST_PARTY_CONVEX));
     });
   });
 

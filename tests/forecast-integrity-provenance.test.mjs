@@ -36,8 +36,8 @@ describe('forecast integrity and provenance surfaces', () => {
   });
 
   it('exposes degraded forecast backend state instead of empty success only', () => {
-    const handler = read('server/worldmonitor/forecast/v1/get-forecasts.ts');
-    const proto = read('proto/worldmonitor/forecast/v1/get_forecasts.proto');
+    const handler = read('server/worldview/forecast/v1/get-forecasts.ts');
+    const proto = read('proto/worldview/forecast/v1/get_forecasts.proto');
 
     assert.match(proto, /bool degraded = 3;/);
     assert.match(proto, /bool stale = 4;/);

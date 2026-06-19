@@ -138,7 +138,7 @@ export class UnifiedSettings {
           // generic Dodo portal that won't recognise them.
           if (result.outcome === 'no-customer') {
             showToast(
-              'Subscription is managed outside Dodo. Email support@worldmonitor.app for help.',
+              'Subscription is managed outside Dodo. Email support@worldview.app for help.',
             );
           }
         });
@@ -666,7 +666,7 @@ export class UnifiedSettings {
       void openBillingPortal(reservedWin).then((result) => {
         if (result.outcome === 'no-customer') {
           showToast(
-            'Subscription is managed outside Dodo. Email support@worldmonitor.app for help.',
+            'Subscription is managed outside Dodo. Email support@worldview.app for help.',
           );
         }
       });
@@ -674,11 +674,11 @@ export class UnifiedSettings {
     }
     this.close();
     if (this.config.isDesktopApp) {
-      window.open('https://worldmonitor.app/pro', '_blank');
+      window.open('https://worldview.app/pro', '_blank');
       return;
     }
     import('@/services/checkout').then(m => import('@/config/products').then(p => m.startCheckout(p.DEFAULT_UPGRADE_PRODUCT))).catch(() => {
-      window.open('https://worldmonitor.app/pro', '_blank');
+      window.open('https://worldview.app/pro', '_blank');
     });
   }
 
@@ -965,7 +965,7 @@ export class UnifiedSettings {
         } else {
           this.close();
           import('@/services/checkout').then(m => import('@/config/products').then(p => m.startCheckout(p.DODO_PRODUCTS.API_STARTER_MONTHLY))).catch(() => {
-            window.open('https://worldmonitor.app/pro', '_blank');
+            window.open('https://worldview.app/pro', '_blank');
           });
         }
       });
@@ -990,7 +990,7 @@ export class UnifiedSettings {
       return `
         <div class="panel-locked-state">
           <div class="panel-locked-icon">${upgradeIcon}</div>
-          <div class="panel-locked-desc">Create and manage API keys to access WorldMonitor data programmatically.</div>
+          <div class="panel-locked-desc">Create and manage API keys to access WorldView data programmatically.</div>
           <button class="panel-locked-cta api-keys-gate-btn">Upgrade to API Starter</button>
         </div>`;
     }
@@ -998,7 +998,7 @@ export class UnifiedSettings {
     return `
       <div class="api-keys-section">
         <div class="api-keys-header">
-          <p class="api-keys-desc">Create API keys to access WorldMonitor data programmatically. Keys are shown once on creation — store them securely.</p>
+          <p class="api-keys-desc">Create API keys to access WorldView data programmatically. Keys are shown once on creation — store them securely.</p>
         </div>
         <div class="api-keys-create-form">
           <input type="text" class="api-keys-name-input" placeholder="Key name (e.g. my-app)" maxlength="64" />
@@ -1180,14 +1180,14 @@ export class UnifiedSettings {
       return `
         <div class="panel-locked-state">
           <div class="panel-locked-icon">${upgradeIcon}</div>
-          <div class="panel-locked-desc">Connect Claude Desktop and other AI clients to your WorldMonitor account.</div>
+          <div class="panel-locked-desc">Connect Claude Desktop and other AI clients to your WorldView account.</div>
         </div>`;
     }
 
     return `
       <div class="mcp-clients-section">
         <div class="mcp-clients-header">
-          <p class="mcp-clients-desc">Connect Claude Desktop, Cursor, and other AI clients to your WorldMonitor account. Each client gets its own credential — revoke any time.</p>
+          <p class="mcp-clients-desc">Connect Claude Desktop, Cursor, and other AI clients to your WorldView account. Each client gets its own credential — revoke any time.</p>
         </div>
         <div class="mcp-clients-quota" id="usMcpQuota" aria-live="polite">${this.renderMcpQuotaText()}</div>
         <div class="mcp-clients-error" id="usMcpClientsError" style="display:none;"></div>
@@ -1320,11 +1320,11 @@ export class UnifiedSettings {
     const revoked = this.mcpClients.filter(c => c.revokedAt);
 
     if (active.length === 0 && revoked.length === 0) {
-      const mcpUrl = 'https://api.worldmonitor.app/mcp';
+      const mcpUrl = 'https://api.worldview.app/mcp';
       setTrustedHtml(container, trustedHtml(`
         <div class="mcp-clients-empty">
           <div class="mcp-clients-empty-title">No connected MCP clients yet</div>
-          <div class="mcp-clients-empty-desc">To connect Claude Desktop or another AI client, paste this URL into the client's MCP server settings and sign in with your WorldMonitor Pro account:</div>
+          <div class="mcp-clients-empty-desc">To connect Claude Desktop or another AI client, paste this URL into the client's MCP server settings and sign in with your WorldView Pro account:</div>
           <div class="mcp-clients-empty-url">
             <code>${escapeHtml(mcpUrl)}</code>
             <button class="btn btn-secondary mcp-clients-copy-url-btn" data-copy-value="${escapeHtml(mcpUrl)}">Copy URL</button>

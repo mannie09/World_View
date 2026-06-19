@@ -6,14 +6,14 @@ const originalFetch = globalThis.fetch;
 const originalEnv = { ...process.env };
 
 const VALID_KEY = 'wm_test_key_123';
-const BASE_URL = 'https://worldmonitor.app/mcp';
+const BASE_URL = 'https://worldview.app/mcp';
 
 function makeReq(body = null, headers = {}) {
   return new Request(BASE_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-WorldMonitor-Key': VALID_KEY,
+      'X-WorldView-Key': VALID_KEY,
       ...headers,
     },
     body: body ? JSON.stringify(body) : undefined,
@@ -38,7 +38,7 @@ describe('api/mcp.ts — JMESPath projection (v1.7.0)', () => {
   let mod;
 
   beforeEach(async () => {
-    process.env.WORLDMONITOR_VALID_KEYS = VALID_KEY;
+    process.env.WORLDVIEW_VALID_KEYS = VALID_KEY;
     delete process.env.UPSTASH_REDIS_REST_URL;
     delete process.env.UPSTASH_REDIS_REST_TOKEN;
     mod = await freshMod();
@@ -345,7 +345,7 @@ describe('api/mcp.ts — JMESPath projection (v1.7.0)', () => {
         prompts: { listChanged: false },
         resources: { subscribe: false, listChanged: false },
       });
-      assert.equal(body.result?.serverInfo?.name, 'worldmonitor');
+      assert.equal(body.result?.serverInfo?.name, 'worldview');
     });
   });
 

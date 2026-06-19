@@ -19,12 +19,12 @@ const MAX_IMPORT_SIZE_BYTES = 5 * 1024 * 1024;
 const SETTINGS_KEY_PREFIXES: readonly string[] = [
   ...CLOUD_SYNC_KEYS,
   // device-local / export-only (excluded from cloud sync)
-  'worldmonitor-live-channels',
-  'worldmonitor-active-channel',
-  'worldmonitor-runtime-feature-toggles',
+  'worldview-live-channels',
+  'worldview-active-channel',
+  'worldview-runtime-feature-toggles',
   'wm-globe-render-scale',
   'wm-live-streams-always-on',
-  'worldmonitor-webcam-prefs',
+  'worldview-webcam-prefs',
   'wm-map-theme:',
   'map-height',
   'map-pinned',
@@ -49,7 +49,7 @@ export function exportSettings(): void {
   const exportData: ExportedSettings = {
     version: 1,
     timestamp: new Date().toISOString(),
-    variant: localStorage.getItem('worldmonitor-variant') || 'full',
+    variant: localStorage.getItem('worldview-variant') || 'full',
     data,
   };
 
@@ -58,7 +58,7 @@ export function exportSettings(): void {
   const a = document.createElement('a');
   a.href = url;
   const ts = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-  a.download = `worldmonitor-settings-${ts}.json`;
+  a.download = `worldview-settings-${ts}.json`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);

@@ -10,18 +10,18 @@ Use this skill when the user asks how "resilient" a country is, or wants the num
 
 ## Authentication — required
 
-`/api/resilience/v1/get-resilience-score` is Pro-tier. Agents and other server-to-server callers MUST present an API key in the `X-WorldMonitor-Key` header. `Authorization: Bearer …` is for MCP/OAuth or Clerk JWTs — **not** raw API keys.
+`/api/resilience/v1/get-resilience-score` is Pro-tier. Agents and other server-to-server callers MUST present an API key in the `X-WorldView-Key` header. `Authorization: Bearer …` is for MCP/OAuth or Clerk JWTs — **not** raw API keys.
 
 ```
-X-WorldMonitor-Key: wm_0123456789abcdef0123456789abcdef01234567
+X-WorldView-Key: wm_0123456789abcdef0123456789abcdef01234567
 ```
 
-The key must be attached to a Pro subscription. Unauthenticated or free-tier requests return `401` / `403`. Issue a key at https://www.worldmonitor.app/pro.
+The key must be attached to a Pro subscription. Unauthenticated or free-tier requests return `401` / `403`. Issue a key at https://www.worldview.app/pro.
 
 ## Endpoint
 
 ```
-GET https://api.worldmonitor.app/api/resilience/v1/get-resilience-score
+GET https://api.worldview.app/api/resilience/v1/get-resilience-score
 ```
 
 ## Parameters
@@ -76,15 +76,15 @@ Key fields for agents:
 ## Worked example
 
 ```bash
-curl -s -H "X-WorldMonitor-Key: $WM_API_KEY" \
-  'https://api.worldmonitor.app/api/resilience/v1/get-resilience-score?countryCode=DE' \
+curl -s -H "X-WorldView-Key: $WM_API_KEY" \
+  'https://api.worldview.app/api/resilience/v1/get-resilience-score?countryCode=DE' \
   | jq '{country: .countryCode, score: .overallScore, level, trend, change30d}'
 ```
 
 ## Errors
 
 - `400` — `countryCode` missing or malformed.
-- `401` — missing `X-WorldMonitor-Key`.
+- `401` — missing `X-WorldView-Key`.
 - `403` — key present but not attached to a Pro-tier subscription.
 - `404` — country not yet scored (rare; some micro-states).
 - `429` — per-key rate limit hit.
@@ -96,6 +96,6 @@ curl -s -H "X-WorldMonitor-Key: $WM_API_KEY" \
 
 ## References
 
-- OpenAPI: [ResilienceService.openapi.yaml](https://www.worldmonitor.app/openapi.yaml) — operation `GetResilienceScore`.
-- Auth matrix: https://www.worldmonitor.app/docs/usage-auth
-- Methodology: https://www.worldmonitor.app/docs/documentation
+- OpenAPI: [ResilienceService.openapi.yaml](https://www.worldview.app/openapi.yaml) — operation `GetResilienceScore`.
+- Auth matrix: https://www.worldview.app/docs/usage-auth
+- Methodology: https://www.worldview.app/docs/documentation

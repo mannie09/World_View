@@ -1,30 +1,30 @@
-# World Monitor v2
+# WorldView v2
 
 AI-powered real-time global intelligence dashboard aggregating news, markets, geopolitical data, and infrastructure monitoring into a unified situation awareness interface.
 
-🌐 **[Live Demo: worldmonitor.app](https://worldmonitor.app)** | 💻 **[Tech Variant: tech.worldmonitor.app](https://tech.worldmonitor.app)**
+🌐 **[Live Demo: worldview.app](https://worldview.app)** | 💻 **[Tech Variant: tech.worldview.app](https://tech.worldview.app)**
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)
 ![D3.js](https://img.shields.io/badge/D3.js-F9A03C?style=flat&logo=d3.js&logoColor=white)
 ![Version](https://img.shields.io/badge/version-2.1.4-blue)
 
-![World Monitor Dashboard](images/new-world-monitor.png)
+![WorldView Dashboard](images/new-world-view.png)
 
 ## Platform Variants
 
-World Monitor runs two specialized variants from a single codebase, each optimized for different monitoring needs:
+WorldView runs two specialized variants from a single codebase, each optimized for different monitoring needs:
 
 | Variant | URL | Focus |
 |---------|-----|-------|
-| **🌍 World Monitor** | [worldmonitor.app](https://worldmonitor.app) | Geopolitical intelligence, military tracking, conflict monitoring, infrastructure security |
-| **💻 Tech Monitor** | [tech.worldmonitor.app](https://tech.worldmonitor.app) | Technology sector intelligence, AI/startup ecosystems, cloud infrastructure, tech events |
+| **🌍 WorldView** | [worldview.app](https://worldview.app) | Geopolitical intelligence, military tracking, conflict monitoring, infrastructure security |
+| **💻 Tech Monitor** | [tech.worldview.app](https://tech.worldview.app) | Technology sector intelligence, AI/startup ecosystems, cloud infrastructure, tech events |
 
 A compact **variant switcher** in the header allows seamless navigation between variants while preserving your map position and panel configuration.
 
 ---
 
-## World Monitor (Geopolitical)
+## WorldView (Geopolitical)
 
 The primary variant focuses on geopolitical intelligence, military tracking, and infrastructure security monitoring.
 
@@ -56,7 +56,7 @@ The primary variant focuses on geopolitical intelligence, military tracking, and
 
 ## Tech Monitor
 
-The tech variant ([tech.worldmonitor.app](https://tech.worldmonitor.app)) provides specialized layers for technology sector monitoring.
+The tech variant ([tech.worldview.app](https://tech.worldview.app)) provides specialized layers for technology sector monitoring.
 
 ### Tech Ecosystem Layers
 
@@ -3066,7 +3066,7 @@ returned, keeping the cache warm for bootstrap and health monitoring.
 
 ## Service Status Monitoring
 
-The Service Status panel tracks the operational health of external services that World Monitor users may depend on.
+The Service Status panel tracks the operational health of external services that WorldView users may depend on.
 
 ### Monitored Services
 
@@ -3206,7 +3206,7 @@ define: {
 }
 
 // App.ts
-const header = `World Monitor v${__APP_VERSION__}`;
+const header = `WorldView v${__APP_VERSION__}`;
 ```
 
 ---
@@ -3215,8 +3215,8 @@ const header = `World Monitor v${__APP_VERSION__}`;
 
 ```bash
 # Clone the repository
-git clone https://github.com/koala73/worldmonitor.git
-cd worldmonitor
+git clone https://github.com/mannie09/World_View.git
+cd worldview
 
 # Install dependencies
 npm install
@@ -3583,7 +3583,7 @@ See [ROADMAP.md](ROADMAP.md) for detailed planning. Recent intelligence enhancem
 - ✅ **Build-Time Version Sync** - Header version auto-syncs with package.json
 - ✅ **Tech Monitor Variant** - Dedicated technology sector dashboard with startup ecosystems, cloud regions, and tech events
 - ✅ **Smart Marker Clustering** - Geographic grouping of nearby markers with click-to-expand popups
-- ✅ **Variant Switcher UI** - Compact orbital navigation between World Monitor and Tech Monitor
+- ✅ **Variant Switcher UI** - Compact orbital navigation between WorldView and Tech Monitor
 - ✅ **CII Learning Mode** - 15-minute calibration period with visual progress indicator
 - ✅ **Regional Tech Coverage** - Verified tech HQ data for MENA, Europe, Asia-Pacific hubs
 - ✅ **Service Status Panel** - External service health monitoring (AI providers, cloud platforms)
@@ -3776,8 +3776,8 @@ Contributions are welcome! Whether you're fixing bugs, adding features, improvin
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/worldmonitor.git
-   cd worldmonitor
+   git clone https://github.com/YOUR_USERNAME/worldview.git
+   cd worldview
    ```
 3. **Install dependencies**:
    ```bash
@@ -3938,7 +3938,7 @@ MIT
 
 ## Author
 
-**Elie Habib**
+**Mannie**
 
 ---
 

@@ -21,7 +21,7 @@ const originalFetch = globalThis.fetch;
 const originalEnv = { ...process.env };
 
 function makeCtx(headers = {}) {
-  const req = new Request('https://worldmonitor.app/api/v2/shipping/route-intelligence', {
+  const req = new Request('https://worldview.app/api/v2/shipping/route-intelligence', {
     method: 'GET',
     headers,
   });
@@ -29,7 +29,7 @@ function makeCtx(headers = {}) {
 }
 
 function proCtx() {
-  return makeCtx({ 'X-WorldMonitor-Key': 'pro-test-key' });
+  return makeCtx({ 'X-WorldView-Key': 'pro-test-key' });
 }
 
 let routeIntelligence;
@@ -43,21 +43,21 @@ let ApiError;
 
 describe('ShippingV2Service handlers', () => {
   beforeEach(async () => {
-    process.env.WORLDMONITOR_VALID_KEYS = 'pro-test-key';
+    process.env.WORLDVIEW_VALID_KEYS = 'pro-test-key';
     process.env.UPSTASH_REDIS_REST_URL = 'https://fake-upstash.example';
     process.env.UPSTASH_REDIS_REST_TOKEN = 'fake-token';
 
-    const riMod = await import('../server/worldmonitor/shipping/v2/route-intelligence.ts');
-    const rwMod = await import('../server/worldmonitor/shipping/v2/register-webhook.ts');
-    const lwMod = await import('../server/worldmonitor/shipping/v2/list-webhooks.ts');
-    const dwMod = await import('../server/worldmonitor/shipping/v2/deliver-webhook.ts');
-    webhookShared = await import('../server/worldmonitor/shipping/v2/webhook-shared.ts');
+    const riMod = await import('../server/worldview/shipping/v2/route-intelligence.ts');
+    const rwMod = await import('../server/worldview/shipping/v2/register-webhook.ts');
+    const lwMod = await import('../server/worldview/shipping/v2/list-webhooks.ts');
+    const dwMod = await import('../server/worldview/shipping/v2/deliver-webhook.ts');
+    webhookShared = await import('../server/worldview/shipping/v2/webhook-shared.ts');
     routeIntelligence = riMod.routeIntelligence;
     registerWebhook = rwMod.registerWebhook;
     listWebhooks = lwMod.listWebhooks;
     deliverShippingV2Webhook = dwMod.deliverShippingV2Webhook;
     WebhookDeliverySsrfError = dwMod.WebhookDeliverySsrfError;
-    const gen = await import('../src/generated/server/worldmonitor/shipping/v2/service_server.ts');
+    const gen = await import('../src/generated/server/worldview/shipping/v2/service_server.ts');
     ValidationError = gen.ValidationError;
     ApiError = gen.ApiError;
   });
@@ -154,7 +154,7 @@ describe('ShippingV2Service handlers', () => {
     }
 
     it('rejects callers without an API key with 401 (tenant-isolation gate)', async () => {
-      // Without this gate, Clerk-authenticated pro callers with no X-WorldMonitor-Key
+      // Without this gate, Clerk-authenticated pro callers with no X-WorldView-Key
       // collapse into a shared 'anon' fingerprint bucket and can see each other's
       // webhooks. Must fire before any premium check.
       await assert.rejects(
@@ -476,7 +476,7 @@ describe('ShippingV2Service handlers', () => {
       assert.equal(seen.url, 'https://hooks.example.com/wm');
       assert.equal(seen.method, 'POST');
       assert.equal(seen.headers['content-type'], 'application/json');
-      assert.equal(seen.headers['user-agent'], 'WorldMonitor-ShippingV2-Webhooks/1.0');
+      assert.equal(seen.headers['user-agent'], 'WorldView-ShippingV2-Webhooks/1.0');
       assert.equal(seen.headers['x-wm-delivery-id'], 'whd_test_delivery');
       assert.equal(seen.headers['x-wm-event'], 'chokepoint.disruption');
       assert.match(seen.headers['x-wm-signature'], /^sha256=[0-9a-f]{64}$/);

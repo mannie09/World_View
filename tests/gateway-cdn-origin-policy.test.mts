@@ -4,7 +4,7 @@ import { afterEach, before, describe, it } from 'node:test';
 import { createDomainGateway } from '../server/gateway.ts';
 import { issueSessionToken } from '../api/_session.js';
 
-const originalKeys = process.env.WORLDMONITOR_VALID_KEYS;
+const originalKeys = process.env.WORLDVIEW_VALID_KEYS;
 const originalSecret = process.env.WM_SESSION_SECRET;
 
 // Anonymous browser access now requires a wms_ session token (issue #3541).
@@ -17,8 +17,8 @@ before(async () => {
 });
 
 afterEach(() => {
-  if (originalKeys == null) delete process.env.WORLDMONITOR_VALID_KEYS;
-  else process.env.WORLDMONITOR_VALID_KEYS = originalKeys;
+  if (originalKeys == null) delete process.env.WORLDVIEW_VALID_KEYS;
+  else process.env.WORLDVIEW_VALID_KEYS = originalKeys;
   if (originalSecret == null) delete process.env.WM_SESSION_SECRET;
   else process.env.WM_SESSION_SECRET = originalSecret;
   // Re-set test secret in case afterEach ran AFTER the per-test reset.
@@ -42,30 +42,30 @@ function createHandler() {
 
 async function requestPublicRoute(origin: string) {
   const handler = createHandler();
-  return handler(new Request('https://worldmonitor.app/api/market/v1/list-market-quotes?symbols=AAPL', {
-    headers: { Origin: origin, 'X-WorldMonitor-Key': sessionToken },
+  return handler(new Request('https://worldview.app/api/market/v1/list-market-quotes?symbols=AAPL', {
+    headers: { Origin: origin, 'X-WorldView-Key': sessionToken },
   }));
 }
 
 describe('gateway CDN origin policy', () => {
-  it('keeps per-origin CORS and enables CDN caching for worldmonitor.app', async () => {
-    const res = await requestPublicRoute('https://worldmonitor.app');
+  it('keeps per-origin CORS and enables CDN caching for worldview.app', async () => {
+    const res = await requestPublicRoute('https://worldview.app');
     assert.equal(res.status, 200);
-    assert.equal(res.headers.get('Access-Control-Allow-Origin'), 'https://worldmonitor.app');
+    assert.equal(res.headers.get('Access-Control-Allow-Origin'), 'https://worldview.app');
     assert.equal(res.headers.get('Vary'), 'Origin');
     assert.match(res.headers.get('CDN-Cache-Control') ?? '', /s-maxage=/);
   });
 
   it('keeps per-origin CORS and enables CDN caching for production subdomains', async () => {
-    const res = await requestPublicRoute('https://tech.worldmonitor.app');
+    const res = await requestPublicRoute('https://tech.worldview.app');
     assert.equal(res.status, 200);
-    assert.equal(res.headers.get('Access-Control-Allow-Origin'), 'https://tech.worldmonitor.app');
+    assert.equal(res.headers.get('Access-Control-Allow-Origin'), 'https://tech.worldview.app');
     assert.equal(res.headers.get('Vary'), 'Origin');
     assert.match(res.headers.get('CDN-Cache-Control') ?? '', /s-maxage=/);
   });
 
   it('enables CDN caching for preview origins', async () => {
-    const origin = 'https://worldmonitor-git-feature-eliewm.vercel.app';
+    const origin = 'https://worldview-git-feature-eliewm.vercel.app';
     const res = await requestPublicRoute(origin);
     assert.equal(res.status, 200);
     assert.equal(res.headers.get('Access-Control-Allow-Origin'), origin);
@@ -84,12 +84,12 @@ describe('gateway CDN origin policy', () => {
 
   it('enables CDN caching for Tauri origins', async () => {
     const origin = 'tauri://localhost';
-    process.env.WORLDMONITOR_VALID_KEYS = 'real-key-123';
+    process.env.WORLDVIEW_VALID_KEYS = 'real-key-123';
     const handler = createHandler();
-    const res = await handler(new Request('https://worldmonitor.app/api/market/v1/list-market-quotes?symbols=AAPL', {
+    const res = await handler(new Request('https://worldview.app/api/market/v1/list-market-quotes?symbols=AAPL', {
       headers: {
         Origin: origin,
-        'X-WorldMonitor-Key': 'real-key-123',
+        'X-WorldView-Key': 'real-key-123',
       },
     }));
     assert.equal(res.status, 200);
@@ -100,29 +100,29 @@ describe('gateway CDN origin policy', () => {
 
   it('still blocks disallowed origins before route handling', async () => {
     const handler = createHandler();
-    const res = await handler(new Request('https://worldmonitor.app/api/market/v1/list-market-quotes?symbols=AAPL', {
+    const res = await handler(new Request('https://worldview.app/api/market/v1/list-market-quotes?symbols=AAPL', {
       headers: { Origin: 'https://evil.example.com' },
     }));
     assert.equal(res.status, 403);
   });
 
   it('preserves premium auth behavior', async () => {
-    process.env.WORLDMONITOR_VALID_KEYS = 'real-key-123';
+    process.env.WORLDVIEW_VALID_KEYS = 'real-key-123';
     const handler = createHandler();
 
-    const noCreds = await handler(new Request('https://worldmonitor.app/api/market/v1/analyze-stock?symbol=AAPL', {
-      headers: { Origin: 'https://worldmonitor.app' },
+    const noCreds = await handler(new Request('https://worldview.app/api/market/v1/analyze-stock?symbol=AAPL', {
+      headers: { Origin: 'https://worldview.app' },
     }));
     assert.equal(noCreds.status, 401);
 
-    const withKey = await handler(new Request('https://worldmonitor.app/api/market/v1/analyze-stock?symbol=AAPL', {
+    const withKey = await handler(new Request('https://worldview.app/api/market/v1/analyze-stock?symbol=AAPL', {
       headers: {
-        Origin: 'https://worldmonitor.app',
-        'X-WorldMonitor-Key': 'real-key-123',
+        Origin: 'https://worldview.app',
+        'X-WorldView-Key': 'real-key-123',
       },
     }));
     assert.equal(withKey.status, 200);
-    assert.equal(withKey.headers.get('Access-Control-Allow-Origin'), 'https://worldmonitor.app');
+    assert.equal(withKey.headers.get('Access-Control-Allow-Origin'), 'https://worldview.app');
     assert.equal(withKey.headers.get('Vary'), 'Origin');
     assert.equal(withKey.headers.get('CDN-Cache-Control'), null, 'premium endpoints must NOT have CDN caching');
   });

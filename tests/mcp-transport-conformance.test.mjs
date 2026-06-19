@@ -210,7 +210,7 @@ describe('api/mcp.ts — transport conformance over real HTTP', () => {
     assert.equal(body.jsonrpc, '2.0');
     assert.equal(body.id, 1);
     assert.equal(body.result?.protocolVersion, '2025-03-26');
-    assert.equal(body.result?.serverInfo?.name, 'worldmonitor');
+    assert.equal(body.result?.serverInfo?.name, 'worldview');
 
     const wrongSession = await fetch(server.url, {
       method: 'GET',
@@ -327,7 +327,7 @@ describe('api/mcp.ts — transport conformance over real HTTP', () => {
 
     const sessionId = initialize.headers.get('mcp-session-id');
     assert.ok(sessionId, 'JSON initialize response must still emit Mcp-Session-Id');
-    assert.equal((await initialize.json()).result?.serverInfo?.name, 'worldmonitor');
+    assert.equal((await initialize.json()).result?.serverInfo?.name, 'worldview');
 
     const error = await fetch(server.url, {
       method: 'POST',

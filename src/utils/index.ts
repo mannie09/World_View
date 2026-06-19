@@ -23,7 +23,7 @@ export function formatPrice(price: number | null | undefined): string {
   // Live feeds occasionally omit `price` (undefined) rather than sending null,
   // and `null`/NaN slip through call-site `!` assertions on `number | null`
   // fields. Guard here so a missing price renders the unavailable placeholder
-  // instead of throwing `undefined.toLocaleString()` (WORLDMONITOR-SH).
+  // instead of throwing `undefined.toLocaleString()` (WORLDVIEW-SH).
   if (typeof price !== 'number' || !Number.isFinite(price)) return '--';
   if (price >= 1000) {
     return `$${price.toLocaleString(undefined, {

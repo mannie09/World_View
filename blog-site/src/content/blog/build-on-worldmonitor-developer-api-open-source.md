@@ -1,20 +1,20 @@
 ---
-title: "Build on World Monitor: APIs and Developer Platform"
-description: "Build intelligence apps on World Monitor's typed API: 34 services, 276 proto files, 60+ edge functions, and auto-generated TypeScript clients. AGPL-3.0."
-metaTitle: "Developer API & Open Source Platform | World Monitor"
+title: "Build on WorldView: APIs and Developer Platform"
+description: "Build intelligence apps on WorldView's typed API: 34 services, 276 proto files, 60+ edge functions, and auto-generated TypeScript clients. AGPL-3.0."
+metaTitle: "Developer API & Open Source Platform | WorldView"
 keywords: "open source intelligence API, OSINT API free, geopolitical data API, intelligence platform developer, proto-first API architecture"
 audience: "Developers, data engineers, startup builders, academic researchers, open-source contributors"
-heroImage: "/blog/images/blog/build-on-worldmonitor-developer-api-open-source.jpg"
+heroImage: "/blog/images/blog/build-on-worldview-developer-api-open-source.jpg"
 pubDate: "2026-03-09"
 ---
 
 Most intelligence platforms are walled gardens. You pay for access, you use their interface, and if you want to build something custom, you're out of luck. The data is locked behind a UI.
 
-World Monitor is designed differently. The entire intelligence platform, every data feed, every scoring algorithm, every aggregation pipeline, is built on a **typed API layer** that developers can use, extend, and build upon.
+WorldView is designed differently. The entire intelligence platform, every data feed, every scoring algorithm, every aggregation pipeline, is built on a **typed API layer** that developers can use, extend, and build upon.
 
 ## Proto-First Architecture
 
-World Monitor uses **Protocol Buffers (protobuf)** as the single source of truth for all API contracts. The codebase contains:
+WorldView uses **Protocol Buffers (protobuf)** as the single source of truth for all API contracts. The codebase contains:
 
 - **276 proto files** defining every data structure and service
 - **34 typed service domains** covering all intelligence verticals
@@ -37,11 +37,11 @@ Protocol Buffers enforce a contract between client and server that can't drift:
 - **Code generation:** TypeScript clients are generated, not handwritten. Zero chance of client/server mismatch.
 - **Documentation:** The proto file IS the documentation. Field names, types, and comments are the API spec.
 
-For developers building on World Monitor, this means you can trust the API contracts completely. If the proto says a field is `int64`, it's `int64`. If it says `repeated string`, it's an array of strings.
+For developers building on WorldView, this means you can trust the API contracts completely. If the proto says a field is `int64`, it's `int64`. If it says `repeated string`, it's an array of strings.
 
 ## 34 Service Domains
 
-World Monitor's API is organized into domain-specific services:
+WorldView's API is organized into domain-specific services:
 
 | Domain | What It Covers |
 |--------|---------------|
@@ -94,16 +94,16 @@ The API layer runs on **Vercel Edge Functions**, providing:
 
 API endpoints follow the pattern:
 ```
-api.worldmonitor.app/api/{domain}/v1/{rpc}
+api.worldview.app/api/{domain}/v1/{rpc}
 ```
 
 For example:
 
-- `api.worldmonitor.app/api/market/v1/quotes` for stock quotes
-- `api.worldmonitor.app/api/conflict/v1/events` for conflict data
-- `api.worldmonitor.app/api/intelligence/v1/cii` for Country Instability Index scores
+- `api.worldview.app/api/market/v1/quotes` for stock quotes
+- `api.worldview.app/api/conflict/v1/events` for conflict data
+- `api.worldview.app/api/intelligence/v1/cii` for Country Instability Index scores
 
-## Building with World Monitor's API
+## Building with WorldView's API
 
 ### Custom Dashboards
 
@@ -117,7 +117,7 @@ const cii = await intelligenceClient.getCII({ countries: ['US', 'CN', 'RU'] });
 
 ### Data Pipelines
 
-Feed World Monitor data into your own analytics:
+Feed WorldView data into your own analytics:
 
 - Pull conflict events into a data warehouse for historical analysis
 - Stream market data alongside geopolitical scores for correlation studies
@@ -129,11 +129,11 @@ Academic researchers can use the API programmatically:
 
 - Study the relationship between news velocity and conflict escalation
 - Analyze prediction market accuracy against actual outcomes (see [prediction markets and AI forecasting](/blog/posts/prediction-markets-ai-forecasting-geopolitics/))
-- Build custom scoring models using World Monitor's raw data feeds
+- Build custom scoring models using WorldView's raw data feeds
 
 ### Mobile Apps
 
-Build a mobile app that consumes World Monitor's API for a custom mobile intelligence experience. The OpenAPI spec makes it accessible from any language (Swift, Kotlin, Python, Go).
+Build a mobile app that consumes WorldView's API for a custom mobile intelligence experience. The OpenAPI spec makes it accessible from any language (Swift, Kotlin, Python, Go).
 
 ### Slack/Teams Bots
 
@@ -146,7 +146,7 @@ Build alerting bots that post to your team channel when:
 
 ## Self-Hosting
 
-World Monitor is AGPL-3.0. You can self-host the entire platform, including [local AI capabilities that run without cloud dependencies](/blog/posts/ai-powered-intelligence-without-the-cloud/):
+WorldView is AGPL-3.0. You can self-host the entire platform, including [local AI capabilities that run without cloud dependencies](/blog/posts/ai-powered-intelligence-without-the-cloud/):
 
 **Frontend:** React + TypeScript + Vite. Standard `npm install && npm run build`.
 
@@ -177,7 +177,7 @@ The proto-first architecture makes contributing safe: the type system catches co
 
 ## The Developer Stack
 
-For reference, World Monitor is built with:
+For reference, WorldView is built with:
 
 | Layer | Technology |
 |-------|-----------|
@@ -194,11 +194,11 @@ For reference, World Monitor is built with:
 | i18n | i18next (21 locales) |
 | Testing | Vitest, Playwright |
 
-## Why Build on World Monitor?
+## Why Build on WorldView?
 
-The intelligence industry has a consolidation problem. A handful of vendors control the data, the algorithms, and the interfaces. Analysts are locked into ecosystems they can't customize, audit, or extend. See how World Monitor [compares to traditional intelligence tools](/blog/posts/worldmonitor-vs-traditional-intelligence-tools/) in practice.
+The intelligence industry has a consolidation problem. A handful of vendors control the data, the algorithms, and the interfaces. Analysts are locked into ecosystems they can't customize, audit, or extend. See how WorldView [compares to traditional intelligence tools](/blog/posts/worldview-vs-traditional-intelligence-tools/) in practice.
 
-World Monitor's open, typed, proto-first architecture is the alternative:
+WorldView's open, typed, proto-first architecture is the alternative:
 
 - **Audit everything:** Every scoring algorithm, every data pipeline, every API contract is in the codebase
 - **Extend anything:** Add data sources, build custom panels, create new service domains
@@ -206,14 +206,14 @@ World Monitor's open, typed, proto-first architecture is the alternative:
 - **Deploy anywhere:** Edge functions, self-hosted, or desktop
 - **Own your intelligence:** No vendor lock-in, no API key revocation, no price hikes
 
-The intelligence platform of the future isn't a product. It's an ecosystem. World Monitor is building the foundation.
+The intelligence platform of the future isn't a product. It's an ecosystem. WorldView is building the foundation.
 
-Building an AI agent instead of an app? The same platform is exposed as a Model Context Protocol server with 39 live tools. See [how to connect Claude and other agents to World Monitor's MCP server](/blog/posts/worldmonitor-mcp-server-ai-agents-real-time-intelligence/).
+Building an AI agent instead of an app? The same platform is exposed as a Model Context Protocol server with 39 live tools. See [how to connect Claude and other agents to WorldView's MCP server](/blog/posts/worldview-mcp-server-ai-agents-real-time-intelligence/).
 
 ## Frequently Asked Questions
 
-**Is the World Monitor API free to use?**
-Yes. World Monitor is AGPL-3.0 open source. You can use the public API at api.worldmonitor.app or self-host the entire stack. There are no API keys required for public endpoints and no usage fees.
+**Is the WorldView API free to use?**
+Yes. WorldView is AGPL-3.0 open source. You can use the public API at api.worldview.app or self-host the entire stack. There are no API keys required for public endpoints and no usage fees.
 
 **What languages can I use to consume the API?**
 Any language that supports HTTP. The auto-generated OpenAPI spec provides compatibility with Swift, Kotlin, Python, Go, Java, and more. TypeScript clients are generated directly from the proto files for first-class type safety.
@@ -223,4 +223,4 @@ Define your data structures in a proto file, implement a handler function, wire 
 
 ---
 
-**Start building at [github.com/koala73/worldmonitor](https://github.com/koala73/worldmonitor). 34 services, 276 proto files, and a global intelligence dataset waiting for your application.**
+**Start building at [github.com/mannie09/World_View](https://github.com/mannie09/World_View). 34 services, 276 proto files, and a global intelligence dataset waiting for your application.**

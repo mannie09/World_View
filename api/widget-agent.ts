@@ -4,8 +4,8 @@
  * Auth paths:
  *   1. Clerk JWT (Authorization: Bearer <token>) — validates plan === 'pro',
  *      then injects real server keys and proxies to the Railway relay.
- *   2. Browser tester key (X-WorldMonitor-Key) — validated against
- *      WORLDMONITOR_VALID_KEYS so one browser-held key can unlock premium
+ *   2. Browser tester key (X-WorldView-Key) — validated against
+ *      WORLDVIEW_VALID_KEYS so one browser-held key can unlock premium
  *      testing paths across the app.
  *   3. Legacy tester keys (X-Widget-Key / X-Pro-Key) — validated directly here
  *      so the relay's WIDGET_AGENT_KEY / PRO_WIDGET_KEY are never exposed
@@ -22,18 +22,18 @@ import { getCorsHeaders, isDisallowedOrigin } from './_cors.js';
 import { validateBearerToken } from '../server/auth-session';
 import { getEntitlements } from '../server/_shared/entitlement-check';
 
-const RELAY_BASE = 'https://proxy.worldmonitor.app';
+const RELAY_BASE = 'https://proxy.worldview.app';
 const WIDGET_AGENT_KEY = process.env.WIDGET_AGENT_KEY ?? '';
 const PRO_WIDGET_KEY = process.env.PRO_WIDGET_KEY ?? '';
-const WORLDMONITOR_VALID_KEY_SET = new Set(
-  (process.env.WORLDMONITOR_VALID_KEYS ?? '')
+const WORLDVIEW_VALID_KEY_SET = new Set(
+  (process.env.WORLDVIEW_VALID_KEYS ?? '')
     .split(',')
     .map((v) => v.trim())
     .filter(Boolean),
 );
 
-function hasValidWorldMonitorKey(key: string): boolean {
-  return Boolean(key) && WORLDMONITOR_VALID_KEY_SET.has(key);
+function hasValidWorldViewKey(key: string): boolean {
+  return Boolean(key) && WORLDVIEW_VALID_KEY_SET.has(key);
 }
 
 function getCookie(req: Request, name: string): string {
@@ -72,7 +72,7 @@ export default async function handler(req: Request): Promise<Response> {
       headers: {
         ...corsHeaders,
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-WorldMonitor-Key, X-Api-Key, X-Widget-Key, X-Pro-Key',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-WorldView-Key, X-Api-Key, X-Widget-Key, X-Pro-Key',
       },
     });
   }
@@ -80,15 +80,15 @@ export default async function handler(req: Request): Promise<Response> {
   // ── Auth ──────────────────────────────────────────────────────────────────
   let isPro = false;
 
-  const headerWorldMonitorKey =
-    req.headers.get('X-WorldMonitor-Key') ??
+  const headerWorldViewKey =
+    req.headers.get('X-WorldView-Key') ??
     req.headers.get('X-Api-Key') ??
     '';
-  const worldMonitorKey =
-    headerWorldMonitorKey ||
+  const worldViewKey =
+    headerWorldViewKey ||
     getCookie(req, 'wm-pro-key') ||
     getCookie(req, 'wm-widget-key');
-  if (hasValidWorldMonitorKey(worldMonitorKey)) {
+  if (hasValidWorldViewKey(worldViewKey)) {
     isPro = true;
   } else {
     const authHeader = req.headers.get('Authorization');
@@ -163,7 +163,7 @@ export default async function handler(req: Request): Promise<Response> {
   // ── Build relay headers (server-side keys, never exposed to browser) ──────
   const relayHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
-    'User-Agent': 'worldmonitor-widget-edge/1.0',
+    'User-Agent': 'worldview-widget-edge/1.0',
     ...(WIDGET_AGENT_KEY ? { 'X-Widget-Key': WIDGET_AGENT_KEY } : {}),
   };
   if (isPro && PRO_WIDGET_KEY) {

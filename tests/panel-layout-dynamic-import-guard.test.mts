@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { describe, it } from 'node:test';
 
-// Regression coverage for WORLDMONITOR-R4: dynamic `import(...).then(({ Foo }) => new Foo(...))`
+// Regression coverage for WORLDVIEW-R4: dynamic `import(...).then(({ Foo }) => new Foo(...))`
 // must guard against the destructured named export resolving to `undefined`, AND must pass an
 // onRejected handler as the SECOND argument to `.then(...)` so the import-promise rejection is
 // suppressed without swallowing synchronous throws from inside the .then() callback body
@@ -118,7 +118,7 @@ function assertGuardedDynamicImport(source: string, modulePath: string, exportNa
   );
 }
 
-describe('panel-layout dynamic-import guard (WORLDMONITOR-R4)', () => {
+describe('panel-layout dynamic-import guard (WORLDVIEW-R4)', () => {
   const filePath = new URL('../src/app/panel-layout.ts', import.meta.url);
 
   it('RegionalIntelligenceBoard import has typeof guard + onRejected arg', async () => {

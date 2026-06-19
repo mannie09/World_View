@@ -91,7 +91,7 @@ function buildInitPayload() {
     params: {
       protocolVersion: MCP_PROTOCOL_VERSION,
       capabilities: {},
-      clientInfo: { name: 'worldmonitor', version: '1.0' },
+      clientInfo: { name: 'worldview', version: '1.0' },
     },
   };
 }
@@ -109,7 +109,7 @@ function buildHeaders(customHeaders) {
   const h = {
     'Content-Type': 'application/json',
     'Accept': 'application/json, text/event-stream',
-    'User-Agent': 'WorldMonitor-MCP-Proxy/1.0',
+    'User-Agent': 'WorldView-MCP-Proxy/1.0',
   };
   if (customHeaders && typeof customHeaders === 'object') {
     for (const [k, v] of Object.entries(customHeaders)) {
@@ -365,7 +365,7 @@ async function mcpListToolsSse(serverUrl, customHeaders) {
     const initResp = await session.send(1, 'initialize', {
       protocolVersion: MCP_PROTOCOL_VERSION,
       capabilities: {},
-      clientInfo: { name: 'worldmonitor', version: '1.0' },
+      clientInfo: { name: 'worldview', version: '1.0' },
     });
     if (initResp.error) throw new Error(`Initialize error: ${initResp.error.message}`);
     await session.notify('notifications/initialized', {});
@@ -385,7 +385,7 @@ async function mcpCallToolSse(serverUrl, toolName, toolArgs, customHeaders) {
     const initResp = await session.send(1, 'initialize', {
       protocolVersion: MCP_PROTOCOL_VERSION,
       capabilities: {},
-      clientInfo: { name: 'worldmonitor', version: '1.0' },
+      clientInfo: { name: 'worldview', version: '1.0' },
     });
     if (initResp.error) throw new Error(`Initialize error: ${initResp.error.message}`);
     await session.notify('notifications/initialized', {});
@@ -454,7 +454,7 @@ export default async function handler(req) {
     return new Response(null, { status: 204, headers: cors });
 
   // Auth gate (issue #3723). The proxy can relay arbitrary customHeaders
-  // (Authorization, API keys) to any public MCP server under WorldMonitor's
+  // (Authorization, API keys) to any public MCP server under WorldView's
   // outbound IP, and consume our outbound-IP reputation / quota — so the
   // gate must accept ONLY paying / authorised callers.
   //
@@ -465,7 +465,7 @@ export default async function handler(req) {
   // for normal web Pro users (no enterprise key path).
   //
   // isCallerPremium is the project's canonical premium-caller check. It
-  // accepts: enterprise key (WORLDMONITOR_VALID_KEYS), wm_ user API key
+  // accepts: enterprise key (WORLDVIEW_VALID_KEYS), wm_ user API key
   // (Convex-validated + entitlement check), and Clerk Pro Bearer JWT
   // (role==='pro' or entitlement tier>=1). It rejects wms_ session tokens
   // by requiring keyCheck.required === true (wms_ short-circuits at

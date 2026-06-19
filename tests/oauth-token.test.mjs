@@ -568,7 +568,7 @@ describe('resolveBearerToContext (U6 resolver)', () => {
 
   it('returns kind:"env_key" for legacy 64-char SHA-256 bare-string', async () => {
     await ensureFixtures();
-    process.env.WORLDMONITOR_VALID_KEYS = `${ENV_KEY},another_key`;
+    process.env.WORLDVIEW_VALID_KEYS = `${ENV_KEY},another_key`;
     const restore = withRedisGet(JSON.stringify(ENV_KEY_HASH));
     try {
       const ctx = await resolveBearerToContext('uuid-x');
@@ -580,7 +580,7 @@ describe('resolveBearerToContext (U6 resolver)', () => {
 
   it('returns kind:"env_key" for legacy 16-char fingerprint bare-string (client_credentials)', async () => {
     await ensureFixtures();
-    process.env.WORLDMONITOR_VALID_KEYS = ENV_KEY;
+    process.env.WORLDVIEW_VALID_KEYS = ENV_KEY;
     const restore = withRedisGet(JSON.stringify(ENV_KEY_FINGERPRINT));
     try {
       const ctx = await resolveBearerToContext('uuid-x');
@@ -697,7 +697,7 @@ describe('resolveApiKeyFromBearer (legacy wrapper)', () => {
 
   it('returns the cleartext api key for a legacy env-key bearer (backward compat)', async () => {
     await ensureFixtures();
-    process.env.WORLDMONITOR_VALID_KEYS = ENV_KEY;
+    process.env.WORLDVIEW_VALID_KEYS = ENV_KEY;
     const restore = withRedisGet(JSON.stringify(ENV_KEY_HASH));
     try {
       assert.equal(await resolveApiKeyFromBearer('uuid-x'), ENV_KEY);
@@ -795,7 +795,7 @@ describe('U6 round-trip — tokenHandler → resolveBearerToContext', () => {
     await ensureFixtures();
     delete process.env.UPSTASH_REDIS_REST_URL;
     delete process.env.UPSTASH_REDIS_REST_TOKEN;
-    process.env.WORLDMONITOR_VALID_KEYS = ENV_KEY;
+    process.env.WORLDVIEW_VALID_KEYS = ENV_KEY;
     const { redis, deps } = makeDeps();
     redis.store.set('oauth:code:abc', {
       // Legacy shape — no kind.
@@ -856,7 +856,7 @@ describe('U6 tokenHandler — client_credentials (regression guard)', () => {
     await ensureFixtures();
     delete process.env.UPSTASH_REDIS_REST_URL;
     delete process.env.UPSTASH_REDIS_REST_TOKEN;
-    process.env.WORLDMONITOR_VALID_KEYS = ENV_KEY;
+    process.env.WORLDVIEW_VALID_KEYS = ENV_KEY;
     const { redis, deps } = makeDeps();
 
     _uuidCounter = 600;

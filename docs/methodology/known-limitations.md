@@ -145,7 +145,7 @@ spot-check runs.
 **References.**
 
 - Seeder: `scripts/seed-displacement-summary.mjs`
-- Scorer reads: `server/worldmonitor/resilience/v1/_dimension-scorers.ts`
+- Scorer reads: `server/worldview/resilience/v1/_dimension-scorers.ts`
   lines 843 (`getCountryDisplacement`), 1383, 1412, 1765
 - UNHCR Population API schema:
   https://api.unhcr.org/docs/population.html
@@ -263,7 +263,7 @@ verifying.
   (`WB_WATER_STRESS_INDICATOR`, `fetchAquastatDataset`,
   `buildAquastatWbMap`)
 - Scorer reads:
-  `server/worldmonitor/resilience/v1/_dimension-scorers.ts`
+  `server/worldview/resilience/v1/_dimension-scorers.ts`
   lines 895 (`scoreAquastatValue`), 1471 (`scoreFoodWater`),
   135 (`IMPUTE.ipcFood` constant)
 - WB indicator docs:
@@ -326,7 +326,7 @@ Phase 1 ships the rename + drop; Phase 2 ships the
 
 **Retired-but-not-deleted code.** `RESILIENCE_SANCTIONS_KEY` constant
 and `normalizeSanctionCount` helper in
-`server/worldmonitor/resilience/v1/_dimension-scorers.ts` are retained
+`server/worldview/resilience/v1/_dimension-scorers.ts` are retained
 with retire-tag comments pending Phase 2's decision on whether the OFAC
 count gets re-purposed inside `financialSystemExposure`. The historical
 `tests/resilience-sanctions-field-mapping.test.mts` was deleted; its

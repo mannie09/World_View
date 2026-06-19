@@ -363,7 +363,7 @@ entries.
 
 | Service | ID | Type |
 |---|---|---|
-| worldmonitor (ais-relay) | `a5f66d97-217f-44a0-a42d-5f3b67752223` | AIS relay + inline seeds |
+| worldview (ais-relay) | `a5f66d97-217f-44a0-a42d-5f3b67752223` | AIS relay + inline seeds |
 | notification-relay | `aa37bd8e-c28d-4e9b-9d1e-0961f1b63d97` | Notification dispatch |
 | simulation-worker | `67264e35-0b51-457b-984f-4ef20e36a117` | Forecast simulations |
 | deep-forecast-worker | `750bc68f-9840-49a3-95eb-7c8bcc060485` | Deep forecast tasks |
@@ -511,7 +511,7 @@ Each bundle service inherits the same env vars as the individual seeds it replac
 - `NODE_OPTIONS=--dns-result-order=ipv4first`
 - Plus any API keys used by member seeds (GIE_API_KEY, ICAO_API_KEY, etc.)
 
-The simplest approach: use Railway's "shared variables" or copy all env vars from the `worldmonitor` (ais-relay) service, which has a superset of all API keys.
+The simplest approach: use Railway's "shared variables" or copy all env vars from the `worldview` (ais-relay) service, which has a superset of all API keys.
 
 ---
 
@@ -549,15 +549,15 @@ IMPORT_HHI_VERBOSE=1 FORCE_RESEED=true node scripts/seed-recovery-import-hhi.mjs
 Then warm live scores so `importConcentration` reads the refreshed canonical key:
 
 ```bash
-API_BASE_URL=https://api.worldmonitor.app \
-WORLDMONITOR_SEED_REFRESH_KEY=<seed-refresh-key> \
-WORLDMONITOR_API_KEY=<read-key> \
+API_BASE_URL=https://api.worldview.app \
+WORLDVIEW_SEED_REFRESH_KEY=<seed-refresh-key> \
+WORLDVIEW_API_KEY=<read-key> \
 node scripts/seed-resilience-scores.mjs
 ```
 
-`WORLDMONITOR_SEED_REFRESH_KEY` is required: the resilience score seeder uses it
+`WORLDVIEW_SEED_REFRESH_KEY` is required: the resilience score seeder uses it
 for the seed-only `get-resilience-ranking?refresh=1` recompute path. Keep
-`WORLDMONITOR_API_KEY` or `WORLDMONITOR_VALID_KEYS` available too so laggard
+`WORLDVIEW_API_KEY` or `WORLDVIEW_VALID_KEYS` available too so laggard
 per-country score warms can fall back to the normal premium read endpoint. In
 Railway, the service environment should already provide the Upstash Redis
 credentials; for a local force-run, export `UPSTASH_REDIS_REST_URL` and
@@ -574,9 +574,9 @@ counts `intervalMissingScorePayloadCount`, `intervalStaleScorePayloadCount`,
 Verify the public audit surfaces after the run:
 
 ```bash
-curl -fsS https://api.worldmonitor.app/api/resilience/v1/get-runtime-manifest \
+curl -fsS https://api.worldview.app/api/resilience/v1/get-runtime-manifest \
   | jq '{formulaTag, rankingCache, constructVersions, intervals}'
-curl -fsS https://api.worldmonitor.app/api/health \
+curl -fsS https://api.worldview.app/api/health \
   | jq '.checks.resilienceIntervals'
 ```
 
@@ -589,7 +589,7 @@ Pass condition for interval recovery: runtime manifest reports
 Verify both Redis and the live score API:
 
 ```bash
-WORLDMONITOR_API_KEY=<key> node scripts/verify-import-hhi-coverage.mjs
+WORLDVIEW_API_KEY=<key> node scripts/verify-import-hhi-coverage.mjs
 ```
 
 Pass condition for AE/RU/NO/CH:

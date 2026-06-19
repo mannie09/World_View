@@ -12,7 +12,7 @@
 //   (useful for identifying imaging windows after events)
 
 import { getRpcBaseUrl } from '@/services/rpc-client';
-import { IntelligenceServiceClient } from '@/generated/client/worldmonitor/intelligence/v1/service_client';
+import { IntelligenceServiceClient } from '@/generated/client/worldview/intelligence/v1/service_client';
 import { twoline2satrec, propagate, eciToGeodetic, gstime, degreesLong, degreesLat } from 'satellite.js';
 import type { SatRec } from 'satellite.js';
 

@@ -1,11 +1,11 @@
 ---
 title: "Quickstart"
-description: "Make your first WorldMonitor API call in under a minute — curl, JavaScript, and Python."
+description: "Make your first WorldView API call in under a minute — curl, JavaScript, and Python."
 ---
 
 ## 1. Get an API key
 
-PRO subscribers get an API key from [worldmonitor.app/pro](https://www.worldmonitor.app/pro). User-issued keys are exactly `wm_` followed by 40 lowercase hex characters.
+PRO subscribers get an API key from [worldview.app/pro](https://www.worldview.app/pro). User-issued keys are exactly `wm_` followed by 40 lowercase hex characters.
 
 <Tip>
 The dashboard browser session can call supported public endpoints without a user API key. You need a key for server-to-server use, untrusted browser origins, and routes that explicitly require an API key.
@@ -16,16 +16,16 @@ The dashboard browser session can call supported public endpoints without a user
 ### curl
 
 ```bash
-curl -s 'https://api.worldmonitor.app/api/conflict/v1/list-conflict-events?limit=5' \
-  -H 'X-WorldMonitor-Key: wm_0123456789abcdef0123456789abcdef01234567'
+curl -s 'https://api.worldview.app/api/conflict/v1/list-conflict-events?limit=5' \
+  -H 'X-WorldView-Key: wm_0123456789abcdef0123456789abcdef01234567'
 ```
 
 ### JavaScript (Node or browser)
 
 ```js
 const res = await fetch(
-  'https://api.worldmonitor.app/api/market/v1/get-quotes?symbols=AAPL,TSLA',
-  { headers: { 'X-WorldMonitor-Key': process.env.WM_KEY } }
+  'https://api.worldview.app/api/market/v1/get-quotes?symbols=AAPL,TSLA',
+  { headers: { 'X-WorldView-Key': process.env.WM_KEY } }
 );
 const data = await res.json();
 console.log(data);
@@ -37,9 +37,9 @@ console.log(data);
 import os, httpx
 
 r = httpx.get(
-    "https://api.worldmonitor.app/api/economic/v1/get-fred-series",
+    "https://api.worldview.app/api/economic/v1/get-fred-series",
     params={"series_id": "FEDFUNDS"},
-    headers={"X-WorldMonitor-Key": os.environ["WM_KEY"]},
+    headers={"X-WorldView-Key": os.environ["WM_KEY"]},
 )
 r.raise_for_status()
 print(r.json())
@@ -50,8 +50,8 @@ print(r.json())
 For dashboards, use `/api/bootstrap` to pull all seeded caches in one request:
 
 ```bash
-curl -s 'https://api.worldmonitor.app/api/bootstrap' \
-  -H 'X-WorldMonitor-Key: wm_0123456789abcdef0123456789abcdef01234567'
+curl -s 'https://api.worldview.app/api/bootstrap' \
+  -H 'X-WorldView-Key: wm_0123456789abcdef0123456789abcdef01234567'
 ```
 
 See [Platform endpoints](/api-platform#bootstrap) for the response shape.
@@ -61,7 +61,7 @@ See [Platform endpoints](/api-platform#bootstrap) for the response shape.
 Point any MCP-compatible client at the server URL — the client handles OAuth automatically:
 
 ```
-https://api.worldmonitor.app/api/mcp
+https://api.worldview.app/api/mcp
 ```
 
 See [MCP](/mcp-server) for client-specific setup.

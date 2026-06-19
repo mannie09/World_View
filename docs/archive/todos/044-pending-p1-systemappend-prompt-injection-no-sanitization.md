@@ -13,9 +13,9 @@ dependencies: []
 
 ## Findings
 - **`server/_shared/llm.ts`** — `messages[0].content += '\n\n---\n\n' + systemAppend` with no directive-phrase filtering
-- **`server/worldmonitor/intelligence/v1/get-country-intel-brief.ts:38`** — `frameworkRaw = req.framework.slice(0, 2000)` — truncation only, no sanitization
-- **`server/worldmonitor/intelligence/v1/deduct-situation.ts`** — same
-- **`server/worldmonitor/news/v1/summarize-article.ts`** — same
+- **`server/worldview/intelligence/v1/get-country-intel-brief.ts:38`** — `frameworkRaw = req.framework.slice(0, 2000)` — truncation only, no sanitization
+- **`server/worldview/intelligence/v1/deduct-situation.ts`** — same
+- **`server/worldview/news/v1/summarize-article.ts`** — same
 - Client-side: `analysis-framework-store.ts` validates max 2000 chars and no duplicate names — does NOT sanitize directive phrases
 - Flagged by: security-sentinel, learnings-researcher (llm-self-improvement-prompt-injection skill)
 
@@ -44,8 +44,8 @@ Strip `<`, `>`, `{`, `}` and control characters from `systemAppend`. Leave direc
 **Cons:** Insufficient — directive-phrase injection still works without special chars | **Risk:** High
 
 ## Technical Details
-- Files: `server/_shared/llm.ts`, `server/worldmonitor/intelligence/v1/get-country-intel-brief.ts`, `server/worldmonitor/intelligence/v1/deduct-situation.ts`, `server/worldmonitor/news/v1/summarize-article.ts`
-- PR: koala73/worldmonitor#2380
+- Files: `server/_shared/llm.ts`, `server/worldview/intelligence/v1/get-country-intel-brief.ts`, `server/worldview/intelligence/v1/deduct-situation.ts`, `server/worldview/news/v1/summarize-article.ts`
+- PR: mannie09/World_View#2380
 - Reference: llm-self-improvement-prompt-injection skill
 
 ## Acceptance Criteria

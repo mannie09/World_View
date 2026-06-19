@@ -14,7 +14,7 @@ function isDesktopOrigin(origin) {
 
 async function isValidEnterpriseKey(key) {
   if (!key) return false;
-  const validKeys = (process.env.WORLDMONITOR_VALID_KEYS || '').split(',').filter(Boolean);
+  const validKeys = (process.env.WORLDVIEW_VALID_KEYS || '').split(',').filter(Boolean);
   return timingSafeIncludes(key, validKeys);
 }
 
@@ -47,7 +47,7 @@ function getCookie(req, name) {
 //   2. A wm_-prefixed user API key (validated against the user-key table by gateway).
 //      Kind: 'user'. Returns required:true/valid:false here so the gateway's
 //      fallback at server/gateway.ts:~440 triggers validateUserApiKey().
-//   3. An enterprise key (WORLDMONITOR_VALID_KEYS). Kind: 'enterprise'. The
+//   3. An enterprise key (WORLDVIEW_VALID_KEYS). Kind: 'enterprise'. The
 //      ONLY kind that bypasses entitlement checks (operator-issued).
 // Tauri desktop continues to authenticate via enterprise key.
 //
@@ -55,7 +55,7 @@ function getCookie(req, name) {
 // All call sites await this — see grep for migration history.
 export async function validateApiKey(req, options = {}) {
   const forceKey = options.forceKey === true;
-  const headerKey = req.headers.get('X-WorldMonitor-Key') || req.headers.get('X-Api-Key') || '';
+  const headerKey = req.headers.get('X-WorldView-Key') || req.headers.get('X-Api-Key') || '';
   const sessionCookie = getCookie(req, 'wm-session');
   const testerCookie = getCookie(req, 'wm-pro-key') || getCookie(req, 'wm-widget-key');
   const key = headerKey || testerCookie || sessionCookie;
@@ -84,10 +84,10 @@ export async function validateApiKey(req, options = {}) {
     return { valid: false, required: true, error: 'Invalid session token' };
   }
 
-  // Enterprise key (WORLDMONITOR_VALID_KEYS) — checked BEFORE the wm_ user-key
+  // Enterprise key (WORLDVIEW_VALID_KEYS) — checked BEFORE the wm_ user-key
   // fallthrough so an operator-issued key that happens to start with wm_ is
   // still recognized. Pre-#3541 the static allowlist accepted any prefix; some
-  // legacy operator keys (e.g. the Railway relay's WORLDMONITOR_RELAY_KEY) use
+  // legacy operator keys (e.g. the Railway relay's WORLDVIEW_RELAY_KEY) use
   // the wm_ prefix from before user-issued keys were namespaced. Without this
   // ordering, those keys get punted to validateUserApiKey() and 401 because
   // the Convex user-key table has no record of an operator-minted value.

@@ -1,7 +1,7 @@
 /**
  * Fetch wrapper for premium RPC clients.
  *
- * Injects a Clerk Bearer token (or WORLDMONITOR_API_KEY as fallback) directly
+ * Injects a Clerk Bearer token (or WORLDVIEW_API_KEY as fallback) directly
  * into every request for premium endpoints. This is the source-of-truth auth
  * injection for those routes — no reliance on the global fetch patch.
  *
@@ -13,11 +13,11 @@
  * users with no tester key:
  *
  *   1. premiumFetch sets Authorization → wm-session interceptor sees it
- *      and steps aside (no `X-WorldMonitor-Key: wms_…` is attached).
+ *      and steps aside (no `X-WorldView-Key: wms_…` is attached).
  *   2. Server gateway only resolves Bearer JWTs on tier-gated paths
  *      (gateway.ts: `if (isTierGated) resolveClerkSession(...)`); for
  *      non-tier-gated paths the JWT is ignored entirely.
- *   3. api/_api-key.js `validateApiKey()` reads ONLY X-WorldMonitor-Key.
+ *   3. api/_api-key.js `validateApiKey()` reads ONLY X-WorldView-Key.
  *      With no key present it returns { valid: false, required: true } →
  *      gateway emits 401.
  *
@@ -29,7 +29,7 @@
  * Fix: don't attach Bearer for non-premium paths. Fall through to the
  * unauth path so the wm-session interceptor handles the wms_ attach.
  * API-key holders (step 1) and tester-key holders (step 2) are unaffected
- * — those keys travel via X-WorldMonitor-Key which works on any path.
+ * — those keys travel via X-WorldView-Key which works on any path.
  */
 import { enqueueSentryCall } from '@/bootstrap/sentry-defer';
 import { PREMIUM_RPC_PATHS } from '@/shared/premium-paths';
@@ -55,12 +55,12 @@ function reportServerError(res: Response, input: RequestInfo | URL): void {
   if (res.status < 500) return;
   try {
     const href = input instanceof Request ? input.url : String(input);
-    const path = new URL(href, globalThis.location?.href ?? 'https://worldmonitor.app').pathname;
+    const path = new URL(href, globalThis.location?.href ?? 'https://worldview.app').pathname;
     // Cloudflare edge errors (520-527) are CDN<->origin transport failures, not
     // origin application errors — a single one is a transient blip. Capture at
     // `warning` so a sustained outage still escalates by volume without a lone
     // transient drowning genuine origin 5xx in the error dashboard
-    // (WORLDMONITOR-RG). Genuine origin 5xx (500-511) stay at `error`.
+    // (WORLDVIEW-RG). Genuine origin 5xx (500-511) stay at `error`.
     const isCloudflareEdgeError = res.status >= 520 && res.status <= 527;
     const message = `API ${res.status}: ${path}`;
     const level: 'warning' | 'error' = isCloudflareEdgeError ? 'warning' : 'error';
@@ -84,7 +84,7 @@ function withCredentials(init?: RequestInit): RequestInit {
 function isPremiumRpcTarget(input: RequestInfo | URL): boolean {
   try {
     const href = input instanceof Request ? input.url : String(input);
-    const path = new URL(href, globalThis.location?.href ?? 'https://worldmonitor.app').pathname;
+    const path = new URL(href, globalThis.location?.href ?? 'https://worldview.app').pathname;
     return PREMIUM_RPC_PATHS.has(path);
   } catch {
     // If we can't parse the URL, fall through to the strict path: keep
@@ -165,18 +165,18 @@ export async function premiumFetch(
 ): Promise<Response> {
   // Skip injection if the caller already set an auth header.
   const existing = new Headers(init?.headers);
-  if (existing.has('Authorization') || existing.has('X-WorldMonitor-Key')) {
+  if (existing.has('Authorization') || existing.has('X-WorldView-Key')) {
     const res = await globalThis.fetch(input, withCredentials(init));
     reportServerError(res, input);
     return res;
   }
 
-  // 1. WORLDMONITOR_API_KEY from env (desktop / test environments).
+  // 1. WORLDVIEW_API_KEY from env (desktop / test environments).
   try {
     const { getRuntimeConfigSnapshot } = await import('@/services/runtime-config');
-    const wmKey = getRuntimeConfigSnapshot().secrets['WORLDMONITOR_API_KEY']?.value;
+    const wmKey = getRuntimeConfigSnapshot().secrets['WORLDVIEW_API_KEY']?.value;
     if (wmKey) {
-      existing.set('X-WorldMonitor-Key', wmKey);
+      existing.set('X-WorldView-Key', wmKey);
       const res = await globalThis.fetch(input, { ...withCredentials(init), headers: existing });
       reportServerError(res, input);
       return res;
@@ -188,7 +188,7 @@ export async function premiumFetch(
   const testerKeys = await loadTesterKeys();
   for (const testerKey of testerKeys) {
     const testerHeaders = new Headers(existing);
-    testerHeaders.set('X-WorldMonitor-Key', testerKey);
+    testerHeaders.set('X-WorldView-Key', testerKey);
     const res = await globalThis.fetch(input, { ...withCredentials(init), headers: testerHeaders });
     if (res.status !== 401) {
       reportServerError(res, input);

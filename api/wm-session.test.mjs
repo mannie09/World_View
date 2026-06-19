@@ -5,7 +5,7 @@ const SECRET = 'test-secret-must-be-at-least-32-chars-long-xxx';
 process.env.WM_SESSION_SECRET = SECRET;
 process.env.WIDGET_AGENT_KEY = 'widget-secret';
 process.env.PRO_WIDGET_KEY = 'pro-secret';
-process.env.WORLDMONITOR_VALID_KEYS = 'enterprise-secret';
+process.env.WORLDVIEW_VALID_KEYS = 'enterprise-secret';
 
 const { default: handler } = await import('./wm-session.js');
 const { validateSessionToken } = await import('./_session.js');
@@ -13,7 +13,7 @@ const { validateSessionToken } = await import('./_session.js');
 function makeReq(method, { origin } = {}) {
   const headers = new Headers();
   if (origin) headers.set('origin', origin);
-  return new Request('https://api.worldmonitor.app/api/wm-session', { method, headers });
+  return new Request('https://api.worldview.app/api/wm-session', { method, headers });
 }
 
 function makeLocalReq(method, { origin } = {}) {
@@ -41,7 +41,7 @@ function finalCookieJar(cookies) {
     const domainAttr = attrs.find((attr) => attr.toLowerCase().startsWith('domain='));
     const pathAttr = attrs.find((attr) => attr.toLowerCase().startsWith('path='));
     const maxAgeAttr = attrs.find((attr) => attr.toLowerCase().startsWith('max-age='));
-    const domain = domainAttr ? domainAttr.slice('domain='.length).toLowerCase() : 'api.worldmonitor.app';
+    const domain = domainAttr ? domainAttr.slice('domain='.length).toLowerCase() : 'api.worldview.app';
     const path = pathAttr ? pathAttr.slice('path='.length) : '/';
     const key = `${name};${domain};${path}`;
     if (maxAgeAttr && Number(maxAgeAttr.slice('max-age='.length)) <= 0) {
@@ -54,7 +54,7 @@ function finalCookieJar(cookies) {
 }
 
 test('POST from trusted origin sets a valid HttpOnly wms_ session cookie without exposing token JSON', async () => {
-  const resp = await handler(makeReq('POST', { origin: 'https://worldmonitor.app' }));
+  const resp = await handler(makeReq('POST', { origin: 'https://worldview.app' }));
   assert.equal(resp.status, 200);
   const body = await resp.json();
   assert.equal(body.token, undefined);
@@ -64,7 +64,7 @@ test('POST from trusted origin sets a valid HttpOnly wms_ session cookie without
   assert.match(token, /^wms_/);
   assert.equal(await validateSessionToken(token), true);
   assert.match(cookies.join('\n'), /wm-session=.*HttpOnly/);
-  assert.match(cookies.join('\n'), /wm-session=.*Domain=\.worldmonitor\.app/);
+  assert.match(cookies.join('\n'), /wm-session=.*Domain=\.worldview\.app/);
 });
 
 test('localhost session cookie remains host-only for dev', async () => {
@@ -77,14 +77,14 @@ test('localhost session cookie remains host-only for dev', async () => {
 });
 
 test('OPTIONS preflight returns 204 with CORS', async () => {
-  const resp = await handler(makeReq('OPTIONS', { origin: 'https://worldmonitor.app' }));
+  const resp = await handler(makeReq('OPTIONS', { origin: 'https://worldview.app' }));
   assert.equal(resp.status, 204);
   assert.equal(resp.headers.get('access-control-allow-methods'), 'POST, OPTIONS');
   assert.equal(resp.headers.get('access-control-allow-credentials'), 'true');
 });
 
 test('GET method is rejected with 405', async () => {
-  const resp = await handler(makeReq('GET', { origin: 'https://worldmonitor.app' }));
+  const resp = await handler(makeReq('GET', { origin: 'https://worldview.app' }));
   assert.equal(resp.status, 405);
 });
 
@@ -102,7 +102,7 @@ test('No origin (curl) is allowed (rate limit + token TTL are the throttles)', a
 });
 
 test('no-key session refresh preserves existing HttpOnly key cookies', async () => {
-  const resp = await handler(makeReq('POST', { origin: 'https://worldmonitor.app' }));
+  const resp = await handler(makeReq('POST', { origin: 'https://worldview.app' }));
   assert.equal(resp.status, 200);
   const cookies = setCookies(resp);
   assert.ok(cookies.some((cookie) => cookie.startsWith('wm-session=')));
@@ -111,10 +111,10 @@ test('no-key session refresh preserves existing HttpOnly key cookies', async () 
 });
 
 test('legacy widget/pro keys are moved into short-lived HttpOnly cookies', async () => {
-  const req = new Request('https://api.worldmonitor.app/api/wm-session', {
+  const req = new Request('https://api.worldview.app/api/wm-session', {
     method: 'POST',
     headers: {
-      origin: 'https://worldmonitor.app',
+      origin: 'https://worldview.app',
       'content-type': 'application/json',
     },
     body: JSON.stringify({ widgetKey: 'widget-secret', proKey: 'pro-secret' }),
@@ -125,16 +125,16 @@ test('legacy widget/pro keys are moved into short-lived HttpOnly cookies', async
   const joined = cookies.join('\n');
   assert.match(joined, /wm-widget-key=widget-secret;.*HttpOnly/);
   assert.match(joined, /wm-pro-key=pro-secret;.*HttpOnly/);
-  assert.match(joined, /wm-widget-key=widget-secret;.*Domain=\.worldmonitor\.app/);
-  assert.match(joined, /wm-pro-key=pro-secret;.*Domain=\.worldmonitor\.app/);
+  assert.match(joined, /wm-widget-key=widget-secret;.*Domain=\.worldview\.app/);
+  assert.match(joined, /wm-pro-key=pro-secret;.*Domain=\.worldview\.app/);
   assert.match(joined, /Max-Age=43200/);
 });
 
 test('enterprise key can be exchanged into a short-lived HttpOnly pro cookie', async () => {
-  const req = new Request('https://api.worldmonitor.app/api/wm-session', {
+  const req = new Request('https://api.worldview.app/api/wm-session', {
     method: 'POST',
     headers: {
-      origin: 'https://worldmonitor.app',
+      origin: 'https://worldview.app',
       'content-type': 'application/json',
     },
     body: JSON.stringify({ proKey: 'enterprise-secret' }),
@@ -146,10 +146,10 @@ test('enterprise key can be exchanged into a short-lived HttpOnly pro cookie', a
 });
 
 test('invalid legacy keys are rejected and not persisted as HttpOnly cookies', async () => {
-  const req = new Request('https://api.worldmonitor.app/api/wm-session', {
+  const req = new Request('https://api.worldview.app/api/wm-session', {
     method: 'POST',
     headers: {
-      origin: 'https://worldmonitor.app',
+      origin: 'https://worldview.app',
       'content-type': 'application/json',
     },
     body: JSON.stringify({ widgetKey: 'wrong-widget-key', proKey: 'wrong-pro-key' }),
@@ -164,10 +164,10 @@ test('invalid legacy keys are rejected and not persisted as HttpOnly cookies', a
 });
 
 test('legacy cookie tombstones do not delete replacement HttpOnly key cookies', async () => {
-  const req = new Request('https://api.worldmonitor.app/api/wm-session', {
+  const req = new Request('https://api.worldview.app/api/wm-session', {
     method: 'POST',
     headers: {
-      origin: 'https://worldmonitor.app',
+      origin: 'https://worldview.app',
       'content-type': 'application/json',
     },
     body: JSON.stringify({ widgetKey: 'widget-secret', proKey: 'pro-secret' }),
@@ -175,15 +175,15 @@ test('legacy cookie tombstones do not delete replacement HttpOnly key cookies', 
   const resp = await handler(req);
   assert.equal(resp.status, 200);
   const jar = finalCookieJar(setCookies(resp));
-  assert.equal(jar.get('wm-widget-key;.worldmonitor.app;/'), 'widget-secret');
-  assert.equal(jar.get('wm-pro-key;.worldmonitor.app;/'), 'pro-secret');
+  assert.equal(jar.get('wm-widget-key;.worldview.app;/'), 'widget-secret');
+  assert.equal(jar.get('wm-pro-key;.worldview.app;/'), 'pro-secret');
 });
 
 test('Returns 503 when WM_SESSION_SECRET is missing', async () => {
   const stash = process.env.WM_SESSION_SECRET;
   delete process.env.WM_SESSION_SECRET;
   try {
-    const resp = await handler(makeReq('POST', { origin: 'https://worldmonitor.app' }));
+    const resp = await handler(makeReq('POST', { origin: 'https://worldview.app' }));
     assert.equal(resp.status, 503);
     const body = await resp.json();
     assert.match(body.error, /Session service not configured/);

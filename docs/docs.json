@@ -1,23 +1,23 @@
 {
   "$schema": "https://mintlify.com/schema.json",
   "theme": "mint",
-  "name": "World Monitor",
+  "name": "WorldView",
   "description": "AI-powered real-time global intelligence dashboard",
   "logo": {
     "dark": "/logo.png",
     "light": "/logo.png",
-    "href": "https://www.worldmonitor.app"
+    "href": "https://www.worldview.app"
   },
   "favicon": "/favicon.png",
   "seo": {
     "metatags": {
-      "og:image": "https://www.worldmonitor.app/favico/og-image.png",
-      "og:site_name": "World Monitor Documentation",
+      "og:image": "https://www.worldview.app/favico/og-image.png",
+      "og:site_name": "WorldView Documentation",
       "og:type": "website",
       "og:locale": "en_US",
       "twitter:card": "summary_large_image",
-      "twitter:site": "@worldmonitorai",
-      "twitter:image": "https://www.worldmonitor.app/favico/og-image.png"
+      "twitter:site": "@WorldViewApp",
+      "twitter:image": "https://www.worldview.app/favico/og-image.png"
     }
   },
   "colors": {
@@ -29,25 +29,25 @@
     "links": [
       {
         "label": "Blog",
-        "href": "https://www.worldmonitor.app/blog"
+        "href": "https://www.worldview.app/blog"
       },
       {
         "label": "Dashboard",
-        "href": "https://www.worldmonitor.app"
+        "href": "https://www.worldview.app"
       },
       {
         "label": "Pro",
-        "href": "https://www.worldmonitor.app/pro"
+        "href": "https://www.worldview.app/pro"
       },
       {
         "label": "GitHub",
-        "href": "https://github.com/koala73/worldmonitor"
+        "href": "https://github.com/mannie09/World_View"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Get Early Access",
-      "href": "https://www.worldmonitor.app/pro#waitlist"
+      "href": "https://www.worldview.app/pro#waitlist"
     }
   },
   "navigation": {
@@ -409,25 +409,25 @@
   },
   "footer": {
     "socials": {
-      "github": "https://github.com/koala73/worldmonitor",
+      "github": "https://github.com/mannie09/World_View",
       "discord": "https://discord.gg/re63kWKxaz",
-      "x": "https://x.com/worldmonitorai"
+      "x": "https://x.com/worldviewai"
     },
     "links": [
       {
-        "header": "World Monitor",
+        "header": "WorldView",
         "items": [
           {
             "label": "Dashboard",
-            "href": "https://www.worldmonitor.app"
+            "href": "https://www.worldview.app"
           },
           {
             "label": "Pro",
-            "href": "https://www.worldmonitor.app/pro"
+            "href": "https://www.worldview.app/pro"
           },
           {
             "label": "Blog",
-            "href": "https://www.worldmonitor.app/blog"
+            "href": "https://www.worldview.app/blog"
           }
         ]
       },
@@ -436,7 +436,7 @@
         "items": [
           {
             "label": "GitHub",
-            "href": "https://github.com/koala73/worldmonitor"
+            "href": "https://github.com/mannie09/World_View"
           },
           {
             "label": "Discord",
@@ -444,11 +444,11 @@
           },
           {
             "label": "X",
-            "href": "https://x.com/worldmonitorai"
+            "href": "https://x.com/worldviewai"
           },
           {
             "label": "Status",
-            "href": "https://status.worldmonitor.app/"
+            "href": "https://status.worldview.app/"
           }
         ]
       }

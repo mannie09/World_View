@@ -490,8 +490,8 @@ export function createBrowserEnvironment() {
     removeEventListener() {},
     open() {},
     location: {
-      origin: 'https://worldmonitor.test',
-      href: 'https://worldmonitor.test/',
+      origin: 'https://worldview.test',
+      href: 'https://worldview.test/',
     },
     navigator: {
       clipboard: {

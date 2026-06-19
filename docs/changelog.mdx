@@ -1,10 +1,10 @@
 ---
 title: "Changelog"
-description: "All notable changes to World Monitor, organized by release."
+description: "All notable changes to WorldView, organized by release."
 rss: true
 ---
 
-All notable changes to World Monitor are documented here. Subscribe via [RSS](/changelog/rss.xml) to stay updated.
+All notable changes to WorldView are documented here. Subscribe via [RSS](/changelog/rss.xml) to stay updated.
 
 <Update label="Unreleased" description="Unreleased" tags={["Trade", "Intelligence", "Search", "Supply Chain", "Maritime", "Security", "MCP"]}>
 
@@ -40,13 +40,13 @@ All notable changes to World Monitor are documented here. Subscribe via [RSS](/c
   - `/api/supply-chain/v1/country-products` → `/api/supply-chain/v1/get-country-products`
   - `/api/supply-chain/v1/multi-sector-cost-shock` → `/api/supply-chain/v1/get-multi-sector-cost-shock`
 
-  Aliases retire at the next v1→v2 break (tracked in [#3282](https://github.com/koala73/worldmonitor/issues/3282)).
+  Aliases retire at the next v1→v2 break (tracked in [#3282](https://github.com/mannie09/World_View/issues/3282)).
 
 - `POST /api/scenario/v1/run-scenario` now returns `200 OK` instead of the pre-migration `202 Accepted`. sebuf's HTTP annotations don't carry per-RPC status codes. Branch on response body `status === "pending"` instead of `response.status === 202`. `statusUrl` field is preserved.
 
 ### Security
 
-- **CDN cache bypass closed**: `CDN-Cache-Control` header now only emitted for trusted origins (worldmonitor.app, Vercel previews, Tauri). No-origin server-side requests always invoke the edge function so `validateApiKey` runs, preventing a cached 200 from being served to external scrapers.
+- **CDN cache bypass closed**: `CDN-Cache-Control` header now only emitted for trusted origins (worldview.app, Vercel previews, Tauri). No-origin server-side requests always invoke the edge function so `validateApiKey` runs, preventing a cached 200 from being served to external scrapers.
 - **Shipping v2 webhook tenant isolation (#3242)**: `POST /api/v2/shipping/webhooks` and `GET /api/v2/shipping/webhooks` now enforce `validateApiKey(req, { forceKey: true })`, matching the sibling `[subscriberId]{,/[action]}` routes. Without this gate, a Clerk-authenticated pro user with no API key would collapse into a shared `'anon'` fingerprint bucket and see/overwrite webhooks owned by other `'anon'`-bucket tenants.
 
 ### Fixed
@@ -257,7 +257,7 @@ All notable changes to World Monitor are documented here. Subscribe via [RSS](/c
 - **Runtime**: route all /api/* calls through CDN edge instead of direct Vercel (#780)
 - **Desktop**: detect Linux node target from host arch (#742), harden Windows installer update path + map resize (#739), close update toast after clicking download (#738), only open valid http(s) links externally (#723)
 - **Webcams**: replace dead Tel Aviv live stream (#732), replace stale Jerusalem feed (#849)
-- Story header uses full domain WORLDMONITOR.APP (#799)
+- Story header uses full domain WORLDVIEW.APP (#799)
 - Open variant nav links in same window instead of new tab (#721)
 - Suppress map renders during resize drag (#728)
 - Append deduction panel to DOM after async import resolves (#764)
@@ -364,7 +364,7 @@ All notable changes to World Monitor are documented here. Subscribe via [RSS](/c
 ### Added
 
 - **Edge caching**: Complete Cloudflare edge cache tier coverage with degraded-response policy (#484)
-- **Edge caching**: Cloudflare edge caching for proxy.worldmonitor.app (#478) and api.worldmonitor.app (#471)
+- **Edge caching**: Cloudflare edge caching for proxy.worldview.app (#478) and api.worldview.app (#471)
 - **Edge caching**: Tiered edge Cache-Control aligned to upstream TTLs (#474)
 - **API migration**: Convert 52 API endpoints from POST to GET for edge caching (#468)
 - **Gateway**: Configurable VITE_WS_API_URL + harden POST-to-GET shim (#480)
@@ -584,7 +584,7 @@ All notable changes to World Monitor are documented here. Subscribe via [RSS](/c
 
 ### Added
 
-- **Finance variant**: Added a dedicated market-first variant (`finance.worldmonitor.app`) with finance/trading-focused feeds, panels, and map defaults
+- **Finance variant**: Added a dedicated market-first variant (`finance.worldview.app`) with finance/trading-focused feeds, panels, and map defaults
 - **Finance desktop profile**: Added finance-specific desktop config and build profile for Tauri packaging
 
 ### Changed
@@ -675,7 +675,7 @@ All notable changes to World Monitor are documented here. Subscribe via [RSS](/c
 
 ### Security
 
-- **CORS hardening**: Tighten Vercel preview deployment regex to block origin spoofing (`worldmonitorEVIL.vercel.app`)
+- **CORS hardening**: Tighten Vercel preview deployment regex to block origin spoofing (`worldviewEVIL.vercel.app`)
 - **Sidecar auth bypass**: Move `/api/local-env-update` behind `LOCAL_API_TOKEN` auth check
 - **Env key allowlist**: Restrict sidecar env mutations to 18 known secret keys (matching `SUPPORTED_SECRET_KEYS`)
 - **postMessage validation**: Add `origin` and `source` checks on incoming messages in LiveNewsPanel

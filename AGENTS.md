@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Agent entry point for WorldMonitor. Read this first, then follow links for depth.
+Agent entry point for WorldView. Read this first, then follow links for depth.
 
 ## What This Project Is
 
@@ -30,10 +30,10 @@ Real-time global intelligence dashboard. TypeScript SPA (Vite + Preact) with 155
 │   ├── _shared/            # Redis, rate-limit, LLM, caching, response headers
 │   ├── gateway.ts          # Domain gateway factory (CORS, auth, cache tiers)
 │   ├── router.ts           # Route matching
-│   └── worldmonitor/       # Domain handlers (mirrors proto service structure)
+│   └── worldview/       # Domain handlers (mirrors proto service structure)
 ├── proto/                  # Protobuf definitions (sebuf framework)
 │   ├── buf.yaml            # Buf configuration
-│   └── worldmonitor/       # Service definitions with HTTP annotations
+│   └── worldview/       # Service definitions with HTTP annotations
 ├── shared/                 # Cross-platform data (JSON configs for markets, RSS domains)
 ├── scripts/                # Seed scripts, build helpers, data fetchers
 ├── src-tauri/              # Tauri desktop shell (Rust + Node.js sidecar)
@@ -69,19 +69,19 @@ npm run worktree:env                # Link ignored local env files only
 Worktrees usually start without ignored local state. When creating or entering one:
 
 1. Start from `origin/main` or the requested base, not a dirty local branch.
-2. Run `npm run worktree:bootstrap` before typecheck/tests. The helper links ignored `.env.local` / `.env` from the main worktree when Git can infer it, and installs deps with `npm ci --cache /tmp/worldmonitor-npm-cache`.
+2. Run `npm run worktree:bootstrap` before typecheck/tests. The helper links ignored `.env.local` / `.env` from the main worktree when Git can infer it, and installs deps with `npm ci --cache /tmp/worldview-npm-cache`.
 3. If only docs/test tooling is needed and native postinstall work is unnecessary, use `npm run worktree:bootstrap:test-only`.
 4. If live credentials are unavailable, do not fabricate secrets. Run the non-credentialed checks you can and report the credential gate explicitly.
 
 Env rules:
 
 - Link only `.env.local` and `.env`. Never copy or link `.env.vercel-backup` or `.env.vercel-export`; the pre-push guard blocks those files even as symlinks.
-- Override env source discovery with `WM_ENV_SOURCE=/path/to/worldmonitor npm run worktree:env` when the main worktree cannot be inferred.
+- Override env source discovery with `WM_ENV_SOURCE=/path/to/worldview npm run worktree:env` when the main worktree cannot be inferred.
 - `.env*` files are ignored local state. Do not add, print, or summarize secret values.
 
 Validation hygiene:
 
-- Prefer `npm ci` over `npm install` in fresh worktrees. Use `npm_config_cache=/tmp/worldmonitor-npm-cache` for `npx` or install commands if cache ownership errors appear.
+- Prefer `npm ci` over `npm install` in fresh worktrees. Use `npm_config_cache=/tmp/worldview-npm-cache` for `npx` or install commands if cache ownership errors appear.
 - After bootstrap or pre-push, run `git status --short`. If dependency bootstrap changed lockfiles you did not intend to edit, remove those incidental changes before finalizing.
 - After install, prefer local tools such as `./node_modules/.bin/tsx --test ...` for focused TypeScript tests when `npx` is flaky.
 
@@ -110,7 +110,7 @@ types -> config -> services -> components -> app -> App.ts
 
 - `server/` code is bundled INTO Edge Functions at deploy time via gateway
 - `server/_shared/` contains Redis client, rate limiting, LLM helpers
-- `server/worldmonitor/<domain>/` has RPC handlers matching proto services
+- `server/worldview/<domain>/` has RPC handlers matching proto services
 - All handlers use `cachedFetchJson()` for Redis caching with stampede protection
 
 ### Proto Contract Flow
@@ -141,10 +141,10 @@ Variant is set via `VITE_VARIANT` env var. Config lives in `src/config/variants/
 
 ### Adding a New API Endpoint
 
-1. Define proto message in `proto/worldmonitor/<domain>/`
+1. Define proto message in `proto/worldview/<domain>/`
 2. Add RPC with `(sebuf.http.config)` annotation
 3. Run `make generate`
-4. Create handler in `server/worldmonitor/<domain>/`
+4. Create handler in `server/worldview/<domain>/`
 5. Wire handler in domain's `handler.ts`
 6. Use `cachedFetchJson()` for caching, include request params in cache key
 

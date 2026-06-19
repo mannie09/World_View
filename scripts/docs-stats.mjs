@@ -68,13 +68,13 @@ function computeStats() {
   const protoServices = protoFiles
     .map((f) => (read(f).match(/^service\s+\w+/gm) || []).length)
     .reduce((a, b) => a + b, 0);
-  const protoDomainFolders = dirsIn('proto/worldmonitor').length;
+  const protoDomainFolders = dirsIn('proto/worldview').length;
 
   // ---- Generated OpenAPI service specs (docs/api/*Service.openapi.yaml) ----
   const openapiServiceSpecs = filesIn('docs/api').filter((f) => /Service\.openapi\.yaml$/.test(f)).length;
 
-  // ---- Server domain handlers (server/worldmonitor/*/) ----
-  const serverDomains = dirsIn('server/worldmonitor').length;
+  // ---- Server domain handlers (server/worldview/*/) ----
+  const serverDomains = dirsIn('server/worldview').length;
 
   // ---- Locales (src/locales/*.json) ----
   const locales = filesIn('src/locales').filter((f) => f.endsWith('.json')).length;
@@ -241,20 +241,20 @@ function claims(s) {
     { file: 'docs/algorithms.mdx', re: /and (\d+)\s+tracked world-leader names/, value: s.leaderNames },
 
     // ---- Blog posts (blog-site/) — capability counts quoted in evergreen developer/overview posts ----
-    { file: 'blog-site/src/content/blog/build-on-worldmonitor-developer-api-open-source.md', re: /typed API: (\d+)\s+services/, value: s.protoServices },
-    { file: 'blog-site/src/content/blog/build-on-worldmonitor-developer-api-open-source.md', re: /typed API: \d+\s+services, (\d+)\s+proto files/, value: s.protoFiles },
-    { file: 'blog-site/src/content/blog/build-on-worldmonitor-developer-api-open-source.md', re: /\*\*(\d+)\s+proto files\*\* defining/, value: s.protoFiles },
-    { file: 'blog-site/src/content/blog/build-on-worldmonitor-developer-api-open-source.md', re: /\*\*(\d+)\s+typed service domains\*\*/, value: s.protoServices },
-    // Heading labels the table below it, which is enumerated from server/worldmonitor/* dirs → pin to serverDomains (not protoServices; the two equal 34 today but a domain with two `service` blocks would diverge them).
-    { file: 'blog-site/src/content/blog/build-on-worldmonitor-developer-api-open-source.md', re: /##\s+(\d+)\s+Service Domains/, value: s.serverDomains },
-    { file: 'blog-site/src/content/blog/build-on-worldmonitor-developer-api-open-source.md', re: /Protocol Buffers \((\d+)\s+files\)/, value: s.protoFiles },
-    { file: 'blog-site/src/content/blog/build-on-worldmonitor-developer-api-open-source.md', re: /worldmonitor\)\. (\d+)\s+services, \d+\s+proto files, and a global/, value: s.protoServices },
-    { file: 'blog-site/src/content/blog/build-on-worldmonitor-developer-api-open-source.md', re: /worldmonitor\)\. \d+\s+services, (\d+)\s+proto files, and a global/, value: s.protoFiles },
-    { file: 'blog-site/src/content/blog/what-is-worldmonitor-real-time-global-intelligence.md', re: /typed APIs \((\d+)\s+proto files, \d+\s+services\)/, value: s.protoFiles },
-    { file: 'blog-site/src/content/blog/what-is-worldmonitor-real-time-global-intelligence.md', re: /typed APIs \(\d+\s+proto files, (\d+)\s+services\)/, value: s.protoServices },
+    { file: 'blog-site/src/content/blog/build-on-worldview-developer-api-open-source.md', re: /typed API: (\d+)\s+services/, value: s.protoServices },
+    { file: 'blog-site/src/content/blog/build-on-worldview-developer-api-open-source.md', re: /typed API: \d+\s+services, (\d+)\s+proto files/, value: s.protoFiles },
+    { file: 'blog-site/src/content/blog/build-on-worldview-developer-api-open-source.md', re: /\*\*(\d+)\s+proto files\*\* defining/, value: s.protoFiles },
+    { file: 'blog-site/src/content/blog/build-on-worldview-developer-api-open-source.md', re: /\*\*(\d+)\s+typed service domains\*\*/, value: s.protoServices },
+    // Heading labels the table below it, which is enumerated from server/worldview/* dirs → pin to serverDomains (not protoServices; the two equal 34 today but a domain with two `service` blocks would diverge them).
+    { file: 'blog-site/src/content/blog/build-on-worldview-developer-api-open-source.md', re: /##\s+(\d+)\s+Service Domains/, value: s.serverDomains },
+    { file: 'blog-site/src/content/blog/build-on-worldview-developer-api-open-source.md', re: /Protocol Buffers \((\d+)\s+files\)/, value: s.protoFiles },
+    { file: 'blog-site/src/content/blog/build-on-worldview-developer-api-open-source.md', re: /worldview\)\. (\d+)\s+services, \d+\s+proto files, and a global/, value: s.protoServices },
+    { file: 'blog-site/src/content/blog/build-on-worldview-developer-api-open-source.md', re: /worldview\)\. \d+\s+services, (\d+)\s+proto files, and a global/, value: s.protoFiles },
+    { file: 'blog-site/src/content/blog/what-is-worldview-real-time-global-intelligence.md', re: /typed APIs \((\d+)\s+proto files, \d+\s+services\)/, value: s.protoFiles },
+    { file: 'blog-site/src/content/blog/what-is-worldview-real-time-global-intelligence.md', re: /typed APIs \(\d+\s+proto files, (\d+)\s+services\)/, value: s.protoServices },
     { file: 'blog-site/src/content/blog/ai-powered-intelligence-without-the-cloud.md', re: /architecture \((\d+)\s+proto files, \d+\s+typed services\)/, value: s.protoFiles },
     { file: 'blog-site/src/content/blog/ai-powered-intelligence-without-the-cloud.md', re: /architecture \(\d+\s+proto files, (\d+)\s+typed services\)/, value: s.protoServices },
-    { file: 'blog-site/src/content/blog/worldmonitor-vs-traditional-intelligence-tools.md', re: /using the (\d+)\s+typed API services/, value: s.protoServices },
+    { file: 'blog-site/src/content/blog/worldview-vs-traditional-intelligence-tools.md', re: /using the (\d+)\s+typed API services/, value: s.protoServices },
   ];
 }
 
